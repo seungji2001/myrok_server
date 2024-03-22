@@ -29,7 +29,7 @@ public class Record {
     private LocalDate recordDate;
 
     @NonNull
-    @Column(name = "record_content")
+    @Column(name = "record_content", columnDefinition = "TEXT")
     private String recordContent;
 
     @Description("해당 프로젝트에 참여하는 멤버리스트")
