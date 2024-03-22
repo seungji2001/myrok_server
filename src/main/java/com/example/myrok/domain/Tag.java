@@ -24,4 +24,6 @@ public class Tag {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "r_id")
     private Record record;
+
+    private int count;
 }
