@@ -26,6 +26,11 @@ public class Member {
     @Description("랜덤 패스워드 부야")
     private String password;
 
+    @Description("탈퇴한 회원, true의 경우 탈퇴한 회원")
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean deleted = false;
+
     @Description("멤버별 참조하는 프로젝트(팀) 참조")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")
