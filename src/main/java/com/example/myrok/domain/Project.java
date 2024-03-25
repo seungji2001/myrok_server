@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Project {
+public class Project extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,14 @@ public class Project {
     @Column(name = "team_name")
     private String teamName;
 
+    @Description("삭제된 프로젝트, true의 경우 삭제된 프로젝트")
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean deleted = false;
+
     @Description("해당 프로젝트에 참여하는 멤버리스트")
     @OneToMany(mappedBy = "project")
     private List<Member> memberList;
+
+    public void changeDeleted(){this.deleted = true;}
 }
