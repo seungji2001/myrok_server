@@ -5,6 +5,7 @@ import jdk.jfr.Description;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -36,6 +37,19 @@ public class Project extends BaseTimeEntity{
     @Description("해당 프로젝트에 참여하는 멤버리스트")
     @OneToMany(mappedBy = "project")
     private List<Member> memberList;
+
+    @Column(name = "start_date")
+    @Description("프로젝트 시작 일자")
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    @Description("프로젝트 마감 일자")
+    private LocalDate endDate;
+
+    @Column(name = "limit_member")
+    @Description("참가자 제한 6명이 기본 참여 멤버")
+    @Builder.Default
+    private int limitMember = 6;
 
     public void changeDeleted(){this.deleted = true;}
 }
