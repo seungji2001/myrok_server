@@ -31,6 +31,10 @@ public class Member {
     @Builder.Default
     private Boolean deleted = false;
 
+    @Column(name = "img_url")
+    @Description("이미지 url")
+    private String imgUrl;
+
     @Description("멤버별 참조하는 프로젝트(팀) 참조")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")

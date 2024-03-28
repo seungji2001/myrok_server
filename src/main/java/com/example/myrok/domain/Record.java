@@ -32,6 +32,11 @@ public class Record {
     @Column(name = "record_content", columnDefinition = "TEXT")
     private String recordContent;
 
+    @Description("삭제한 record")
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean deleted = false;
+
     @Description("해당 프로젝트에 참여하는 멤버리스트")
     @OneToMany(mappedBy = "record")
     private List<Tag> tagList;
