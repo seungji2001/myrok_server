@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ProjectDto {
     private String projectName;
-    private String teamName;
     private String endDate;
     private String startDate;
     @Builder.Default
