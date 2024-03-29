@@ -24,5 +24,4 @@ public class ProjectController {
         Project project = memberService.registerProjectToMember(memberId, projectId);
         return ResponseEntity.ok().body(project.getId());
     }
-
 }
