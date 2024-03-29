@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor // property에 대한 의존성 주입
 @Service
 @Log4j2
@@ -18,8 +21,7 @@ public class ProjectServiceImpl implements ProjectService{
     private final MemberRepository memberRepository;
 
     @Override
-    public Long register(Long memberId, ProjectDto projectDto) {
-        Member member = memberRepository.findById(memberId).orElseThrow();
+    public Long register(ProjectDto projectDto) {
         Project project = dtoToEntity(projectDto);
         return projectRepository.save(project).getId();
     }

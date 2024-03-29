@@ -1,6 +1,10 @@
 package com.example.myrok;
 
+import com.example.myrok.domain.Project;
 import com.example.myrok.dto.ProjectDto;
+import com.example.myrok.repository.ProjectRepository;
+import com.example.myrok.service.MemberService;
+import com.example.myrok.service.MemberServiceImpl;
 import com.example.myrok.service.ProjectService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -12,14 +16,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ProjectTests {
     @Autowired
     ProjectService projectService;
+    @Autowired
+    ProjectRepository projectRepository;
+    @Autowired
+    MemberService memberService;
 
     @Test
     public void testRegister(){
         ProjectDto projectDto = ProjectDto.builder()
                 .projectName("test name 1")
                 .teamName("test team 1")
+                .startDate("2024-01-01")
+                .endDate("2025-01-01")
                 .build();
-
-        log.info(projectService.register(1l, projectDto));
+        Long projectId = projectService.register(projectDto);
+        Project project = memberService.registerProjectToMember(1L, projectId);
+        log.info(project.getId());
     }
 }
