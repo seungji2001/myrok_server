@@ -19,7 +19,6 @@ import java.util.UUID;
 public class ProjectServiceImpl implements ProjectService{
 
     private final ProjectRepository projectRepository;
-    private final MemberRepository memberRepository;
 
     @Override
     public Long register(ProjectDto projectDto) {

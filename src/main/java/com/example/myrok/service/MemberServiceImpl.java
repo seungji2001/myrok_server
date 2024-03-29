@@ -17,12 +17,24 @@ public class MemberServiceImpl implements MemberService {
     private final ProjectRepository projectRepository;
 
     @Override
+    public Boolean checkMemberHaveProject(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        return member.getProject() != null;
+    }
+
+    @Override
     public Project registerProjectToMember(Long memberId, Long projectId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         Project project = projectRepository.findById(projectId).orElseThrow();
-        if(member.getProject() != null){
-            throw new IllegalArgumentException("이미 소속된 프로젝트가 존재합니다. 기존 프로젝트에서 나간 후 진행해주세요.");
-        }
+        member.changeProject(project);
+        memberRepository.save(member);
+        return member.getProject();
+    }
+
+    @Override
+    public Project participateProject(Long memberId, String inviteCode) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        Project project = projectRepository.findByInviteCode(inviteCode);
         member.changeProject(project);
         memberRepository.save(member);
         return member.getProject();
