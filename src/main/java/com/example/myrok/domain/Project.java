@@ -26,10 +26,6 @@ public class Project extends BaseTimeEntity{
     @Column(name = "project_name")
     private String projectName;
 
-    @NonNull
-    @Column(name = "team_name")
-    private String teamName;
-
     @Description("삭제된 프로젝트, true의 경우 삭제된 프로젝트")
     @Column(name = "is_deleted")
     @Builder.Default

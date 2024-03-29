@@ -14,7 +14,6 @@ public interface ProjectService {
     default Project dtoToEntity(ProjectDto projectDto){
         return Project.builder()
                 .projectName(projectDto.getProjectName())
-                .teamName(projectDto.getTeamName())
                 .startDate(LocalDate.parse(projectDto.getStartDate()))
                 .endDate(LocalDate.parse(projectDto.getEndDate()))
                 .limitMember(projectDto.getLimitMember())
@@ -24,7 +23,6 @@ public interface ProjectService {
     default ProjectDto entityToDto(Project project){
         return ProjectDto.builder()
                 .projectName(project.getProjectName())
-                .teamName(project.getTeamName())
                 .startDate(String.valueOf(project.getStartDate()))
                 .endDate(String.valueOf(project.getEndDate()))
                 .limitMember(project.getLimitMember())
