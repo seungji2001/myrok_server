@@ -25,7 +25,6 @@ public class ProjectTests {
     public void testRegister(){
         ProjectDto projectDto = ProjectDto.builder()
                 .projectName("test name 1")
-                .teamName("test team 1")
                 .startDate("2024-01-01")
                 .endDate("2025-01-01")
                 .build();
