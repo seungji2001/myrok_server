@@ -20,6 +20,9 @@ public class MemberServiceImpl implements MemberService {
     public Project registerProjectToMember(Long memberId, Long projectId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         Project project = projectRepository.findById(projectId).orElseThrow();
+        if(member.getProject() != null){
+            throw new IllegalArgumentException("이미 소속된 프로젝트가 존재합니다. 기존 프로젝트에서 나간 후 진행해주세요.");
+        }
         member.changeProject(project);
         memberRepository.save(member);
         return member.getProject();
