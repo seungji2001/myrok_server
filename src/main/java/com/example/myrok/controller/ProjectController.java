@@ -20,8 +20,16 @@ public class ProjectController {
     private final MemberService memberService;
     @PostMapping("/")
     public ResponseEntity<Long> createProject(Long memberId, @RequestBody ProjectDto projectDto){
+        if(memberService.checkMemberHaveProject(memberId))
+            return ResponseEntity.badRequest().build();
         Long projectId = projectService.register(projectDto);
         Project project = memberService.registerProjectToMember(memberId, projectId);
         return ResponseEntity.ok().body(project.getId());
+    }
+    @PostMapping("/participate")
+    public ResponseEntity<Long> participateProject(Long memberId, String inviteCode){
+        if(memberService.checkMemberHaveProject(memberId))
+            return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().body(memberService.participateProject(memberId, inviteCode).getId());
     }
 }
