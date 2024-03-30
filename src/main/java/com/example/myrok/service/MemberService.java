@@ -11,4 +11,6 @@ public interface MemberService {
     Project registerProjectToMember(Long memberId, Long projectId);
 
     Project participateProject(Long memberId, String inviteCode);
+
+    Project getOutFromProject(Long memberId, Long projectId);
 }

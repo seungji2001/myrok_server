@@ -39,4 +39,14 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
         return member.getProject();
     }
+
+    @Override
+    public Project getOutFromProject(Long memberId, Long projectId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        Project project = projectRepository.findById(projectId).orElseThrow();
+        if(member.getProject() != project)
+            throw new IllegalArgumentException("소속되지 않은 프로젝트에서 나갈 수 없습니다.");
+        member.changeProject(null);
+        return project;
+    }
 }
