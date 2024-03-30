@@ -25,4 +25,14 @@ public class ProjectServiceImpl implements ProjectService{
         Project project = dtoToEntity(projectDto);
         return projectRepository.save(project).getId();
     }
+
+    @Override
+    //멤버가 프로젝트 나가기를 할 때마다, 해당 프로젝트 내 소속된 인원이 없는지 확인 필요
+    //없을경우 해당 프로젝트 삭제 핸들링
+    public Long checkProjectDelete(Project project) {
+        if(project.getMemberList().isEmpty()){
+            project.changeDeleted();
+        }
+        return project.getId();
+    }
 }

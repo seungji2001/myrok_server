@@ -10,6 +10,8 @@ import java.time.LocalDate;
 public interface ProjectService {
     Long register(ProjectDto requestDto);
 
+    Long checkProjectDelete(Project project);
+
 
     default Project dtoToEntity(ProjectDto projectDto){
         return Project.builder()
