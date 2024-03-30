@@ -6,10 +6,7 @@ import com.example.myrok.service.MemberService;
 import com.example.myrok.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("myrok/project")
@@ -31,5 +28,10 @@ public class ProjectController {
         if(memberService.checkMemberHaveProject(memberId))
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok().body(memberService.participateProject(memberId, inviteCode).getId());
+    }
+
+    @DeleteMapping("/")
+    public ResponseEntity<Long> getOutProject(Long memberId, Long projectId){
+
     }
 }
