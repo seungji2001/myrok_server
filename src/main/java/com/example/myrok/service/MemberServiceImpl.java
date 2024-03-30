@@ -20,7 +20,12 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Boolean checkMemberHaveProject(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
-        return member.getProject() != null;
+        //멤버에게 프로젝트가 있으며, 프로젝트 회원인지 확인
+        if(member.getMemberProjectType()==MemberProjectType.PROJECT_MEMBER){
+            //이미 프로젝트가 있음
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -28,6 +33,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId).orElseThrow();
         Project project = projectRepository.findById(projectId).orElseThrow();
         member.changeProject(project);
+        member.changeMemberProjectType(MemberProjectType.PROJECT_MEMBER);
         memberRepository.save(member);
         return member.getProject();
     }
@@ -36,7 +42,11 @@ public class MemberServiceImpl implements MemberService {
     public Project participateProject(Long memberId, String inviteCode) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         Project project = projectRepository.findByInviteCode(inviteCode);
+        if(project.getMemberList().size() + 1 > project.getLimitMember()){
+            throw new IllegalArgumentException("멤버 인원수가 초과되었습니다.");
+        }
         member.changeProject(project);
+        member.changeMemberProjectType(MemberProjectType.PROJECT_MEMBER);
         memberRepository.save(member);
         return member.getProject();
     }
@@ -51,6 +61,7 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("이미 해당 프로젝트에서 탈퇴를 하였습니다.");
         }
         member.changeMemberProjectType(MemberProjectType.NON_PROJECT_MEMBER);
+        memberRepository.save(member);
         return project;
     }
 }
