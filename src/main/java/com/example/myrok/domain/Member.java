@@ -43,7 +43,8 @@ public class Member {
     private Project project;
 
     @Enumerated(EnumType.STRING)
-    private MemberProjectType memberProjectType;
+    @Builder.Default
+    private MemberProjectType memberProjectType = MemberProjectType.NON_PROJECT_MEMBER;
 
     public void changeProject(Project project){
         this.project = project;
