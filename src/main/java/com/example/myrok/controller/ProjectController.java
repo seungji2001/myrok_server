@@ -32,6 +32,8 @@ public class ProjectController {
 
     @DeleteMapping("/")
     public ResponseEntity<Long> getOutProject(Long memberId, Long projectId){
-
+        Project project = memberService.getOutFromProject(memberId,projectId);
+        projectService.checkProjectDelete(project);
+        return ResponseEntity.ok().body(project.getId());
     }
 }
