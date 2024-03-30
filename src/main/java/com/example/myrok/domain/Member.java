@@ -1,5 +1,7 @@
 package com.example.myrok.domain;
 
+import com.example.myrok.type.MemberProjectType;
+import com.example.myrok.type.Role;
 import jakarta.persistence.*;
 import jdk.jfr.Description;
 import lombok.*;
@@ -40,7 +42,13 @@ public class Member {
     @JoinColumn(name = "p_id")
     private Project project;
 
+    @Enumerated(EnumType.STRING)
+    private MemberProjectType memberProjectType;
+
     public void changeProject(Project project){
         this.project = project;
+    }
+    public void changeMemberProjectType(MemberProjectType memberProjectType){
+        this.memberProjectType = memberProjectType;
     }
 }
