@@ -4,6 +4,7 @@ import com.example.myrok.domain.Member;
 import com.example.myrok.domain.Project;
 import com.example.myrok.repository.MemberRepository;
 import com.example.myrok.repository.ProjectRepository;
+import com.example.myrok.type.MemberProjectType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,10 @@ public class MemberServiceImpl implements MemberService {
         Project project = projectRepository.findById(projectId).orElseThrow();
         if(member.getProject() != project)
             throw new IllegalArgumentException("소속되지 않은 프로젝트에서 나갈 수 없습니다.");
-        member.changeProject(null);
+        if(member.getMemberProjectType() == MemberProjectType.NON_PROJECT_MEMBER){
+            throw new IllegalArgumentException("이미 해당 프로젝트에서 탈퇴를 하였습니다.");
+        }
+        member.changeMemberProjectType(MemberProjectType.NON_PROJECT_MEMBER);
         return project;
     }
 }
