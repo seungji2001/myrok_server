@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import java.util.NoSuchElementException;
+
 @RequiredArgsConstructor // property에 대한 의존성 주입
 @Service
 @Log4j2
