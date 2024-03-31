@@ -44,7 +44,4 @@ public class Member {
     @JoinColumn(name = "record_id")
     private Record record;
 
-    public Member(Long id){
-        this.id=id;
-    }
 }
