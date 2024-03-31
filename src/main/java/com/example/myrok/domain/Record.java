@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Record {
+public class Record extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,11 @@ public class Record {
     private Boolean deleted = false;
 
     @Description("해당 프로젝트에 참여하는 멤버리스트")
-    @OneToMany(mappedBy = "record")
+    @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
+    private List<Member> memberList;
+
+    @Description("해당 프로젝트에 포함된 태그리스트")
+    @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
     private List<Tag> tagList;
 
 }
