@@ -45,4 +45,8 @@ public class Record extends BaseTimeEntity {
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
     private List<Tag> tagList;
 
+    public void delete(){
+        this.deleted=true;
+    }
+
 }
