@@ -26,8 +26,8 @@ public class RecordController {
         return new ResponseEntity<>(savedRecord, HttpStatus.CREATED);
     }
 
-    @PostMapping("/records/{recordId}/delete")
-    public ResponseEntity<Void> delete(Long id){
+    @PostMapping("/delete/{recordId}")
+    public ResponseEntity<Record> delete(@PathVariable("recordId") Long id){
         recordService.deleteUpdate(id);
         return ResponseEntity.noContent().build();
     }
