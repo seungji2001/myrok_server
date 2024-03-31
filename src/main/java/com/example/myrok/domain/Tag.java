@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "tb_tag")
 @Getter
@@ -21,9 +23,14 @@ public class Tag {
     @Column(name = "tag_name")
     private String tagName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "r_id")
+    private int count;
+
+    @ManyToOne
+    @JoinColumn(name = "record_id")
     private Record record;
 
-    private int count;
+    public Tag(String tagName) {
+        this.tagName = tagName;
+    }
+
 }

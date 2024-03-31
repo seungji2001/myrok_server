@@ -39,4 +39,12 @@ public class Member {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")
     private Project project;
+
+    @ManyToOne
+    @JoinColumn(name = "record_id")
+    private Record record;
+
+    public Member(Long id){
+        this.id=id;
+    }
 }
