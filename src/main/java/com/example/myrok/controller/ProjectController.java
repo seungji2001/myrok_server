@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("myrok/project")
 @Tag(name = "Project", description = "Project 관련 API 입니다.")
 @RequestMapping("myrok/project")
 @RequiredArgsConstructor
@@ -45,10 +44,4 @@ public class ProjectController {
         return ResponseEntity.ok().body(memberService.participateProject(memberId, inviteCode).getId());
     }
 
-    @DeleteMapping("/")
-    public ResponseEntity<Long> getOutProject(Long memberId, Long projectId){
-        Project project = memberService.getOutFromProject(memberId,projectId);
-        projectService.checkProjectDelete(project);
-        return ResponseEntity.ok().body(project.getId());
-    }
 }
