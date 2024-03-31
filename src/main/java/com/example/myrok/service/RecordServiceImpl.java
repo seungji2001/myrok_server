@@ -43,7 +43,11 @@ public class RecordServiceImpl implements RecordService{
         // Tag 데이터베이스 유무 검사 후 Tag 저장 & 매핑 테이블도 저장
         for (String tagName : tags) {
             Tag tag = tagRepository.findByTagName(tagName)
-                    .orElseGet(() -> tagRepository.save(new Tag(tagName)));
+                    .orElseGet(() -> tagRepository.save(new Tag(tagName,0)));
+
+            // count 증가 
+            tag.incrementCount();
+            tagRepository.save(tag);
 
             // Record 와 Tag 사이의 연결을 위한 RecordTag 객체 생성 및 저장
             RecordTag recordTag = RecordTag.builder()

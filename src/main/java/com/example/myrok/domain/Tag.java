@@ -29,8 +29,13 @@ public class Tag {
     @JoinColumn(name = "record_id")
     private Record record;
 
-    public Tag(String tagName) {
+    public Tag(String tagName, int count) {
         this.tagName = tagName;
+        this.count=count;
+    }
+
+    public void incrementCount() {
+        this.count += 1;
     }
 
 }
