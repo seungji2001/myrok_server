@@ -21,8 +21,14 @@ public class RecordController {
     public void save(){}
 
     @PostMapping("/records")
-    public ResponseEntity<Record> saveOk(@RequestBody RecordDTO recordDTO){
+    public ResponseEntity<Record> save(@RequestBody RecordDTO recordDTO){
         Record savedRecord=recordService.save(recordDTO);
         return new ResponseEntity<>(savedRecord, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/records/{recordId}/delete")
+    public ResponseEntity<Void> delete(Long id){
+        recordService.deleteUpdate(id);
+        return ResponseEntity.noContent().build();
     }
 }

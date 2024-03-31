@@ -45,7 +45,7 @@ public class RecordServiceImpl implements RecordService{
             Tag tag = tagRepository.findByTagName(tagName)
                     .orElseGet(() -> tagRepository.save(new Tag(tagName,0)));
 
-            // count 증가 
+            // count 증가
             tag.incrementCount();
             tagRepository.save(tag);
 
@@ -72,6 +72,47 @@ public class RecordServiceImpl implements RecordService{
         }
 
         return savedRecord;
+    }
+
+    @Override
+    public Boolean deleteUpdate(Long id) {
+        try {
+            // 회의록 삭제
+            Record record = recordRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("존재하지 않는 회의록입니다."));
+            record.delete();
+
+            //회의록 안의 태그 리스트 Count 감소 & Count==0 이라면 삭제
+            List<Tag> tagList = record.getTagList();
+            for (Tag tag : tagList) {
+                tag.decrementCount();
+                if (tag.getCount() == 0) {
+                    tag.delete();
+                }
+                tagRepository.save(tag);
+            }
+
+            //MemberRecord 매핑객체 삭제
+            List<MemberRecord> memberRecords = memberRecordRepository.findAllByRecordId(record.getId());
+            for (MemberRecord memberRecord : memberRecords) {
+                memberRecord.delete();
+                memberRecordRepository.save(memberRecord);
+            }
+
+            //RecordTag 매핑객체 삭제
+            List<RecordTag> recordTags = recordTagRepository.findAllByRecordId(record.getId());
+            for (RecordTag recordTag : recordTags) {
+                recordTag.delete();
+                recordTagRepository.save(recordTag);
+            }
+
+            return true;
+        }  catch (NotFoundException e) {
+            System.out.println("존재하지 않는 회의록 삭제 시도");
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.myrok.domain;
 
 import jakarta.persistence.*;
+import jdk.jfr.Description;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,11 @@ public class Tag {
     @Column(name = "tag_name")
     private String tagName;
 
+    @Description("삭제한 tag")
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean deleted = false;
+
     private int count;
 
     @ManyToOne
@@ -37,5 +43,9 @@ public class Tag {
     public void incrementCount() {
         this.count += 1;
     }
+
+    public void decrementCount(){ this.count -= 1; }
+
+    public void delete(){ this.deleted=true; }
 
 }
