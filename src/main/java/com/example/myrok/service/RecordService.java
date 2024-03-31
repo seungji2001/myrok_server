@@ -6,5 +6,5 @@ import com.example.myrok.dto.RecordDTO;
 public interface RecordService {
     Record save(RecordDTO recordDTO);
 
-    Boolean deleteUpdate(Long id);
+    void deleteUpdate(Long id);
 }

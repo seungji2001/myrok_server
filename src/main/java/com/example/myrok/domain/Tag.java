@@ -35,9 +35,10 @@ public class Tag {
     @JoinColumn(name = "record_id")
     private Record record;
 
-    public Tag(String tagName, int count) {
+    public Tag(String tagName, int count, boolean deleted) {
         this.tagName = tagName;
         this.count=count;
+        this.deleted=deleted;
     }
 
     public void incrementCount() {
