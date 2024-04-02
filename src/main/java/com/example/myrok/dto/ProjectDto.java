@@ -10,14 +10,17 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@Builder
-@AllArgsConstructor
 public class ProjectDto {
-    private String projectName;
-    private String endDate;
-    private String startDate;
-    @Builder.Default
-    private int limitMember = 6;
+    @Data
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class RegisterProject{
+        private String projectName;
+        private String endDate;
+        private String startDate;
+        @Builder.Default
+        private int limitMember = 6;
+    }
+
 }
