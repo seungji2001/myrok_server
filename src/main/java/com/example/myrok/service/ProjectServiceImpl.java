@@ -24,7 +24,7 @@ public class ProjectServiceImpl implements ProjectService{
     private final ProjectRepository projectRepository;
 
     @Override
-    public Long register(ProjectDto projectDto) {
+    public Long register(ProjectDto.RegisterProject projectDto) {
         Project project = dtoToEntity(projectDto);
         return projectRepository.save(project).getId();
     }
