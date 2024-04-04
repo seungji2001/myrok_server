@@ -34,7 +34,7 @@ public class ProjectController {
             description = "프로젝트 생성을 완료하였습니다."
     )
     @PostMapping("/")
-    public ResponseEntity<Object> createProject(Long memberId, @RequestBody ProjectDto.RegisterProject projectDto){
+    public ResponseEntity<Long> createProject(Long memberId, @RequestBody ProjectDto.RegisterProject projectDto){
         memberService.checkMemberHaveProject(memberId);
         Long projectId = projectService.register(projectDto);
         Project project = memberService.registerProjectToMember(memberId, projectId);
