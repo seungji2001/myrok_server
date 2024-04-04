@@ -31,6 +31,10 @@ public class Record extends BaseTimeEntity {
     private LocalDate recordDate;
 
     @NonNull
+    @Column(name = "record_writer_id")
+    private Long recordWriterId;
+
+    @NonNull
     @Column(name = "record_content", columnDefinition = "TEXT")
     private String recordContent;
 
