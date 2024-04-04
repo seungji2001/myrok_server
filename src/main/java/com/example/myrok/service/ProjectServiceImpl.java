@@ -25,6 +25,10 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public Long register(ProjectDto.RegisterProject projectDto) {
+        if(projectDto.getStartDate() == null && projectDto.getEndDate() == null){
+            projectDto.setStartDate("1000-01-01");
+            projectDto.setEndDate("3000-01-01");
+        }
         Project project = dtoToEntity(projectDto);
         return projectRepository.save(project).getId();
     }

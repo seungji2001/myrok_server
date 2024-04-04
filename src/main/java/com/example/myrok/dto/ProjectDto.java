@@ -1,6 +1,7 @@
 package com.example.myrok.dto;
 
 import com.example.myrok.domain.Member;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jdk.jfr.Description;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,9 @@ public class ProjectDto {
     @AllArgsConstructor
     public static class RegisterProject{
         private String projectName;
+        @Nullable
         private String endDate;
+        @Nullable
         private String startDate;
         @Builder.Default
         private int limitMember = 6;
