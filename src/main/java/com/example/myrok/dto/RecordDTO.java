@@ -16,6 +16,7 @@ public record RecordDTO (
     @NotBlank(message = "본문은 필수 입력 사항입니다.")
     String recordContent,
     LocalDate recordDate,
+    Long recordWriterId,
     List<Long> memberList,
     List<String> tagList,
     Long projectId
@@ -25,6 +26,7 @@ public record RecordDTO (
                 .recordName(recordName)
                 .recordContent(recordContent)
                 .recordDate(recordDate)
+                .recordWriterId(recordWriterId)
                 .memberList(memberList)
                 .tagList(tagList)
                 .project(project)
