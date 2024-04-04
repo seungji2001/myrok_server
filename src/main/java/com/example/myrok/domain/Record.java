@@ -2,6 +2,7 @@ package com.example.myrok.domain;
 
 import jakarta.persistence.*;
 import jdk.jfr.Description;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -45,6 +46,12 @@ public class Record extends BaseTimeEntity {
     @Description("해당 프로젝트에 포함된 태그리스트")
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
     private List<Tag> tagList;
+
+    @JsonBackReference
+    @Description("어떤 프로젝트의 회의록인지")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "p_id")
+    private Project project;
 
     public void delete(){
         this.deleted=true;

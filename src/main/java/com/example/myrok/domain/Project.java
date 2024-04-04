@@ -2,6 +2,7 @@ package com.example.myrok.domain;
 
 import jakarta.persistence.*;
 import jdk.jfr.Description;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -36,6 +37,11 @@ public class Project extends BaseTimeEntity{
     @OneToMany(mappedBy = "project")
     @Builder.Default
     private List<Member> memberList = new ArrayList<>();
+
+    @Description("해당 프로젝트의 회의록리스트")
+    @OneToMany(mappedBy = "project")
+    @JsonManagedReference
+    private List<Record> recordList =  new ArrayList<>();
 
     @Column(name = "start_date")
     @Description("프로젝트 시작 일자")
