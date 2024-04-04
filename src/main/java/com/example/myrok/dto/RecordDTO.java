@@ -1,6 +1,7 @@
 package com.example.myrok.dto;
 
 import com.example.myrok.domain.Member;
+import com.example.myrok.domain.Project;
 import com.example.myrok.domain.Record;
 import com.example.myrok.domain.Tag;
 import lombok.*;
@@ -16,15 +17,17 @@ public record RecordDTO (
     String recordContent,
     LocalDate recordDate,
     List<Long> memberList,
-    List<String> tagList
+    List<String> tagList,
+    Long projectId
 ){
-    public Record toEntity(List<Member> memberList, List<Tag> tagList){
+    public Record toEntity(List<Member> memberList, List<Tag> tagList, Project project){
         return Record.builder()
                 .recordName(recordName)
                 .recordContent(recordContent)
                 .recordDate(recordDate)
                 .memberList(memberList)
                 .tagList(tagList)
+                .project(project)
                 .build();
     }
 

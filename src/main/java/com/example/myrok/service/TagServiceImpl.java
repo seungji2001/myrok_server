@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class TagServiceImpl implements TagService{
     @Autowired
-    TagRepository tagRepository;
+    private TagRepository tagRepository;
     @Override
     public Tag save(String tagName){
         Tag tag = tagRepository.findByTagName(tagName)

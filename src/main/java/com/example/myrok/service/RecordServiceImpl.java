@@ -24,6 +24,8 @@ public class RecordServiceImpl implements RecordService{
     private final MemberRepository memberRepository;
     @Autowired
     private final TagRepository tagRepository;
+    @Autowired
+    private final ProjectRepository projectRepository;
 
     @Autowired
     private RecordTagService recordTagService;
@@ -40,8 +42,13 @@ public class RecordServiceImpl implements RecordService{
         // 멤버 리스트 & 태그 리스트 받아와서 Record 저장
         List<String> tags = recordDTO.tagList();
         List<Long> members=recordDTO.memberList();
+        Long projectId=recordDTO.projectId();
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("해당 프로젝트를 찾을 수 없습니다. ID: " + projectId));
+
         Record record= recordDTO.toEntity(memberRepository.findAllByIdIn(members),
-                                            tagRepository.findAllByTagNameIn(tags));
+                                            tagRepository.findAllByTagNameIn(tags),
+                                            project);
         Record savedRecord = recordRepository.save(record);
 
         // Tag 저장
@@ -63,7 +70,7 @@ public class RecordServiceImpl implements RecordService{
 
             // 회의록 삭제
             Record record = recordRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("존재하지 않는 회의록입니다."));
+                    .orElseThrow(() -> new NotFoundException("해당 회의록을 찾을 수 없습니다. ID: "+id));
             record.delete();
             recordRepository.save(record);
 
