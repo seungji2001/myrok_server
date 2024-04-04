@@ -51,7 +51,7 @@ public class Project extends BaseTimeEntity{
     @Column(name = "invite_code")
     @Description("초대코드")
     @Builder.Default
-    private String inviteCode = String.valueOf(UUID.randomUUID());
+    private String inviteCode = String.valueOf(UUID.randomUUID().toString().split("-")[0]);
 
     public void changeDeleted(){this.deleted = true;}
 }
