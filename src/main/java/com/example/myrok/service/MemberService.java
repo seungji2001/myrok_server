@@ -6,6 +6,9 @@ import jakarta.transaction.Transactional;
 
 @Transactional
 public interface MemberService {
+    //멤버 초기화 상태 만들어주기
+    void initMemberProject(Long memberId);
+
     //멤버가 보유한 프로젝트가 있는지 확가
     void checkMemberHaveProject(Long memberId);
 

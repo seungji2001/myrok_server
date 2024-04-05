@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import jdk.jfr.Description;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "tb_member")
 @Getter
@@ -36,5 +38,8 @@ public class Member {
     @Column(name = "img_url")
     @Description("이미지 url")
     private String imgUrl;
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberProject> memberProjects;
 
 }

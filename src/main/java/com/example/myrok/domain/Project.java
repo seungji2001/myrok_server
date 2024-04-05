@@ -48,5 +48,7 @@ public class Project extends BaseTimeEntity{
     @Builder.Default
     private String inviteCode = String.valueOf(UUID.randomUUID().toString().split("-")[0]);
 
+    @OneToMany(mappedBy = "project")
+    private List<MemberProject> memberProjects;
     public void changeDeleted(){this.deleted = true;}
 }
