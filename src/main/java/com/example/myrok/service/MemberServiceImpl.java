@@ -27,23 +27,28 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void checkMemberHaveProject(Long memberId){
-        Member member = memberRepository.findById(memberId).orElseThrow();
-        //멤버에게 프로젝트가 있으며, 프로젝트 회원인지 확인
-//        if(member.getMemberProjectType()==MemberProjectType.PROJECT_MEMBER){
-//            throw new CustomException(ErrorCode.MEMBER_IN_PROJECT, HttpStatus.NOT_ACCEPTABLE);
-//        }
+        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
+        //멤버에게 프로젝트가 있으며, 프로젝트 회원인지 확인, 멤버가 초기 사용자인 경우 테이블 생성 후 만들어줘야한다.
+        MemberProject memberProject = memberProjectRepository.findByMemberId(memberId).orElse(
+                memberProjectRepository.save(MemberProject.builder()
+                        .member(member)
+                        .memberProjectType(MemberProjectType.NON_PROJECT_MEMBER)
+                        .project(null)
+                        .build())
+        );
+        //멤버가 진행중인 프로젝트가 있는 경우
+        if(memberProject.getMemberProjectType() == MemberProjectType.PROJECT_MEMBER){
+            throw new CustomException(ErrorCode.MEMBER_IN_PROJECT, HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     @Override
     public Long registerProjectToMember(Long memberId, Long projectId) {
         //MemberProject entity에 등록 후, 상태값 변경 필요
-        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
+        MemberProject memberProject = memberProjectRepository.findByMemberIdAndProjectId(memberId, null).orElseThrow();
         Project project = projectRepository.findById(projectId).orElseThrow(NoSuchElementException::new);
-        MemberProject memberProject = MemberProject.builder()
-                .project(project)
-                .member(member)
-                .memberProjectType(MemberProjectType.PROJECT_MEMBER)
-                .build();
+        memberProject.changeProject(project);
+        memberProject.changeMemberProjectType(MemberProjectType.PROJECT_MEMBER);
         return memberProjectRepository.save(memberProject).getId();
     }
 
