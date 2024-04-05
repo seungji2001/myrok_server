@@ -21,15 +21,12 @@ public class MemberProject {
 
 
     @OneToOne
-    @Column(name = "m_id")
     private Member member;
     @OneToOne
-    @Column(name = "m_id")
     private Project project;
     @Column(name = "member_project_type")
     @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private MemberProjectType memberProjectType = MemberProjectType.NON_PROJECT_MEMBER;
+    private MemberProjectType memberProjectType;
     public void changeProject(Project project){
         this.project = project;
     }

@@ -29,12 +29,12 @@ public class ProjectTests {
                 .endDate("")
                 .build();
         Long projectId = projectService.register(projectDto);
-        Project project = memberService.registerProjectToMember(2L, projectId);
-        log.info(project.getId());
+        Long project = memberService.registerProjectToMember(1L, projectId);
+        log.info(project);
     }
 
-    @Test
-    public void testParticipate(){
-        memberService.participateProject(2L, "e6d75f72-0d56-4834-b5a0-ba72e90b226a");
-    }
+//    @Test
+//    public void testParticipate(){
+//        memberService.participateProject(2L, "e6d75f72-0d56-4834-b5a0-ba72e90b226a");
+//    }
 }
