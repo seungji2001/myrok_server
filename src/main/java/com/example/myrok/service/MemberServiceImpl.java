@@ -26,42 +26,42 @@ public class MemberServiceImpl implements MemberService {
     public void checkMemberHaveProject(Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow();
         //멤버에게 프로젝트가 있으며, 프로젝트 회원인지 확인
-        if(member.getMemberProjectType()==MemberProjectType.PROJECT_MEMBER){
-            throw new CustomException(ErrorCode.MEMBER_IN_PROJECT, HttpStatus.NOT_ACCEPTABLE);
-        }
+//        if(member.getMemberProjectType()==MemberProjectType.PROJECT_MEMBER){
+//            throw new CustomException(ErrorCode.MEMBER_IN_PROJECT, HttpStatus.NOT_ACCEPTABLE);
+//        }
     }
 
     @Override
     public Project registerProjectToMember(Long memberId, Long projectId) {
         Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
         Project project = projectRepository.findById(projectId).orElseThrow(NoSuchElementException::new);
-        member.changeProject(project);
-        member.changeMemberProjectType(MemberProjectType.PROJECT_MEMBER);
+//        member.changeProject(project);
+//        member.changeMemberProjectType(MemberProjectType.PROJECT_MEMBER);
         memberRepository.save(member);
-        return member.getProject();
+//        return member.getProject();
     }
 
     @Override
     public Project participateProject(Long memberId, String inviteCode) {
         Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
         Project project = projectRepository.findByInviteCode(inviteCode);
-        if(project.getMemberList().size() + 1 > project.getLimitMember()){
-            throw new CustomException(ErrorCode.LIMITED_MEMBER, HttpStatus.NOT_ACCEPTABLE);
-        }
-        member.changeProject(project);
-        member.changeMemberProjectType(MemberProjectType.PROJECT_MEMBER);
+//        if(project.getMemberList().size() + 1 > project.getLimitMember()){
+//            throw new CustomException(ErrorCode.LIMITED_MEMBER, HttpStatus.NOT_ACCEPTABLE);
+//        }
+//        member.changeProject(project);
+//        member.changeMemberProjectType(MemberProjectType.PROJECT_MEMBER);
         memberRepository.save(member);
-        return member.getProject();
+//        return member.getProject();
     }
 
     @Override
     public Project getOutFromProject(Long memberId, Long projectId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         Project project = projectRepository.findById(projectId).orElseThrow();
-        if(member.getProject() != project || member.getMemberProjectType() == MemberProjectType.NON_PROJECT_MEMBER){
-            throw new CustomException(ErrorCode.MEMBER_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE);
-        }
-        member.changeMemberProjectType(MemberProjectType.NON_PROJECT_MEMBER);
+//        if(member.getProject() != project || member.getMemberProjectType() == MemberProjectType.NON_PROJECT_MEMBER){
+//            throw new CustomException(ErrorCode.MEMBER_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE);
+//        }
+//        member.changeMemberProjectType(MemberProjectType.NON_PROJECT_MEMBER);
         memberRepository.save(member);
         return project;
     }

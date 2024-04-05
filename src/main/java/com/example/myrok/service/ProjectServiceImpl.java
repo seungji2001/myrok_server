@@ -35,11 +35,11 @@ public class ProjectServiceImpl implements ProjectService{
     public Long checkProjectDelete(Project project) {
         boolean canDelete = true;
         //한명이라도 소속 멤버인 경우 delete하지 않는다
-        for(int i = 0; i<project.getMemberList().size(); i++){
-            if(project.getMemberList().get(i).getMemberProjectType() == MemberProjectType.PROJECT_MEMBER){
-                canDelete = false;
-            }
-        }
+//        for(int i = 0; i<project.getMemberList().size(); i++){
+//            if(project.getMemberList().get(i).getMemberProjectType() == MemberProjectType.PROJECT_MEMBER){
+//                canDelete = false;
+//            }
+//        }
         if(canDelete){
             project.changeDeleted();
         }

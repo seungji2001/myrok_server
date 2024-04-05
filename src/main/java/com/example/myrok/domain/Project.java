@@ -32,11 +32,6 @@ public class Project extends BaseTimeEntity{
     @Builder.Default
     private Boolean deleted = false;
 
-    @Description("해당 프로젝트에 참여하는 멤버리스트")
-    @OneToMany(mappedBy = "project")
-    @Builder.Default
-    private List<Member> memberList = new ArrayList<>();
-
     @Column(name = "start_date")
     @Description("프로젝트 시작 일자")
     private LocalDate startDate;
