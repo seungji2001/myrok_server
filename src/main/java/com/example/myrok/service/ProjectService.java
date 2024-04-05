@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Transactional
 public interface ProjectService {
+    //프로젝트 등록
     Long register(ProjectDto.RegisterProject requestDto);
 
     Long checkProjectDelete(Project project);

@@ -4,10 +4,7 @@ import com.example.myrok.domain.Member;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jdk.jfr.Description;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -18,9 +15,9 @@ public class ProjectDto {
     @AllArgsConstructor
     public static class RegisterProject{
         private String projectName;
-        @Nullable
+        @NonNull
         private String endDate;
-        @Nullable
+        @NonNull
         private String startDate;
         @Builder.Default
         private int limitMember = 6;
