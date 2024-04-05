@@ -1,4 +1,4 @@
-package com.example.myrok;
+package com.example.myrok.service;
 
 import com.example.myrok.domain.Project;
 import com.example.myrok.dto.ProjectDto;
