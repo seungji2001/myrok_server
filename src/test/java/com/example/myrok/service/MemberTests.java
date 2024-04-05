@@ -13,6 +13,6 @@ public class MemberTests {
     MemberService memberService;
     @Test
     public void testRegister(){
-        memberService.checkMemberHaveProject(2L);
+        memberService.checkMemberHaveProject(1L);
     }
 }
