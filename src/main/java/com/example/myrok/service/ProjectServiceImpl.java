@@ -10,11 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RequiredArgsConstructor // property에 대한 의존성 주입
 @Service
@@ -25,7 +21,7 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public Long register(ProjectDto.RegisterProject projectDto) {
-        if(projectDto.getStartDate() == null && projectDto.getEndDate() == null){
+        if(Objects.equals(projectDto.getStartDate(), "") && Objects.equals(projectDto.getEndDate(), "")){
             projectDto.setStartDate("1000-01-01");
             projectDto.setEndDate("3000-01-01");
         }
