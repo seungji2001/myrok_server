@@ -19,10 +19,11 @@ public class MemberProject {
     @Column(name = "mp_id")
     private Long id;
 
-
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "m_id")
     private Member member;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "p_id")
     private Project project;
     @Column(name = "member_project_type")
     @Enumerated(EnumType.STRING)

@@ -32,9 +32,4 @@ public class ProjectTests {
         Long project = memberService.registerProjectToMember(1L, projectId);
         log.info(project);
     }
-
-//    @Test
-//    public void testParticipate(){
-//        memberService.participateProject(2L, "e6d75f72-0d56-4834-b5a0-ba72e90b226a");
-//    }
 }
