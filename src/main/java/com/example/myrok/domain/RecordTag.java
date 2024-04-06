@@ -19,11 +19,11 @@ public class RecordTag {
     @Column(name = "rt_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "r_id")
     private Record record;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // 영속성 설정, 안하면 sql 오류
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "t_id")
     private Tag tag;
 

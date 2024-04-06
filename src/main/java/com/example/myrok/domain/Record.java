@@ -45,11 +45,11 @@ public class Record extends BaseTimeEntity {
 
     @Description("해당 프로젝트에 참여하는 멤버리스트")
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
-    private List<Member> memberList;
+    private List<MemberRecord> memberRecordList;
 
     @Description("해당 프로젝트에 포함된 태그리스트")
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
-    private List<Tag> tagList;
+    private List<RecordTag> recordTagList;
 
     @JsonBackReference
     @Description("어떤 프로젝트의 회의록인지")

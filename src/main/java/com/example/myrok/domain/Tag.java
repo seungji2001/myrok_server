@@ -31,9 +31,6 @@ public class Tag {
 
     private int count;
 
-    @ManyToOne
-    @JoinColumn(name = "record_id")
-    private Record record;
 
     public Tag(String tagName, int count, boolean deleted) {
         this.tagName = tagName;

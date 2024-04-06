@@ -11,6 +11,7 @@ import com.example.myrok.type.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,7 +21,8 @@ public class MemberRecordServiceImpl implements MemberRecordService{
     @Autowired
     MemberRepository memberRepository;
     @Override
-    public void save(List<Long> members, Record record, Long recordWriterId){
+    public List<MemberRecord> save(List<Long> members, Record record, Long recordWriterId){
+        List<MemberRecord> memberRecordList= new ArrayList<>();
         for (Long memberId : members) {
             Member member = memberRepository.findById(memberId)
                     .orElseThrow(() -> new NotFoundException("존재하지 않는 팀원입니다."));
@@ -30,8 +32,10 @@ public class MemberRecordServiceImpl implements MemberRecordService{
                     .member(member)
                     .role(role)
                     .build();
-            memberRecordRepository.save(memberRecord);
+            MemberRecord savedMemberRecord = memberRecordRepository.save(memberRecord);
+            memberRecordList.add(savedMemberRecord);
         }
+        return memberRecordList;
     }
     @Override
     public void delete(Long id){

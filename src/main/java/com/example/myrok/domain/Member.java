@@ -42,9 +42,6 @@ public class Member {
     @JoinColumn(name = "p_id")
     private Project project;
 
-    @ManyToOne
-    @JoinColumn(name = "record_id")
-    private Record record;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
