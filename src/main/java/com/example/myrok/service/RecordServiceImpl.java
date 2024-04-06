@@ -49,20 +49,16 @@ public class RecordServiceImpl implements RecordService{
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("해당 프로젝트를 찾을 수 없습니다. ID: " + projectId));
 
-        Record record= recordDTO.toEntity(memberRepository.findAllByIdIn(members),
-                                            tagRepository.findAllByTagNameIn(tags),
-                                            project);
+        Record record=recordDTO.toEntity(project);
         Record savedRecord = recordRepository.save(record);
 
         // Tag 저장
         for (String tagName : tags) {
-            Tag tag=tagService.save(tagName);
-            // record 와 tag 매핑객체 생성
-            recordTagService.save(record,tag);
+            tagService.save(tagName);
         }
-        // 멤버 권한 지정 및 매핑객체 생성
 
-        memberRecordService.save(members, record,recordWriterId);
+        memberRecordService.save(members,savedRecord,recordWriterId);
+        recordTagService.save(tags,savedRecord);
 
 
         return savedRecord;
@@ -79,7 +75,7 @@ public class RecordServiceImpl implements RecordService{
             recordRepository.save(record);
 
             //회의록 안의 태그 리스트 삭제
-            tagService.delete(record.getTagList());
+            tagService.delete(record.getRecordTagList());
 
             //MemberRecord 매핑객체 삭제
             memberRecordService.delete(record.getId());

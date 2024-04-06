@@ -22,14 +22,15 @@ public class TagServiceImpl implements TagService{
         tagRepository.save(tag);
         return tag;
     }
-    @Transactional
+
     @Override
-    public void delete(List<Tag> tagList){
+    public void delete(List<RecordTag> recordTagList){
         //Tag Count 감소, 0이라면 삭제
         //deleted 여부도 검사해야될듯
-        for (Tag tag : tagList) {
+        for (RecordTag recordTag : recordTagList) {
+            Tag tag= recordTag.getTag();
             tag.decrementCount();
-            if (tag.getCount() == 0) {
+            if (tag.getCount() <= 0) {
                 tag.delete();
             }
             tagRepository.save(tag);
