@@ -1,5 +1,7 @@
 package com.example.myrok.domain;
 
+import com.example.myrok.type.MemberProjectType;
+import com.example.myrok.type.Role;
 import jakarta.persistence.*;
 import jdk.jfr.Description;
 import lombok.*;
@@ -31,8 +33,28 @@ public class Member {
     @Builder.Default
     private Boolean deleted = false;
 
+    @Column(name = "img_url")
+    @Description("이미지 url")
+    private String imgUrl;
+
     @Description("멤버별 참조하는 프로젝트(팀) 참조")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")
     private Project project;
+
+    @ManyToOne
+    @JoinColumn(name = "record_id")
+    private Record record;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private MemberProjectType memberProjectType = MemberProjectType.NON_PROJECT_MEMBER;
+
+    public void changeProject(Project project){
+        this.project = project;
+    }
+    public void changeMemberProjectType(MemberProjectType memberProjectType){
+        this.memberProjectType = memberProjectType;
+    }
+
 }
