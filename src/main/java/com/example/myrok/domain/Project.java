@@ -32,11 +32,6 @@ public class Project extends BaseTimeEntity{
     @Builder.Default
     private Boolean deleted = false;
 
-    @Description("해당 프로젝트에 참여하는 멤버리스트")
-    @OneToMany(mappedBy = "project")
-    @Builder.Default
-    private List<Member> memberList = new ArrayList<>();
-
     @Column(name = "start_date")
     @Description("프로젝트 시작 일자")
     private LocalDate startDate;
@@ -46,12 +41,15 @@ public class Project extends BaseTimeEntity{
     private LocalDate endDate;
 
     @Column(name = "limit_member")
-    private int limitMember;
+    @Builder.Default
+    private int limitMember = 6;
 
     @Column(name = "invite_code")
     @Description("초대코드")
     @Builder.Default
     private String inviteCode = String.valueOf(UUID.randomUUID().toString().split("-")[0]);
 
+    @OneToMany(mappedBy = "project")
+    private List<MemberProject> memberProjects;
     public void changeDeleted(){this.deleted = true;}
 }
