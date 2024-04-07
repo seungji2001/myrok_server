@@ -18,19 +18,19 @@ public class ProjectControllerTests {
 
     @Test
     public void createProject(){
-        memberService.checkMemberHaveProject(1L);
+        memberService.checkMemberHaveProject(2L);
         ProjectDto.RegisterProject registerProject = ProjectDto.RegisterProject.builder()
                 .projectName("test_member2")
                 .startDate("")
                 .endDate("")
                 .build();
         Long projectId = projectService.register(registerProject);
-        log.info(memberService.registerProjectToMember(1L, projectId));
+        log.info(memberService.registerProjectToMember(2L, projectId));
     }
 
     @Test
     public void participantProject(){
-        memberService.checkMemberHaveProject(2L);
-        log.info(memberService.participateProject(2L, "63a392d3"));
+        memberService.checkMemberHaveProject(3L);
+        log.info(memberService.participateProject(3L, "0ddd3e25"));
     }
 }
