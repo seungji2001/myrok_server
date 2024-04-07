@@ -19,7 +19,6 @@ public interface ProjectService {
                 .projectName(projectDto.getProjectName())
                 .startDate(LocalDate.parse(projectDto.getStartDate()))
                 .endDate(LocalDate.parse(projectDto.getEndDate()))
-                .limitMember(projectDto.getLimitMember())
                 .build();
     }
 
@@ -28,7 +27,6 @@ public interface ProjectService {
                 .projectName(project.getProjectName())
                 .startDate(String.valueOf(project.getStartDate()))
                 .endDate(String.valueOf(project.getEndDate()))
-                .limitMember(project.getLimitMember())
                 .build();
     }
 }

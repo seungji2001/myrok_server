@@ -34,15 +34,10 @@ public class ProjectController {
             description = "프로젝트 생성을 완료하였습니다."
     )
     @PostMapping("/")
-    public ResponseEntity<Long> createProject(@RequestBody ProjectDto.RegisterProject projectDto){
-        memberService.checkMemberHaveProject(2L);
-        ProjectDto.RegisterProject registerProject = ProjectDto.RegisterProject.builder()
-                .projectName("test_member2")
-                .startDate("")
-                .endDate("")
-                .build();
-        Long projectId = projectService.register(registerProject);
-        return ResponseEntity.ok().body(memberService.registerProjectToMember(2L, projectId));
+    public ResponseEntity<Long> createProject(@RequestBody ProjectDto.RegisterProject projectDto, Long memberId){
+        memberService.checkMemberHaveProject(memberId);
+        Long projectId = projectService.register(projectDto);
+        return ResponseEntity.ok().body(memberService.registerProjectToMember(memberId, projectId));
     }
 
     @Operation(
@@ -58,18 +53,16 @@ public class ProjectController {
         memberService.checkMemberHaveProject(memberId);
         return ResponseEntity.ok().body(memberService.participateProject(memberId, projectDto.getInviteCode()));
     }
-//    @Operation(
-//            summary = "프로젝트 나가기",
-//            description = "프로젝트에서 나갑니다."
-//    )
-//    @ApiResponse(
-//            responseCode = "200",
-//            description = "프로젝트에서 나갔습니다."
-//    )
-//    @DeleteMapping("/")
-//    public ResponseEntity<Long> getOutProject(Long memberId, Long projectId){
-//        Project project = memberService.getOutFromProject(memberId,projectId);
-//        projectService.checkProjectDelete(project);
-//        return ResponseEntity.ok().body(project.getId());
-//    }
+    @Operation(
+            summary = "프로젝트 나가기",
+            description = "프로젝트에서 나갑니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "프로젝트에서 나갔습니다."
+    )
+    @DeleteMapping("/")
+    public ResponseEntity<Long> getOutProject(@RequestBody ProjectDto.ProjectMemberDto dto) {
+        return ResponseEntity.ok().body(memberService.getOutFromProject(dto.getProjectId(),dto.getMemberId()));
+    }
 }

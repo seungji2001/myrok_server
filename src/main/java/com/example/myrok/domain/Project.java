@@ -41,7 +41,8 @@ public class Project extends BaseTimeEntity{
     private LocalDate endDate;
 
     @Column(name = "limit_member")
-    private int limitMember;
+    @Builder.Default
+    private int limitMember = 6;
 
     @Column(name = "invite_code")
     @Description("초대코드")
