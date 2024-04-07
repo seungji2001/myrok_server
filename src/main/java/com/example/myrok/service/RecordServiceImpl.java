@@ -3,17 +3,22 @@ package com.example.myrok.service;
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.RecordDTO;
+import com.example.myrok.exception.CustomException;
 import com.example.myrok.exception.NotFoundException;
 import com.example.myrok.repository.*;
+import com.example.myrok.type.ErrorCode;
 import com.example.myrok.type.Role;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
@@ -37,6 +42,7 @@ public class RecordServiceImpl implements RecordService{
 
     private static final Logger logger = LoggerFactory.getLogger(RecordServiceImpl.class);
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Record save(RecordDTO recordDTO){
 
@@ -47,7 +53,7 @@ public class RecordServiceImpl implements RecordService{
         Long recordWriterId=recordDTO.recordWriterId();
 
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new NotFoundException("해당 프로젝트를 찾을 수 없습니다. ID: " + projectId));
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 프로젝트입니다. id: " + projectId));
 
         Record record=recordDTO.toEntity(project);
         Record savedRecord = recordRepository.save(record);
@@ -66,22 +72,24 @@ public class RecordServiceImpl implements RecordService{
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void deleteUpdate(Long id) {
+    public void deleteUpdate(Long recorId) {
+        // 회의록 삭제
+        Record record = recordRepository.findById(recorId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회의록입니다. id: " + recorId));
+        if (record.getDeleted()) {
+            throw new CustomException(ErrorCode.DELETED_RECORD_CODE, HttpStatus.BAD_REQUEST);
+        }
+        record.delete();
+        recordRepository.save(record);
 
-            // 회의록 삭제
-            Record record = recordRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("해당 회의록을 찾을 수 없습니다. ID: "+id));
-            record.delete();
-            recordRepository.save(record);
+        //회의록 안의 태그 리스트 삭제
+        tagService.delete(record.getRecordTagList());
 
-            //회의록 안의 태그 리스트 삭제
-            tagService.delete(record.getRecordTagList());
+        //MemberRecord 매핑객체 삭제
+        memberRecordService.delete(record.getId());
 
-            //MemberRecord 매핑객체 삭제
-            memberRecordService.delete(record.getId());
-
-            //RecordTag 매핑객체 삭제
-            recordTagService.delete(record.getId());
+        //RecordTag 매핑객체 삭제
+        recordTagService.delete(record.getId());
 
     }
 }

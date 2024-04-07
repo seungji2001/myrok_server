@@ -42,7 +42,12 @@ public class Tag {
         this.count += 1;
     }
 
-    public void decrementCount(){ this.count -= 1; }
+    public void decrementCount(){
+        if (this.count <= 0) {
+            throw new IllegalArgumentException("태그를 삭제할 수 없습니다.");
+        }
+        this.count -= 1;
+    }
 
     public void delete(){ this.deleted=true; }
 
