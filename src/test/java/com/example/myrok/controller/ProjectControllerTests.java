@@ -33,4 +33,9 @@ public class ProjectControllerTests {
         memberService.checkMemberHaveProject(3L);
         log.info(memberService.participateProject(3L, "0ddd3e25"));
     }
+
+    @Test
+    public void getOutFromProject() {
+        memberService.getOutFromProject(2L, 2L);
+    }
 }

@@ -63,7 +63,7 @@ public class MemberServiceImpl implements MemberService {
     public Long participateProject(Long memberId, String inviteCode) {
         Optional<Project> project = projectRepository.findByInviteCode(inviteCode);
         if(project.isEmpty()){
-            throw new CustomException(ErrorCode.WRONG_INVITE_CODE, HttpStatus.NOT_ACCEPTABLE);
+            throw new CustomException(ErrorCode.WRONG_INVITE_CODE, HttpStatus.BAD_REQUEST);
         }
         MemberProject memberProject = memberProjectRepository.findByMemberIdAndProjectId(memberId, null).orElseThrow();
         memberProject.changeProject(project.get());
@@ -71,28 +71,10 @@ public class MemberServiceImpl implements MemberService {
         return memberProjectRepository.save(memberProject).getId();
     }
 
-//    @Override
-//    public Project participateProject(Long memberId, String inviteCode) {
-//        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
-//        Project project = projectRepository.findByInviteCode(inviteCode);
-//        if(project.getMemberList().size() + 1 > project.getLimitMember()){
-//            throw new CustomException(ErrorCode.LIMITED_MEMBER, HttpStatus.NOT_ACCEPTABLE);
-//        }
-//        member.changeProject(project);
-//        member.changeMemberProjectType(MemberProjectType.PROJECT_MEMBER);
-//        memberRepository.save(member);
-//        return member.getProject();
-//    }
-
-//    @Override
-//    public Project getOutFromProject(Long memberId, Long projectId) {
-//        Member member = memberRepository.findById(memberId).orElseThrow();
-//        Project project = projectRepository.findById(projectId).orElseThrow();
-//        if(member.getProject() != project || member.getMemberProjectType() == MemberProjectType.NON_PROJECT_MEMBER){
-//            throw new CustomException(ErrorCode.MEMBER_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE);
-//        }
-//        member.changeMemberProjectType(MemberProjectType.NON_PROJECT_MEMBER);
-//        memberRepository.save(member);
-//        return project;
-//    }
+    @Override
+    public Long getOutFromProject(Long memberId, Long projectId) {
+        MemberProject memberProject = memberProjectRepository.findByMemberIdAndProjectIdAndMemberProjectType(memberId, projectId, MemberProjectType.PROJECT_MEMBER).orElseThrow(new CustomException(ErrorCode.MEMBER_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE));
+        memberProject.changeMemberProjectType(MemberProjectType.NON_PROJECT_MEMBER);
+        return memberProjectRepository.save(memberProject).getId();
+    }
 }

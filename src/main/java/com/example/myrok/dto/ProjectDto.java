@@ -19,8 +19,6 @@ public class ProjectDto {
         private String endDate;
         @NonNull
         private String startDate;
-        @Builder.Default
-        private int limitMember = 6;
     }
 
     @Data
@@ -30,6 +28,17 @@ public class ProjectDto {
     public static class ParticipateProject{
         @NonNull
         private String inviteCode;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class ProjectMemberDto{
+        @NonNull
+        private Long projectId;
+        @NonNull
+        private Long memberId;
     }
 
 }
