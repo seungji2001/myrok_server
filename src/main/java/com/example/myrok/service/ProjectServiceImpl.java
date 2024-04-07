@@ -10,11 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RequiredArgsConstructor // property에 대한 의존성 주입
 @Service
@@ -24,7 +20,11 @@ public class ProjectServiceImpl implements ProjectService{
     private final ProjectRepository projectRepository;
 
     @Override
-    public Long register(ProjectDto projectDto) {
+    public Long register(ProjectDto.RegisterProject projectDto) {
+        if(Objects.equals(projectDto.getStartDate(), "") && Objects.equals(projectDto.getEndDate(), "")){
+            projectDto.setStartDate("1000-01-01");
+            projectDto.setEndDate("3000-01-01");
+        }
         Project project = dtoToEntity(projectDto);
         return projectRepository.save(project).getId();
     }
@@ -35,11 +35,11 @@ public class ProjectServiceImpl implements ProjectService{
     public Long checkProjectDelete(Project project) {
         boolean canDelete = true;
         //한명이라도 소속 멤버인 경우 delete하지 않는다
-        for(int i = 0; i<project.getMemberList().size(); i++){
-            if(project.getMemberList().get(i).getMemberProjectType() == MemberProjectType.PROJECT_MEMBER){
-                canDelete = false;
-            }
-        }
+//        for(int i = 0; i<project.getMemberList().size(); i++){
+//            if(project.getMemberList().get(i).getMemberProjectType() == MemberProjectType.PROJECT_MEMBER){
+//                canDelete = false;
+//            }
+//        }
         if(canDelete){
             project.changeDeleted();
         }

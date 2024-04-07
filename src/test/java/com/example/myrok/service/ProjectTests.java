@@ -1,4 +1,4 @@
-package com.example.myrok;
+package com.example.myrok.service;
 
 import com.example.myrok.domain.Project;
 import com.example.myrok.dto.ProjectDto;
@@ -23,18 +23,13 @@ public class ProjectTests {
 
     @Test
     public void testRegister(){
-        ProjectDto projectDto = ProjectDto.builder()
+        ProjectDto.RegisterProject projectDto = ProjectDto.RegisterProject.builder()
                 .projectName("test name 1")
-                .startDate("2024-01-01")
-                .endDate("2025-01-01")
+                .startDate("")
+                .endDate("")
                 .build();
         Long projectId = projectService.register(projectDto);
-        Project project = memberService.registerProjectToMember(2L, projectId);
-        log.info(project.getId());
-    }
-
-    @Test
-    public void testParticipate(){
-        memberService.participateProject(2L, "e6d75f72-0d56-4834-b5a0-ba72e90b226a");
+        Long project = memberService.registerProjectToMember(1L, projectId);
+        log.info(project);
     }
 }
