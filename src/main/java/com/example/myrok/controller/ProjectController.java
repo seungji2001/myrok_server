@@ -25,36 +25,39 @@ public class ProjectController {
     private final ProjectService projectService;
     private final MemberService memberService;
 
-//    @Operation(
-//            summary = "프로젝트 생성",
-//            description = "프로젝트를 생성합니다"
-//    )
-//    @ApiResponse(
-//            responseCode = "200",
-//            description = "프로젝트 생성을 완료하였습니다."
-//    )
-//    @PostMapping("/")
-//    public ResponseEntity<Long> createProject(Long memberId, @RequestBody ProjectDto.RegisterProject projectDto){
-//        memberService.checkMemberHaveProject(memberId);
-//        Long projectId = projectService.register(projectDto);
-//        Project project = memberService.registerProjectToMember(memberId, projectId);
-//        return ResponseEntity.ok().body(project.getId());
-//    }
+    @Operation(
+            summary = "프로젝트 생성",
+            description = "프로젝트를 생성합니다"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "프로젝트 생성을 완료하였습니다."
+    )
+    @PostMapping("/")
+    public ResponseEntity<Long> createProject(@RequestBody ProjectDto.RegisterProject projectDto){
+        memberService.checkMemberHaveProject(2L);
+        ProjectDto.RegisterProject registerProject = ProjectDto.RegisterProject.builder()
+                .projectName("test_member2")
+                .startDate("")
+                .endDate("")
+                .build();
+        Long projectId = projectService.register(registerProject);
+        return ResponseEntity.ok().body(memberService.registerProjectToMember(2L, projectId));
+    }
 
-//    @Operation(
-//            summary = "프로젝트 참가",
-//            description = "프로젝트에 참가합니다"
-//    )
-//    @ApiResponse(
-//            responseCode = "200",
-//            description = "프로젝트 참가를 완료하였습니다."
-//    )
-//    @PostMapping("/participate")
-//    public ResponseEntity<Long> participateProject(Long memberId, String inviteCode){
-//        memberService.checkMemberHaveProject(memberId);
-//        return ResponseEntity.ok().body(memberService.participateProject(memberId, inviteCode).getId());
-//    }
-
+    @Operation(
+            summary = "프로젝트 참가",
+            description = "프로젝트에 참가합니다"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "프로젝트 참가를 완료하였습니다."
+    )
+    @PostMapping("/participate")
+    public ResponseEntity<Long> participateProject(Long memberId, @RequestBody ProjectDto.ParticipateProject projectDto){
+        memberService.checkMemberHaveProject(memberId);
+        return ResponseEntity.ok().body(memberService.participateProject(memberId, projectDto.getInviteCode()));
+    }
 //    @Operation(
 //            summary = "프로젝트 나가기",
 //            description = "프로젝트에서 나갑니다."

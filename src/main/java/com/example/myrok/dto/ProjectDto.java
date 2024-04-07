@@ -23,4 +23,13 @@ public class ProjectDto {
         private int limitMember = 6;
     }
 
+    @Data
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class ParticipateProject{
+        @NonNull
+        private String inviteCode;
+    }
+
 }
