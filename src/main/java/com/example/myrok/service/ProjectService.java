@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Transactional
 public interface ProjectService {
+    //프로젝트 등록
     Long register(ProjectDto.RegisterProject requestDto);
 
     Long checkProjectDelete(Project project);
@@ -18,7 +19,6 @@ public interface ProjectService {
                 .projectName(projectDto.getProjectName())
                 .startDate(LocalDate.parse(projectDto.getStartDate()))
                 .endDate(LocalDate.parse(projectDto.getEndDate()))
-                .limitMember(projectDto.getLimitMember())
                 .build();
     }
 
@@ -27,7 +27,6 @@ public interface ProjectService {
                 .projectName(project.getProjectName())
                 .startDate(String.valueOf(project.getStartDate()))
                 .endDate(String.valueOf(project.getEndDate()))
-                .limitMember(project.getLimitMember())
                 .build();
     }
 }
