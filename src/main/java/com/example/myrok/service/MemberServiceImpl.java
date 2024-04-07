@@ -28,16 +28,25 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void initMemberProject(Long memberId) {
-
+        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
+        MemberProject memberProject = MemberProject.builder()
+                .member(member)
+                .memberProjectType(MemberProjectType.NON_PROJECT_MEMBER)
+                .project(null)
+                .build();
+        memberProjectRepository.save(memberProject);
     }
 
     @Override
     public void checkMemberHaveProject(Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
         Optional<MemberProject> memberProject = memberProjectRepository.findByMemberAndMemberProjectType(member, MemberProjectType.PROJECT_MEMBER);
-        //멤버가 진행중인 프로젝트가 있는 경우
-        memberProject.get();
-        throw new CustomException(ErrorCode.MEMBER_IN_PROJECT, HttpStatus.NOT_ACCEPTABLE);
+        //멤버가 진행중인 프로젝트가 없는 경우, 초기화 상태 만들어준다.
+        if(memberProject.isEmpty()){
+            this.initMemberProject(memberId);
+        }else{
+            throw new CustomException(ErrorCode.MEMBER_IN_PROJECT, HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     @Override
