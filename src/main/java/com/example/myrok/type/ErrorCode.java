@@ -3,11 +3,15 @@ package com.example.myrok.type;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ErrorCode implements EnumModel{
+    // 400 Invalid Argument Error
+    MISSING_REQUEST_PARAMETER(40000, "I001", "요청 파라미터 불일치 에러"),
+    MISMATCH_PARAMETER_TYPE(40001, "I002", "요청 파라미터 타입 에러"),
     // COMMON
     RESOURCE_NOT_FOUND(40400, "C001", "존재하지 않습니다."),
     //project
