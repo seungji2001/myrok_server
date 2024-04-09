@@ -1,5 +1,6 @@
 package com.example.myrok.controller;
 
+import com.example.myrok.domain.Project;
 import com.example.myrok.dto.ProjectDto;
 import com.example.myrok.service.MemberService;
 import com.example.myrok.service.ProjectService;
@@ -36,6 +37,7 @@ public class ProjectControllerTests {
 
     @Test
     public void getOutFromProject() {
-        memberService.getOutFromProject(2L, 2L);
+        memberService.getOutFromProject(3L, 3L);
+        projectService.checkProjectDelete(3L);
     }
 }
