@@ -2,7 +2,9 @@ package com.example.myrok.domain;
 
 import com.example.myrok.type.MemberProjectType;
 import com.example.myrok.type.Role;
+import com.example.myrok.type.ELoginProvider;
 import jakarta.persistence.*;
+import jdk.jfr.Category;
 import jdk.jfr.Description;
 import lombok.*;
 
@@ -27,6 +29,10 @@ public class Member {
     @Column(name = "social_id")
     private String socialId;
 
+    @Column(name = "provider")
+    @Enumerated(EnumType.STRING)
+    private ELoginProvider provider;
+
     @Description("랜덤 패스워드 부야")
     private String password;
 
@@ -42,4 +48,18 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<MemberProject> memberProjects;
 
+    @Builder
+    public Member(final String socialId,
+                  final String password,
+                  final ELoginProvider provider,
+                  final Category category
+    ) {
+        this.socialId = socialId;
+        this.password = password;
+        this.provider = provider;
+        this.isLogin = false;
+        this.refreshToken = null;
+        this.createdAt = LocalDateTime.now();
+        this.category = category;
+    }
 }
