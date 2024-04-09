@@ -11,7 +11,7 @@ public interface ProjectService {
     //프로젝트 등록
     Long register(ProjectDto.RegisterProject requestDto);
 
-    Long checkProjectDelete(Project project);
+    Long checkProjectDelete(Long projectId);
 
 
     default Project dtoToEntity(ProjectDto.RegisterProject projectDto){
