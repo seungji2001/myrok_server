@@ -8,6 +8,7 @@ import jdk.jfr.Category;
 import jdk.jfr.Description;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -48,11 +49,20 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<MemberProject> memberProjects;
 
+
+    @Column(name = "is_login", columnDefinition = "TINYINT(1)", nullable = false)
+    private Boolean isLogin;
+
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
     @Builder
     public Member(final String socialId,
                   final String password,
-                  final ELoginProvider provider,
-                  final Category category
+                  final ELoginProvider provider
     ) {
         this.socialId = socialId;
         this.password = password;
@@ -60,6 +70,5 @@ public class Member {
         this.isLogin = false;
         this.refreshToken = null;
         this.createdAt = LocalDateTime.now();
-        this.category = category;
     }
 }

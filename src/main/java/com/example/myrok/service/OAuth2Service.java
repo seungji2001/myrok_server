@@ -45,7 +45,7 @@ public class OAuth2Service {
         }
 
         if (tempId == null) {
-            throw new CustomException(ErrorCode.NOT_FOUND_END_POINT);
+            throw new CustomException(ErrorCode.RESOURCE_NOT_FOUND);
         }
 
         final String socialId = tempId;
