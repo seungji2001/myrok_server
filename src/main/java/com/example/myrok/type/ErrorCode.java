@@ -9,9 +9,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ErrorCode implements EnumModel{
-    // 400 Invalid Argument Error
-    MISSING_REQUEST_PARAMETER(40000, "I001", "요청 파라미터 불일치 에러"),
-    MISMATCH_PARAMETER_TYPE(40001, "I002", "요청 파라미터 타입 에러"),
+    // Parameter (400 Invalid Argument Error)
+    MISSING_REQUEST_PARAMETER(40000, "PA001", "요청 파라미터 불일치합니다."),
+    MISMATCH_PARAMETER_TYPE(40001, "PA002", "요청 파라미터 타입이 불일치합니다."),
     // COMMON
     RESOURCE_NOT_FOUND(40400, "C001", "존재하지 않습니다."),
     //project
