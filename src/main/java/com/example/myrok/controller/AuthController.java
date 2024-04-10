@@ -15,21 +15,21 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/myrok")
 public class AuthController {
 
     private final OAuth2Service oAuth2Service;
 
 
     //callback url 정보 담아오기
-    @GetMapping("/google")
+    @GetMapping("/auth/google")
     public ResponseDto<Map<String,String>> getGoogleRedirectUrl(){
         Map<String, String> map = new HashMap<>();
         map.put("url", oAuth2Service.getRedirectUrl(ELoginProvider.GOOGLE));
         return ResponseDto.ok(map);
     }
 
-    @GetMapping("/google/callback")
+    @GetMapping("/reissue/google")
     public void getGoogleAccessToken(String code, HttpServletResponse response) throws IOException {
         String accessToken = oAuth2Service.getAccessToken(code, ELoginProvider.GOOGLE);
         oAuth2Service.login(response, accessToken, ELoginProvider.GOOGLE);
