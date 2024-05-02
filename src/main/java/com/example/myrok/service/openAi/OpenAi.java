@@ -3,8 +3,6 @@ package com.example.myrok.service.openAi;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -27,10 +25,11 @@ public class OpenAi {
     public static String assistentId;
 
     @Value("${open_ai.api.key}")
-    public static String apiKey;
+    public String apiKey;
     public void makeRequest() throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
 
+        System.out.println(apiKey);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         headers.set("Authorization", "Bearer " + apiKey);
@@ -48,25 +47,12 @@ public class OpenAi {
         ResponseEntity<String> response = restTemplate.exchange("https://api.openai.com/v1/assistants", HttpMethod.POST, entity, String.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
-
-
-// JSON 문자열을 JsonNode로 파싱
         JsonNode jsonNode = objectMapper.readTree(response.getBody());
-
-// "id" 필드의 값을 가져옴
         assistentId = jsonNode.get("id").asText();
-
-        System.out.println(response);
-        System.out.println(threadId);
     }
 
 
     public void makeThread(){
-//        curl https://api.openai.com/v1/threads \
-//        -H "Content-Type: application/json" \
-//        -H "Authorization: Bearer $OPENAI_API_KEY" \
-//        -H "OpenAI-Beta: assistants=v1" \
-//        -d ''d
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         headers.set("Authorization", "Bearer " + apiKey);
@@ -80,7 +66,6 @@ public class OpenAi {
         ObjectMapper objectMapper = new ObjectMapper();
 
 
-// JSON 문자열을 JsonNode로 파싱
         JsonNode jsonNode = null;
         try {
             jsonNode = objectMapper.readTree(response.getBody());
@@ -88,7 +73,6 @@ public class OpenAi {
             throw new RuntimeException(e);
         }
 
-// "id" 필드의 값을 가져옴
         threadId = jsonNode.get("id").asText();
 
         System.out.println(response);
@@ -96,10 +80,7 @@ public class OpenAi {
 
     }
 
-    public void makeThreadRun() throws JSONException {
-//        @Headers("OpenAI-Beta: assistants=v1")
-//        @POST("/v1/threads/{thread_id}/runs")
-//        Single<Run> createRun(@Path("thread_id") String threadId, @Body RunCreateRequest runCreateRequest);
+    public void makeThreadRun() {
 
         String url = "https://api.openai.com/v1/threads/" + threadId + "/runs";
 
@@ -129,7 +110,6 @@ public class OpenAi {
         String jsonBody = "{\"role\": \"user\", \"content\": \"How does AI work? Explain it in simple terms.\"}";
 
         // HttpClient 생성
-
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -143,8 +123,6 @@ public class OpenAi {
                 "}";
 
         HttpEntity<String> entity = new HttpEntity<>(payload, headers);
-
-        url = "https://api.openai.com/v1/threads/" + threadId + "/messages";
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
         System.out.println(response.getBody());
@@ -162,7 +140,6 @@ public class OpenAi {
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        url = "https://api.openai.com/v1/threads/" + threadId + "/messages";
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         System.out.println(response.getBody());
     }
