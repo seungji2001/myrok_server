@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.NoSuchElementException;
 
@@ -25,5 +26,12 @@ public class ErrorControllerAdvice {
         ErrorResponse response = ErrorResponse.of(e.getErrorCode());
         response.setDetail(e.getMessage());
         return new ResponseEntity<>(response, e.getHttpStatus());
+    }
+
+    @ExceptionHandler(value = HttpClientErrorException.class)
+    protected ResponseEntity<ErrorResponse> httpClientErrorException(HttpClientErrorException e) {
+        ErrorResponse response = ErrorResponse.of(ErrorCode.INSUFFICIENT_VALID);
+        response.setDetail(e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
