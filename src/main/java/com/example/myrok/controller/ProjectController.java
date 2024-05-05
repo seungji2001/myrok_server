@@ -14,9 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -67,12 +64,5 @@ public class ProjectController {
     @DeleteMapping("/")
     public ResponseEntity<Long> getOutProject(@RequestBody ProjectDto.ProjectMemberDto dto) {
         return ResponseEntity.ok().body(memberService.getOutFromProject(dto.getProjectId(),dto.getMemberId()));
-    }
-
-    //소셜로그인
-    @PreAuthorize("isAuthenticated")
-    @GetMapping("/")
-    public OAuth2User home(@AuthenticationPrincipal OAuth2User user) {
-        return user;
     }
 }
