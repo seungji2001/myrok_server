@@ -46,6 +46,8 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.hamcrest:hamcrest-core'
 
     //querydsl 추가
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
