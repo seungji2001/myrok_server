@@ -66,7 +66,9 @@ public class ProjectController {
     )
     @DeleteMapping("/")
     public ResponseEntity<Long> getOutProject(@RequestBody ProjectDto.ProjectMemberDto dto) {
-        return ResponseEntity.ok().body(memberService.getOutFromProject(dto.getProjectId(),dto.getMemberId()));
+        memberService.getOutFromProject(dto.getMemberId(), dto.getProjectId());
+        Long id = projectService.checkProjectDelete(dto.getProjectId());
+        return ResponseEntity.ok().body(id);
     }
 
     //todo 회의록 Controller에 이동 필요
