@@ -16,6 +16,7 @@ public enum ErrorCode implements EnumModel{
     MEMBER_NOT_ACCEPTABLE(40602, "P003", "해당 프로젝트에 대한 권한이 없습니다."),
     WRONG_INVITE_CODE(40401, "P004", "잘못된 참여코드 입니다."),
     MEMBER_NOT_IN_PROJECT(40603,"P005","해당 프로젝트에 소속되지 않은 멤버입니다."),
+    NON_PROJECT_MEMBER_ERROR(40100,"P006","탈퇴된 멤버입니다."),
     // record
     DELETED_RECORD_CODE(40402,"R001","이미 삭제된 회의록입니다."),
     // tag

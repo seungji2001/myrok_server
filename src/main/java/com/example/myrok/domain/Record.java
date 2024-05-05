@@ -51,7 +51,6 @@ public class Record extends BaseTimeEntity {
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
     private List<RecordTag> recordTagList;
 
-    @JsonBackReference
     @Description("어떤 프로젝트의 회의록인지")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")
