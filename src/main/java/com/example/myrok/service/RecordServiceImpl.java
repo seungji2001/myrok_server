@@ -4,10 +4,8 @@ import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.RecordDTO;
 import com.example.myrok.exception.CustomException;
-import com.example.myrok.exception.NotFoundException;
 import com.example.myrok.repository.*;
 import com.example.myrok.type.ErrorCode;
-import com.example.myrok.type.Role;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import static com.example.myrok.type.MemberProjectType.PROJECT_MEMBER;
 
 @RequiredArgsConstructor
 @Service
@@ -27,11 +25,9 @@ public class RecordServiceImpl implements RecordService{
     @Autowired
     private final RecordRepository recordRepository;
     @Autowired
-    private final MemberRepository memberRepository;
-    @Autowired
-    private final TagRepository tagRepository;
-    @Autowired
     private final ProjectRepository projectRepository;
+    @Autowired
+    private final MemberProjectRepository memberProjectRepository;
 
     @Autowired
     private RecordTagService recordTagService;
@@ -39,8 +35,6 @@ public class RecordServiceImpl implements RecordService{
     private MemberRecordService memberRecordService;
     @Autowired
     private TagService tagService;
-
-    private static final Logger logger = LoggerFactory.getLogger(RecordServiceImpl.class);
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -52,8 +46,23 @@ public class RecordServiceImpl implements RecordService{
         Long projectId = recordDTO.projectId();
         Long recordWriterId=recordDTO.recordWriterId();
 
+        // 작성자 아이디가 멤버 리스트에 없다면 예외
+        if (!members.contains(recordWriterId)){
+            throw new IllegalArgumentException("작성자 아이디가 멤버 리스트에 없습니다.");
+        }
+
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 프로젝트입니다. id: " + projectId));
+
+        // 멤버가 프로젝트 소속인지 확인
+        for (Long memberId : members){
+            MemberProject memberProject = memberProjectRepository.findByMemberIdAndProjectId(memberId,projectId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_IN_PROJECT, HttpStatus.BAD_REQUEST));
+            // 탈퇴 여부도 확인.
+            if (memberProject.getMemberProjectType()!=PROJECT_MEMBER){
+                throw new CustomException(ErrorCode.NON_PROJECT_MEMBER_ERROR, HttpStatus.BAD_REQUEST);
+            }
+        }
 
         Record record=recordDTO.toEntity(project);
         Record savedRecord = recordRepository.save(record);

@@ -8,6 +8,7 @@ import com.example.myrok.repository.MemberProjectRepository;
 import com.example.myrok.repository.MemberRecordRepository;
 import com.example.myrok.repository.MemberRepository;
 import com.example.myrok.type.ErrorCode;
+import com.example.myrok.type.MemberProjectType;
 import com.example.myrok.type.Role;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,12 @@ public class MemberRecordServiceImpl implements MemberRecordService{
         for (Long memberId : members) {
             Member member = memberRepository.findById(memberId)
                     .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 멤버입니다. id: " + memberId));
-            // 멤버가 프로젝트 소속인지 확인
+            // 멤버가 소속된 프로젝트가 있는지 확인
             MemberProject memberProject=memberProjectRepository.findByMember(member)
                     .orElseThrow(() -> new EntityNotFoundException("소속된 프로젝트가 없는 멤버입니다. id: " + memberId));
-            if(!record.getProject().getId().equals(memberProject.getProject().getId())){
+            // 멤버가 해당 프로젝트 소속인지 확인
+            if(!record.getProject().getId().equals(memberProject.getProject().getId())
+            || memberProject.getMemberProjectType()== MemberProjectType.NON_PROJECT_MEMBER){
                 throw new CustomException(ErrorCode.MEMBER_NOT_IN_PROJECT, HttpStatus.BAD_REQUEST);
             }
             // 멤버별 권한 부여
