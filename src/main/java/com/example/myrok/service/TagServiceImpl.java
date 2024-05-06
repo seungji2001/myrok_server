@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TagServiceImpl implements TagService{
@@ -20,14 +21,19 @@ public class TagServiceImpl implements TagService{
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Tag save(String tagName){
-        Tag tag = tagRepository.findByTagName(tagName)
-                .orElseGet(() -> tagRepository.save(new Tag(tagName,0,false)));
-        // count 증가
-        tag.incrementCount();
-        tagRepository.save(tag);
-        return tag;
-    }
 
+        Optional<Tag> Tag = tagRepository.findByTagName(tagName);
+
+        if (Tag.isPresent()) {
+            // 존재하는 태그의 경우, count 증가 후 저장
+            Tag tag = Tag.get();
+            tag.incrementCount();
+            return tagRepository.save(tag);
+        } else {
+            // 존재하지 않는 태그의 경우, 새로운 태그 생성 후 저장
+            return tagRepository.save(new Tag(tagName, 1, false));
+        }
+    }
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void delete(List<RecordTag> recordTagList){
