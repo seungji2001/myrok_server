@@ -2,6 +2,7 @@ package com.example.myrok.domain;
 
 import jakarta.persistence.*;
 import jdk.jfr.Description;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -13,7 +14,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Record {
+@Setter
+public class Record extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +31,10 @@ public class Record {
     private LocalDate recordDate;
 
     @NonNull
+    @Column(name = "record_writer_id")
+    private Long recordWriterId;
+
+    @NonNull
     @Column(name = "record_content", columnDefinition = "TEXT")
     private String recordContent;
 
@@ -38,7 +44,20 @@ public class Record {
     private Boolean deleted = false;
 
     @Description("해당 프로젝트에 참여하는 멤버리스트")
-    @OneToMany(mappedBy = "record")
-    private List<Tag> tagList;
+    @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
+    private List<MemberRecord> memberRecordList;
+
+    @Description("해당 프로젝트에 포함된 태그리스트")
+    @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
+    private List<RecordTag> recordTagList;
+
+    @Description("어떤 프로젝트의 회의록인지")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "p_id")
+    private Project project;
+
+    public void delete(){
+        this.deleted=true;
+    }
 
 }
