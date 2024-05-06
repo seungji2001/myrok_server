@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode implements EnumModel{
     // COMMON
     RESOURCE_NOT_FOUND(40400, "C001", "존재하지 않습니다."),
-    INSUFFICIENT_VALID(40002, "C002", "불충분한 문장입니다."),
     //project
     MEMBER_IN_PROJECT(40600, "P001", "기존 프로젝트에서 나간 후 진행해주세요."),
     LIMITED_MEMBER(40601, "P002", "프로젝트 인원이 초과되었습니다."),
