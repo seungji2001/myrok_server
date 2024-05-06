@@ -5,6 +5,7 @@ import com.example.myrok.domain.Tag;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.TagRepository;
 import com.example.myrok.type.ErrorCode;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,9 @@ public class TagServiceImpl implements TagService{
         //Tag Count 감소, 0이라면 삭제
         //deleted 여부도 검사해야될듯
         for (RecordTag recordTag : recordTagList) {
-            Tag tag= recordTag.getTag();
+            String tagName= recordTag.getTag().getTagName();
+            Tag tag = tagRepository.findByTagName(tagName)
+                    .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 태그입니다. name: " + tagName));
             if (tag.getDeleted()) {
                 throw new CustomException(ErrorCode.DELETED_TAG_CODE, HttpStatus.BAD_REQUEST);
             }
