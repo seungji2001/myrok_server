@@ -41,4 +41,5 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<MemberProject> memberProjects;
+
 }
