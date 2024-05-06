@@ -15,7 +15,19 @@ public enum ErrorCode implements EnumModel{
     MEMBER_IN_PROJECT(40600, "P001", "기존 프로젝트에서 나간 후 진행해주세요."),
     LIMITED_MEMBER(40601, "P002", "프로젝트 인원이 초과되었습니다."),
     MEMBER_NOT_ACCEPTABLE(40602, "P003", "해당 프로젝트에 대한 권한이 없습니다."),
-    WRONG_INVITE_CODE(40401, "P004", "잘못된 참여코드 입니다.");
+    WRONG_INVITE_CODE(40401, "P004", "잘못된 참여코드 입니다."),
+    MEMBER_NOT_IN_PROJECT(40603,"P005","해당 프로젝트에 소속되지 않은 멤버입니다."),
+    NON_PROJECT_MEMBER_ERROR(40100,"P006","탈퇴된 멤버입니다."),
+    // record
+    DELETED_RECORD_CODE(40402,"R001","이미 삭제된 회의록입니다."),
+    // tag
+    DELETED_TAG_CODE(40403,"T001","이미 삭제된 태그입니다."),
+    // memberRecord
+    DELETED_MR_CODE(40404,"MR001","이미 삭제된 MemberRecord 매핑입니다."),
+    // recordTag
+    DELETED_RT_CODE(40405,"RT001","이미 삭제된 RecordTag 매핑입니다.");
+
+
 
     private int status;
     private String code;

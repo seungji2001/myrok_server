@@ -1,6 +1,6 @@
 package com.example.myrok.repository;
 
-import com.example.myrok.domain.Member;
+import com.example.myrok.domain.RecordTag;
 import com.example.myrok.domain.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
-
-    List<Member> findAllByIdIn(List<Long> memberList);
+public interface RecordTagRepository extends JpaRepository<RecordTag,Long> {
+    List<RecordTag> findAllByRecordId(Long id);
 }
