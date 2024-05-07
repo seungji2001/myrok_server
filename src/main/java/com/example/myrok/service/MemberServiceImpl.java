@@ -41,9 +41,11 @@ public class MemberServiceImpl implements MemberService {
         if(project.isEmpty()){
             throw new CustomException(ErrorCode.WRONG_INVITE_CODE, HttpStatus.BAD_REQUEST);
         }
-        MemberProject memberProject = memberProjectRepository.findByMemberIdAndProjectId(memberId, null).orElseThrow();
-        memberProject.changeProject(project.get());
-        memberProject.changeMemberProjectType(MemberProjectType.PROJECT_MEMBER);
+        MemberProject memberProject = MemberProject.builder()
+                .member(memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new))
+                .project(project.get())
+                .memberProjectType(MemberProjectType.PROJECT_MEMBER)
+                .build();
         return memberProjectRepository.save(memberProject).getId();
     }
 
