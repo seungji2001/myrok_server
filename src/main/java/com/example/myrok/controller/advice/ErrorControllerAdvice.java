@@ -5,11 +5,13 @@ import com.example.myrok.exception.CustomException;
 import com.example.myrok.type.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.time.format.DateTimeParseException;
 import java.util.NoSuchElementException;
 
 @RestControllerAdvice //컨트롤러에서 발생하는 예외처리를 해당 클래스안에서 해
@@ -28,7 +30,7 @@ public class ErrorControllerAdvice {
         return new ResponseEntity<>(response, e.getHttpStatus());
     }
 
-    @ExceptionHandler(value = HttpClientErrorException.class)
+    @ExceptionHandler({HttpClientErrorException.class, HttpMessageNotReadableException.class, NullPointerException.class, DateTimeParseException.class})
     protected ResponseEntity<ErrorResponse> httpClientErrorException(HttpClientErrorException e) {
         ErrorResponse response = ErrorResponse.of(ErrorCode.INSUFFICIENT_VALID);
         response.setDetail(e.getMessage());
