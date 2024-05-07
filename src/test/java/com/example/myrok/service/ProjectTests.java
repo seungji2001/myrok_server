@@ -32,4 +32,10 @@ public class ProjectTests {
         Long project = memberService.registerProjectToMember(1L, projectId);
         log.info(project);
     }
+
+    @Test
+    public void testGetMembersByProjectId(){
+        ProjectDto.ProjectMembersDto projectMembersDto = projectService.getProjectMembers(4L);
+        log.info(projectMembersDto);
+    }
 }

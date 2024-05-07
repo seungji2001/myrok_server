@@ -84,4 +84,17 @@ public class ProjectController {
     public ResponseEntity<ClovaDto.ResponseDto> getOutProject(@RequestBody ClovaDto.RequestDto requestDto) {
         return ResponseEntity.ok().body(clovaSummary.get(requestDto));
     }
+
+    @Operation(
+            summary = "프로젝트 멤버를 가져옵니다",
+            description = "프로젝트 멤버를 가져옵니다"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "프로젝트 멤버를 가져왔습니다."
+    )
+    @PostMapping("/{projectId}/members")
+    public ResponseEntity<ProjectDto.ProjectMembersDto> getProjectMembers(@PathVariable Long projectId) {
+        return ResponseEntity.ok().body(projectService.getProjectMembers(projectId));
+    }
 }
