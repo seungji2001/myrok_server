@@ -1,7 +1,9 @@
 package com.example.myrok.service;
 
 import com.example.myrok.domain.Member;
+import com.example.myrok.domain.MemberProject;
 import com.example.myrok.domain.Project;
+import com.example.myrok.dto.MemberDto;
 import com.example.myrok.dto.ProjectDto;
 import com.example.myrok.repository.MemberProjectRepository;
 import com.example.myrok.repository.MemberRepository;
@@ -12,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor // property에 대한 의존성 주입
 @Service
@@ -44,4 +47,21 @@ public class ProjectServiceImpl implements ProjectService{
         projectRepository.save(project);
         return project.getId();
     }
+
+    @Override
+    public ProjectDto.ProjectMembersDto getProjectMembers(Long projectId) {
+        //해당 프로젝트 소속 인원의 정보 들고오기
+        List<MemberDto.MemberNameDto> memberNameDtos= memberProjectRepository.findAllByProjectIdAndMemberProjectType(projectId, MemberProjectType.PROJECT_MEMBER)
+                .stream()
+                .map(memberProject -> {
+                    return MemberDto.MemberNameDto.builder()
+                            .memberId(memberProject.getMember().getId())
+                            .memberName(memberProject.getMember().getName())
+                            .build();
+                }).collect(Collectors.toList());
+        return ProjectDto.ProjectMembersDto.builder()
+                .projectMemberNames(memberNameDtos)
+                .build();
+    }
+
 }

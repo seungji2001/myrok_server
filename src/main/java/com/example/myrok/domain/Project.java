@@ -55,6 +55,7 @@ public class Project extends BaseTimeEntity{
 
     @Description("프로젝트 소속 회의록")
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
     private List<Record> record = new ArrayList<>();
 
     @OneToMany(mappedBy = "project")
