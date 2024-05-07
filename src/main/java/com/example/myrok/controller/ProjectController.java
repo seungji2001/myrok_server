@@ -39,8 +39,7 @@ public class ProjectController {
     @PostMapping("/")
     public ResponseEntity<Long> createProject(@RequestBody ProjectDto.RegisterProject projectDto, Long memberId){
         memberService.checkMemberHaveProject(memberId);
-        Long projectId = projectService.register(projectDto);
-        return ResponseEntity.ok().body(memberService.registerProjectToMember(memberId, projectId));
+        return ResponseEntity.ok().body(projectService.register(projectDto , memberId));
     }
 
     @Operation(
