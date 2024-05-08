@@ -10,6 +10,6 @@ public class MemberDTO {
     @ToString
     public static class MemberNameDto{
         private Long memberId;
-        private String memberName;
+        private String name;
     }
 }
