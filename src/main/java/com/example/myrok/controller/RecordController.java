@@ -2,6 +2,7 @@ package com.example.myrok.controller;
 
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.RecordDTO;
+import com.example.myrok.dto.RecordResponseDTO;
 import com.example.myrok.service.RecordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,5 +35,11 @@ public class RecordController {
     public ResponseEntity<Record> delete(@PathVariable("recordId") Long id){
         recordService.deleteUpdate(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/list/{projectId}")
+    public ResponseEntity<List<RecordResponseDTO>> findAll(@PathVariable("projectId") Long projectId){
+        List<RecordResponseDTO> records=recordService.getRecords(projectId);
+        return ResponseEntity.ok(records);
     }
 }

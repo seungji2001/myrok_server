@@ -3,6 +3,7 @@ package com.example.myrok.service;
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.RecordDTO;
+import com.example.myrok.dto.RecordResponseDTO;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.*;
 import com.example.myrok.type.ErrorCode;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.example.myrok.type.MemberProjectType.PROJECT_MEMBER;
 
 @RequiredArgsConstructor
@@ -28,6 +31,8 @@ public class RecordServiceImpl implements RecordService{
     private final ProjectRepository projectRepository;
     @Autowired
     private final MemberProjectRepository memberProjectRepository;
+    @Autowired
+    private final MemberRepository memberRepository;
 
     @Autowired
     private RecordTagService recordTagService;
@@ -101,4 +106,20 @@ public class RecordServiceImpl implements RecordService{
         recordTagService.delete(record.getId());
 
     }
+
+    @Override
+    public List<RecordResponseDTO> getRecords(Long projectId) {
+        List<Record> recordList = recordRepository.findAllByProjectId(projectId);
+        return recordList.stream()
+                .map(record -> {
+                    Member member = memberRepository.findById(record.getRecordWriterId()).orElseThrow(EntityNotFoundException::new);
+                    return RecordResponseDTO.builder()
+                            .recordId(record.getId())
+                            .recordWriterName(member.getName())
+                            .recordDate(String.valueOf(record.getRecordDate()))
+                            .recordName(record.getRecordName())
+                            .build();
+                }).collect(Collectors.toList());
+    }
+
 }

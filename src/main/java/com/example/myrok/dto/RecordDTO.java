@@ -7,7 +7,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 import jakarta.validation.constraints.NotBlank;
-
+@Builder
 public record RecordDTO (
     @NotBlank(message = "제목은 필수 입력 사항입니다.")
     String recordName,
