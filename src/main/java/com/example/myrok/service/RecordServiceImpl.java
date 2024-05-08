@@ -2,13 +2,11 @@ package com.example.myrok.service;
 
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
-import com.example.myrok.dto.RecordDTO;
+import com.example.myrok.dto.classtype.RecordDTO;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.*;
 import com.example.myrok.type.ErrorCode;
 import jakarta.persistence.EntityNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
 import static com.example.myrok.type.MemberProjectType.PROJECT_MEMBER;
 
 @RequiredArgsConstructor
@@ -29,6 +30,8 @@ public class RecordServiceImpl implements RecordService{
     @Autowired
     private final MemberProjectRepository memberProjectRepository;
 
+    private final MemberRepository memberRepository;
+
     @Autowired
     private RecordTagService recordTagService;
     @Autowired
@@ -38,7 +41,7 @@ public class RecordServiceImpl implements RecordService{
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Record save(RecordDTO recordDTO){
+    public Record save(com.example.myrok.dto.recordtype.RecordDTO recordDTO){
 
         // 멤버 리스트 & 태그 리스트 받아와서 Record 저장
         List<String> tags = recordDTO.tagList();
@@ -101,4 +104,20 @@ public class RecordServiceImpl implements RecordService{
         recordTagService.delete(record.getId());
 
     }
+
+    @Override
+    public List<RecordDTO.RecordListObject> getRecords(Long projectId) {
+        List<Record> recordList = recordRepository.findAllByProjectId(projectId);
+        return recordList.stream()
+                .map(record -> {
+                    Member member = memberRepository.findById(record.getRecordWriterId()).orElseThrow(NoSuchElementException::new);
+                    return RecordDTO.RecordListObject.builder()
+                            .recordId(record.getId())
+                            .recordWriterName(member.getName())
+                            .recordDate(String.valueOf(record.getRecordDate()))
+                            .recordName(record.getRecordName())
+                            .build();
+                }).collect(Collectors.toList());
+    }
+
 }

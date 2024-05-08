@@ -3,8 +3,8 @@ package com.example.myrok.service;
 import com.example.myrok.domain.Member;
 import com.example.myrok.domain.MemberProject;
 import com.example.myrok.domain.Project;
-import com.example.myrok.dto.MemberDto;
-import com.example.myrok.dto.ProjectDto;
+import com.example.myrok.dto.classtype.MemberDTO;
+import com.example.myrok.dto.classtype.ProjectDTO;
 import com.example.myrok.repository.MemberProjectRepository;
 import com.example.myrok.repository.MemberRepository;
 import com.example.myrok.repository.ProjectRepository;
@@ -26,7 +26,7 @@ public class ProjectServiceImpl implements ProjectService{
     private final MemberRepository memberRepository;
 
     @Override
-    public Long register(ProjectDto.RegisterProject projectDto, Long memberId) {
+    public Long register(ProjectDTO.RegisterProject projectDto, Long memberId) {
         if(Objects.equals(projectDto.getStartDate(), "") && Objects.equals(projectDto.getEndDate(), "")){
             projectDto.setStartDate("1000-01-01");
             projectDto.setEndDate("3000-01-01");
@@ -59,17 +59,17 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public ProjectDto.ProjectMembersDto getProjectMembers(Long projectId) {
+    public ProjectDTO.ProjectMembersDto getProjectMembers(Long projectId) {
         //해당 프로젝트 소속 인원의 정보 들고오기
-        List<MemberDto.MemberNameDto> memberNameDtos= memberProjectRepository.findAllByProjectIdAndMemberProjectType(projectId, MemberProjectType.PROJECT_MEMBER)
+        List<MemberDTO.MemberNameDto> memberNameDtos= memberProjectRepository.findAllByProjectIdAndMemberProjectType(projectId, MemberProjectType.PROJECT_MEMBER)
                 .stream()
                 .map(memberProject -> {
-                    return MemberDto.MemberNameDto.builder()
+                    return MemberDTO.MemberNameDto.builder()
                             .memberId(memberProject.getMember().getId())
                             .memberName(memberProject.getMember().getName())
                             .build();
                 }).collect(Collectors.toList());
-        return ProjectDto.ProjectMembersDto.builder()
+        return ProjectDTO.ProjectMembersDto.builder()
                 .projectMemberNames(memberNameDtos)
                 .build();
     }

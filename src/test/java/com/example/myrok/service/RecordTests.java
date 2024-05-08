@@ -4,7 +4,7 @@ import com.example.myrok.domain.Member;
 import com.example.myrok.domain.MemberProject;
 import com.example.myrok.domain.Project;
 import com.example.myrok.domain.Record;
-import com.example.myrok.dto.RecordDTO;
+import com.example.myrok.dto.recordtype.RecordDTO;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.MemberProjectRepository;
 import com.example.myrok.repository.MemberRepository;
@@ -160,6 +160,5 @@ public class RecordTests {
         verify(memberRecordService, never()).delete(anyLong());
         verify(recordTagService, never()).delete(anyLong());
     }
-
 
 }

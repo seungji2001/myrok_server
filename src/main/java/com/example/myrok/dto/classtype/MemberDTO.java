@@ -1,8 +1,8 @@
-package com.example.myrok.dto;
+package com.example.myrok.dto.classtype;
 
 import lombok.*;
 
-public class MemberDto {
+public class MemberDTO {
     @Data
     @NoArgsConstructor
     @Builder

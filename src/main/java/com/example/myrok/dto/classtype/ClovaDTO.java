@@ -1,9 +1,9 @@
-package com.example.myrok.dto;
+package com.example.myrok.dto.classtype;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
-public class ClovaDto {
+public class ClovaDTO {
     @Data
     @NoArgsConstructor
     @Builder

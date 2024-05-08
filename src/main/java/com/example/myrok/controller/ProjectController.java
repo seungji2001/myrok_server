@@ -1,26 +1,17 @@
 package com.example.myrok.controller;
 
-import com.example.myrok.domain.Project;
-import com.example.myrok.dto.ClovaDto;
-import com.example.myrok.dto.ProjectDto;
-import com.example.myrok.dto.error.ErrorResponse;
-import com.example.myrok.exception.CustomException;
+import com.example.myrok.dto.classtype.ClovaDTO;
+import com.example.myrok.dto.classtype.ProjectDTO;
 import com.example.myrok.service.MemberService;
 import com.example.myrok.service.ProjectService;
 import com.example.myrok.service.openAi.ClovaSummary;
-import com.example.myrok.type.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,7 +33,7 @@ public class ProjectController {
             description = "프로젝트 생성을 완료하였습니다."
     )
     @PostMapping("/")
-    public ResponseEntity<Long> createProject(@RequestBody ProjectDto.RegisterProject projectDto, Long memberId){
+    public ResponseEntity<Long> createProject(@RequestBody ProjectDTO.RegisterProject projectDto, Long memberId){
         memberService.checkMemberHaveProject(memberId);
         return ResponseEntity.ok().body(projectService.register(projectDto , memberId));
     }
@@ -56,7 +47,7 @@ public class ProjectController {
             description = "프로젝트 참가를 완료하였습니다."
     )
     @PostMapping("/participate")
-    public ResponseEntity<Long> participateProject(Long memberId, @RequestBody ProjectDto.ParticipateProject projectDto){
+    public ResponseEntity<Long> participateProject(Long memberId, @RequestBody ProjectDTO.ParticipateProject projectDto){
         memberService.checkMemberHaveProject(memberId);
         return ResponseEntity.ok().body(memberService.participateProject(memberId, projectDto.getInviteCode()));
     }
@@ -69,16 +60,16 @@ public class ProjectController {
             description = "프로젝트에서 나갔습니다."
     )
     @DeleteMapping("/")
-    public ResponseEntity<Long> getOutProject(@RequestBody ProjectDto.ProjectMemberDto dto) {
+    public ResponseEntity<Long> getOutProject(@RequestBody ProjectDTO.ProjectMemberDto dto) {
         memberService.getOutFromProject(dto.getMemberId(), dto.getProjectId());
         Long id = projectService.checkProjectDelete(dto.getProjectId());
         return ResponseEntity.ok().body(id);
     }
-    @PreAuthorize("isAuthenticated")
-    @GetMapping("/")
-    public OAuth2User home(@AuthenticationPrincipal OAuth2User user) {
-        return user;
-    }
+//    @PreAuthorize("isAuthenticated")
+//    @GetMapping("/")
+//    public OAuth2User home(@AuthenticationPrincipal OAuth2User user) {
+//        return user;
+//    }
 
     //todo 회의록 Controller에 이동 필요
     @Operation(
@@ -90,7 +81,7 @@ public class ProjectController {
             description = "회의록이 요약 되었습니다."
     )
     @PostMapping("/summary")
-    public ResponseEntity<ClovaDto.ResponseDto> getOutProject(@RequestBody ClovaDto.RequestDto requestDto) {
+    public ResponseEntity<ClovaDTO.ResponseDto> getOutProject(@RequestBody ClovaDTO.RequestDto requestDto) {
         return ResponseEntity.ok().body(clovaSummary.get(requestDto));
     }
 
@@ -103,7 +94,7 @@ public class ProjectController {
             description = "프로젝트 멤버를 가져왔습니다."
     )
     @PostMapping("/{projectId}/members")
-    public ResponseEntity<ProjectDto.ProjectMembersDto> getProjectMembers(@PathVariable Long projectId) {
+    public ResponseEntity<ProjectDTO.ProjectMembersDto> getProjectMembers(@PathVariable Long projectId) {
         return ResponseEntity.ok().body(projectService.getProjectMembers(projectId));
     }
 }
