@@ -2,6 +2,8 @@ package com.example.myrok.repository;
 
 import com.example.myrok.domain.Project;
 import com.example.myrok.domain.Record;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +14,9 @@ import java.util.List;
 @Repository
 public interface RecordRepository extends JpaRepository<Record, Long> {
 
-    @Query("SELECT r FROM Record r WHERE r.project.id = :projectId")
+
     List<Record> findAllByProjectId(@Param("projectId") Long projectId);
 
+    @Query("SELECT r FROM Record r WHERE r.project.id = :projectId")
+    Page<Object> selectList(Pageable Pageablepageable, @Param("projectId") Long projectId);
 }

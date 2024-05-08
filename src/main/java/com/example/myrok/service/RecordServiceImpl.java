@@ -3,10 +3,16 @@ package com.example.myrok.service;
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.classtype.RecordDTO;
+import com.example.myrok.dto.pagination.PageRequestDto;
+import com.example.myrok.dto.pagination.PageResponseDto;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.*;
 import com.example.myrok.type.ErrorCode;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -118,6 +124,41 @@ public class RecordServiceImpl implements RecordService{
                             .recordName(record.getRecordName())
                             .build();
                 }).collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResponseDto<RecordDTO.RecordListObject> getRecords(PageRequestDto pageRequestDto, Long projectId) {
+        Pageable pageable = PageRequest.of(pageRequestDto.getPage()-1,
+                pageRequestDto.getSize(),
+                Sort.by("recordDate").descending());
+
+        Page<Object> result = recordRepository.selectList(pageable, projectId);
+
+        List<RecordDTO.RecordListObject> dtoList = result.getContent().stream().map(arr -> {
+            RecordDTO.RecordListObject recordListObject = new RecordDTO.RecordListObject();
+
+            // Correctly cast each element of the array to its expected type
+            Record record = (Record) arr;
+
+
+            Member writer = memberRepository.findById(record.getRecordWriterId()).orElseThrow(NoSuchElementException::new);
+            recordListObject = RecordDTO.RecordListObject.builder()
+                    .recordId(record.getId())
+                    .recordDate(String.valueOf(record.getRecordDate()))
+                    .recordName(record.getRecordName())
+                    .recordWriterName(writer.getName())
+                    .build();
+
+            return recordListObject;
+        }).collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+
+        return PageResponseDto.<RecordDTO.RecordListObject>withAll()
+                .dtoList(dtoList)
+                .total(totalCount)
+                .pageRequestDto(pageRequestDto)
+                .build();
     }
 
 }

@@ -2,6 +2,8 @@ package com.example.myrok.service;
 
 import com.example.myrok.dto.classtype.ProjectDTO;
 import com.example.myrok.dto.classtype.RecordDTO;
+import com.example.myrok.dto.pagination.PageRequestDto;
+import com.example.myrok.dto.pagination.PageResponseDto;
 import com.example.myrok.repository.ProjectRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -42,6 +44,13 @@ public class ProjectTests {
     @Test
     public void getRecordListTests(){
         List<RecordDTO.RecordListObject> listObjects = recordService.getRecords(1L);
+        System.out.println(Arrays.asList(listObjects));
+    }
+
+    @Test
+    public void getRecordListPaginationTests(){
+        PageRequestDto pageRequestDto = PageRequestDto.builder().build();
+        PageResponseDto<RecordDTO.RecordListObject> listObjects = recordService.getRecords(pageRequestDto, 1L);
         System.out.println(Arrays.asList(listObjects));
     }
 }
