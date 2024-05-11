@@ -13,6 +13,8 @@ public interface ProjectService {
 
     Long checkProjectDelete(Long projectId);
 
+    String getInviteCode(Long projectId);
+
     ProjectDto.ProjectMembersDto getProjectMembers(Long projectId);
 
     default Project dtoToEntity(ProjectDto.RegisterProject projectDto){
