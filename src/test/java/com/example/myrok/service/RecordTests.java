@@ -6,6 +6,7 @@ import com.example.myrok.dto.RecordDTO;
 import com.example.myrok.dto.RecordUpdateDTO;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.*;
+import com.example.myrok.type.ErrorCode;
 import com.example.myrok.type.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -65,6 +66,7 @@ public class RecordTests {
     private MemberProject mockMemberProject1, mockMemberProject2;
     private RecordTag mockRecordTag1, mockRecordTag2;
     private Record mockRecord;
+    private MemberRecord mockPARTICIPANTMemberRecord;
     private MemberRecord mockADMINMemberRecord;
     private RecordDTO mockRecordDTO;
     private RecordUpdateDTO mockRecordUpdateDTO;
@@ -111,25 +113,29 @@ public class RecordTests {
         mockRecordTagList.add(mockRecordTag2);
         mockMemberProject1 = new MemberProject(1L, mockMember1, mockProject, PROJECT_MEMBER);
         mockMemberProject2 = new MemberProject(2L, mockMember2, mockProject, PROJECT_MEMBER);
+        mockPARTICIPANTMemberRecord = MemberRecord.builder()
+                .record(mockRecord)
+                .member(mockMember2)
+                .role(Role.PARTICIPANT)
+                .deleted(false)
+                .build();
+        mockADMINMemberRecord = MemberRecord.builder()
+                .record(mockRecord)
+                .member(mockMember1)
+                .role(Role.ADMIN)
+                .deleted(false)
+                .build();
 
         mockRecord = new Record();
         mockRecord.setId(recordId);
         mockRecord.setRecordTagList(mockRecordTagList);
         mockRecord.setProject(mockProject);
-        mockADMINMemberRecord = MemberRecord.builder()
-                .record(any(Record.class))
-                        .member(mockMember1)
-                                .role(Role.ADMIN)
-                                        .build();
 
         // Mock 설정
-        when(recordRepository.findById(recordId)).thenReturn(Optional.of(mockRecord));
-        when(projectRepository.findById(projectId)).thenReturn(Optional.of(mockProject));
         when(memberRepository.findById(memberId1)).thenReturn(Optional.of(mockMember1));
         when(memberRepository.findById(memberId2)).thenReturn(Optional.of(mockMember2));
         when(memberProjectRepository.findByMemberIdAndProjectId(memberId1, projectId)).thenReturn(Optional.of(mockMemberProject1));
         when(memberProjectRepository.findByMemberIdAndProjectId(memberId2, projectId)).thenReturn(Optional.of(mockMemberProject2));
-        when(memberRecordRepository.findByMemberIdAndRecordIdAndDeletedIsFalse(recordWriterId,recordId)).thenReturn(Optional.of(mockADMINMemberRecord));
         when(recordRepository.save(any(Record.class))).thenReturn(mockRecord);
     }
 
@@ -138,6 +144,7 @@ public class RecordTests {
     @Test
     public void saveRecordSuccess() {
         // Given
+        when(projectRepository.findById(projectId)).thenReturn(Optional.of(mockProject));
         mockRecordDTO = new RecordDTO(
                 "Test Record",
                 "This is a test record.",
@@ -147,10 +154,8 @@ public class RecordTests {
                 tagList,
                 recordWriterId
         );
-
         //When
         Record savedRecord=recordService.save(mockRecordDTO);
-
         //Then
         assertNotNull(savedRecord);
         verify(projectRepository, times(1)).findById(anyLong());
@@ -163,9 +168,10 @@ public class RecordTests {
     @Test
     @DisplayName("회의록 Soft delete 검사")
     public void deleteRecordSuccess() {
+        // Given
+        when(recordRepository.findById(recordId)).thenReturn(Optional.of(mockRecord));
         // When
         recordService.deleteUpdate(recordId);
-
         // Then
         //times() : 메소드가 호출된 횟수
         verify(recordRepository, times(1)).findById(recordId);
@@ -179,13 +185,16 @@ public class RecordTests {
     @DisplayName("이미 삭제된 회의록 삭제 시도 검사")
     public void deleteAlreadyDeletedRecordThrowsException() {
         // Given
+        when(recordRepository.findById(recordId)).thenReturn(Optional.of(mockRecord));
         mockRecord.delete(); // 이미 삭제된 상태로 설정
         // When
         // CustomException 이 던져지는지 assert
-        assertThrows(CustomException.class, () -> recordService.deleteUpdate(recordId));
-
+        CustomException customException = assertThrows(CustomException.class, () -> recordService.deleteUpdate(recordId));
         //Then
         // never() : 메소드가 실행되지 않았음을 검증. 삭제된 회의록의 삭제 시도니 관련 객체들도 삭제되면 안됨
+        assertEquals(ErrorCode.DELETED_RECORD_CODE, customException.getErrorCode()); // 에러 코드 검증
+        System.out.println("에러 코드: " + customException.getErrorCode()); // 에러 코드 로그로 출력
+
         verify(recordRepository, times(1)).findById(recordId);
         verify(recordRepository, never()).save(any(Record.class));
         verify(memberRecordService, never()).delete(anyLong());
@@ -195,6 +204,9 @@ public class RecordTests {
     @Test
     @DisplayName("회의록 수정 검사")
     public void updateRecordSuccess(){
+        //Given
+        when(memberRecordRepository.findByMemberIdAndRecordIdAndDeletedIsFalse(recordWriterId,recordId)).thenReturn(Optional.of(mockADMINMemberRecord));
+        when(recordRepository.findById(recordId)).thenReturn(Optional.of(mockRecord));
         //When
         Record updatedRecord = recordService.update(recordId,mockRecordUpdateDTO);
         //Then
@@ -208,11 +220,39 @@ public class RecordTests {
     }
 
     @Test
+    @DisplayName("이미 삭제된 회의록 수정 시도 검사")
+    public void updateAlreadyDeletedRecordThrowsException() {
+        // Given
+        when(memberRecordRepository.findByMemberIdAndRecordIdAndDeletedIsFalse(recordWriterId,recordId)).thenReturn(Optional.of(mockADMINMemberRecord));
+        when(recordRepository.findById(recordId)).thenReturn(Optional.of(mockRecord));
+        mockRecord.delete(); // 이미 삭제된 상태로 설정
+        // When
+        // CustomException 이 던져지는지 assert
+        CustomException customException = assertThrows(CustomException.class, () -> recordService.update(recordId,mockRecordUpdateDTO));
+        //Then
+        // never() : 메소드가 실행되지 않았음을 검증. 삭제된 회의록의 삭제 시도니 관련 객체들도 삭제되면 안됨
+        assertEquals(ErrorCode.DELETED_RECORD_CODE, customException.getErrorCode()); // 에러 코드 검증
+        System.out.println("에러 코드: " + customException.getErrorCode()); // 에러 코드 로그로 출력
+
+        verify(recordRepository, times(1)).findById(recordId);
+        verify(recordRepository, never()).save(any(Record.class));
+        verify(recordTagService, never()).delete(anyLong());
+        verify(recordTagService, never()).save(anyLong(), any(Record.class), anyString());
+
+    }
+
+    @Test
     @DisplayName("작성자 외 수정 시도")
     public void updateRecordThrowsException() {
+        //Given
+        when(memberRecordRepository.findByMemberIdAndRecordIdAndDeletedIsFalse(recordWriterId,recordId)).thenReturn(Optional.of(mockPARTICIPANTMemberRecord));
+        when(recordRepository.findById(recordId)).thenReturn(Optional.of(mockRecord));
         //When
-        assertThrows(CustomException.class, () -> recordService.update(2L,mockRecordUpdateDTO));
+        CustomException customException = assertThrows(CustomException.class, () -> recordService.update(recordId,mockRecordUpdateDTO));
         //Then
+        assertEquals(ErrorCode.WRONG_UPDATE_ACCESS, customException.getErrorCode()); // 에러 코드 검증
+        System.out.println("에러 코드: " + customException.getErrorCode()); // 에러 코드 로그로 출력
+
         verify(recordRepository, times(1)).findById(recordId);
         verify(recordRepository, never()).save(any(Record.class));
         verify(recordTagService, never()).delete(recordId);
