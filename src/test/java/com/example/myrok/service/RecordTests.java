@@ -3,11 +3,11 @@ package com.example.myrok.service;
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.RecordDTO;
+import com.example.myrok.dto.RecordUpdateDTO;
 import com.example.myrok.exception.CustomException;
-import com.example.myrok.repository.MemberProjectRepository;
-import com.example.myrok.repository.MemberRepository;
-import com.example.myrok.repository.ProjectRepository;
-import com.example.myrok.repository.RecordRepository;
+import com.example.myrok.repository.*;
+import com.example.myrok.type.Role;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +45,8 @@ public class RecordTests {
     @MockBean
     private MemberRepository memberRepository;
     @MockBean
+    private MemberRecordRepository memberRecordRepository;
+    @MockBean
     private MemberRecordServiceImpl memberRecordService;
     @MockBean
     private RecordTagServiceImpl recordTagService;
@@ -52,43 +55,90 @@ public class RecordTests {
     // When 에는 RecordService, Then 에는 RecordRepository 가 들어감
     // 다른 클래스 로직들은 해당 테스트에서 검증할 것이므로 Service 로 사용.
 
+    private Long recordId;
+    private Long projectId, memberId1, memberId2, recordWriterId;
+    private List<Long> memberList;
+    private List<String> tagList;
+    private List<RecordTag> mockRecordTagList = new ArrayList<>();
+    private Project mockProject;
+    private Member mockMember1, mockMember2;
+    private MemberProject mockMemberProject1, mockMemberProject2;
+    private RecordTag mockRecordTag1, mockRecordTag2;
+    private Record mockRecord;
+    private MemberRecord mockADMINMemberRecord;
+    private RecordDTO mockRecordDTO;
+    private RecordUpdateDTO mockRecordUpdateDTO;
+
+    @BeforeEach
+    void setUp() {
+        // 초기화 코드
+        projectId = 1L;
+        memberId1 = 1L;
+        memberId2 = 2L;
+        recordId = 1L;
+
+        memberList = List.of(memberId1, memberId2);
+        tagList = List.of("tag1", "tag2");
+        recordWriterId = memberId1;
+
+        mockProject = Project.builder()
+                .id(projectId)
+                .projectName("프로젝트")
+                .build();
+        mockMember1 = Member.builder()
+                .id(memberId1)
+                .name("김민서")
+                .build();
+        mockMember2 = Member.builder()
+                .id(memberId2)
+                .name("임지연")
+                .build();
+        mockRecordTag1 = RecordTag.builder()
+                .record(mockRecord)
+                .tagName("#tag1")
+                .build();
+        mockRecordTag2 = RecordTag.builder()
+                .record(mockRecord)
+                .tagName("#tag2")
+                .build();
+        mockRecordUpdateDTO = new RecordUpdateDTO(
+                "Update Record",
+                "This is updated content",
+                recordWriterId,
+                tagList
+        );
+        mockRecordTagList.add(mockRecordTag1);
+        mockRecordTagList.add(mockRecordTag2);
+        mockMemberProject1 = new MemberProject(1L, mockMember1, mockProject, PROJECT_MEMBER);
+        mockMemberProject2 = new MemberProject(2L, mockMember2, mockProject, PROJECT_MEMBER);
+
+        mockRecord = new Record();
+        mockRecord.setId(recordId);
+        mockRecord.setRecordTagList(mockRecordTagList);
+        mockRecord.setProject(mockProject);
+        mockADMINMemberRecord = MemberRecord.builder()
+                .record(any(Record.class))
+                        .member(mockMember1)
+                                .role(Role.ADMIN)
+                                        .build();
+
+        // Mock 설정
+        when(recordRepository.findById(recordId)).thenReturn(Optional.of(mockRecord));
+        when(projectRepository.findById(projectId)).thenReturn(Optional.of(mockProject));
+        when(memberRepository.findById(memberId1)).thenReturn(Optional.of(mockMember1));
+        when(memberRepository.findById(memberId2)).thenReturn(Optional.of(mockMember2));
+        when(memberProjectRepository.findByMemberIdAndProjectId(memberId1, projectId)).thenReturn(Optional.of(mockMemberProject1));
+        when(memberProjectRepository.findByMemberIdAndProjectId(memberId2, projectId)).thenReturn(Optional.of(mockMemberProject2));
+        when(memberRecordRepository.findByMemberIdAndRecordIdAndDeletedIsFalse(recordWriterId,recordId)).thenReturn(Optional.of(mockADMINMemberRecord));
+        when(recordRepository.save(any(Record.class))).thenReturn(mockRecord);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @DisplayName("회의록 저장 검사")
     @Test
     public void saveRecordSuccess() {
         // Given
-        Long projectId = 1L;
-        Long memberId1 = 1L;
-        Long memberId2 = 2L;
-
-        List<Long> memberList = List.of(memberId1, memberId2);
-        List<String> tagList = List.of("tag1", "tag2", "tag3");
-        Long recordWriterId = memberId1;
-
-        Project mockProject = Project.builder()
-                .id(projectId)
-                .projectName("프로젝트")
-                .build();
-        Member mockMember1 = Member.builder()
-                .id(memberId1)
-                .name("김민서")
-                .build();
-        Member mockMember2 = Member.builder()
-                .id(memberId1)
-                .name("임지연")
-                .build();
-        MemberProject mockMemberProject1 = new MemberProject(1L, mockMember1, mockProject, PROJECT_MEMBER);
-        MemberProject mockMemberProject2 = new MemberProject(2L, mockMember2, mockProject, PROJECT_MEMBER);
-        Record mockRecord = new Record();
-
-        when(projectRepository.findById(projectId)).thenReturn(Optional.of(mockProject));
-        when(memberRepository.findById(memberId1)).thenReturn(Optional.of(mockMember1));
-        when(memberRepository.findById(memberId2)).thenReturn(Optional.of(mockMember2));
-        when(memberProjectRepository.findByMemberIdAndProjectId(memberId1,projectId)).thenReturn(Optional.of(mockMemberProject1));
-        when(memberProjectRepository.findByMemberIdAndProjectId(memberId2,projectId)).thenReturn(Optional.of(mockMemberProject2));
-        when(recordRepository.save(any(Record.class))).thenReturn(mockRecord);
-
-        RecordDTO recordDTO = new RecordDTO(
+        mockRecordDTO = new RecordDTO(
                 "Test Record",
                 "This is a test record.",
                 LocalDate.now(),
@@ -99,7 +149,7 @@ public class RecordTests {
         );
 
         //When
-        Record savedRecord=recordService.save(recordDTO);
+        Record savedRecord=recordService.save(mockRecordDTO);
 
         //Then
         assertNotNull(savedRecord);
@@ -113,15 +163,6 @@ public class RecordTests {
     @Test
     @DisplayName("회의록 Soft delete 검사")
     public void deleteRecordSuccess() {
-        // Given
-        Long recordId = 1L;
-        Record mockRecord = new Record();
-        mockRecord.setId(recordId);
-
-        when(recordRepository.findById(recordId)).thenReturn(Optional.of(mockRecord));
-        doNothing().when(memberRecordService).delete(anyLong());
-        doNothing().when(recordTagService).delete(anyLong());
-
         // When
         recordService.deleteUpdate(recordId);
 
@@ -138,12 +179,7 @@ public class RecordTests {
     @DisplayName("이미 삭제된 회의록 삭제 시도 검사")
     public void deleteAlreadyDeletedRecordThrowsException() {
         // Given
-        Long recordId = 1L;
-        Record mockRecord = new Record();
         mockRecord.delete(); // 이미 삭제된 상태로 설정
-
-        when(recordRepository.findById(recordId)).thenReturn(Optional.of(mockRecord));
-
         // When
         // CustomException 이 던져지는지 assert
         assertThrows(CustomException.class, () -> recordService.deleteUpdate(recordId));
@@ -154,6 +190,34 @@ public class RecordTests {
         verify(recordRepository, never()).save(any(Record.class));
         verify(memberRecordService, never()).delete(anyLong());
         verify(recordTagService, never()).delete(anyLong());
+    }
+
+    @Test
+    @DisplayName("회의록 수정 검사")
+    public void updateRecordSuccess(){
+        //When
+        Record updatedRecord = recordService.update(recordId,mockRecordUpdateDTO);
+        //Then
+        assertEquals(mockRecordUpdateDTO.recordName(), updatedRecord.getRecordName());
+        assertEquals(mockRecordUpdateDTO.recordContent(), updatedRecord.getRecordContent());
+        verify(recordRepository, times(1)).findById(recordId);
+        verify(recordRepository, times(1)).save(any(Record.class));
+        verify(recordTagService,times(1)).delete(recordId);
+        verify(recordTagService, times(mockRecordUpdateDTO.tagList().size())).save(anyLong(), any(Record.class), anyString());
+
+    }
+
+    @Test
+    @DisplayName("작성자 외 수정 시도")
+    public void updateRecordThrowsException() {
+        //When
+        assertThrows(CustomException.class, () -> recordService.update(2L,mockRecordUpdateDTO));
+        //Then
+        verify(recordRepository, times(1)).findById(recordId);
+        verify(recordRepository, never()).save(any(Record.class));
+        verify(recordTagService, never()).delete(recordId);
+        verify(recordTagService, never()).save(anyLong(), any(Record.class), anyString());
+
     }
 
 

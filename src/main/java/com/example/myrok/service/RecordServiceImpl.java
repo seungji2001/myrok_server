@@ -4,9 +4,11 @@ import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.RecordDTO;
 import com.example.myrok.dto.RecordResponseDTO;
+import com.example.myrok.dto.RecordUpdateDTO;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.*;
 import com.example.myrok.type.ErrorCode;
+import com.example.myrok.type.Role;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +41,8 @@ public class RecordServiceImpl implements RecordService{
     private RecordTagService recordTagService;
     @Autowired
     private MemberRecordService memberRecordService;
+    @Autowired
+    private MemberRecordRepository memberRecordRepository;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -83,10 +88,10 @@ public class RecordServiceImpl implements RecordService{
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void deleteUpdate(Long recorId) {
+    public void deleteUpdate(Long recordId) {
         // 회의록 삭제
-        Record record = recordRepository.findById(recorId)
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회의록입니다. id: " + recorId));
+        Record record = recordRepository.findById(recordId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회의록입니다. id: " + recordId));
         if (record.getDeleted()) {
             throw new CustomException(ErrorCode.DELETED_RECORD_CODE, HttpStatus.BAD_REQUEST);
         }
@@ -99,6 +104,28 @@ public class RecordServiceImpl implements RecordService{
         //RecordTag 매핑객체 삭제
         recordTagService.delete(record.getId());
 
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Record update(Long recordId, RecordUpdateDTO recordUpdateDTO) {
+        List<String> tags = recordUpdateDTO.tagList();
+        Long recordWriterId = recordUpdateDTO.recordWriterId();
+        Record record = recordRepository.findById(recordId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회의록입니다. id: " + recordId));
+        MemberRecord memberRecord =memberRecordRepository.findByMemberIdAndRecordIdAndDeletedIsFalse(recordWriterId,recordId)
+                .orElseThrow(() -> new CustomException(ErrorCode.WRONG_UPDATE_ACCESS, HttpStatus.BAD_REQUEST));
+
+        List<RecordTag> updateRecordTagList = new ArrayList<>();
+        for (String tagName : tags) {
+            updateRecordTagList.add(recordTagService.save(record.getProject().getId(),record,tagName));
+        }
+        recordTagService.delete(record.getId());
+        record.setRecordName(recordUpdateDTO.recordName());
+        record.setRecordContent(recordUpdateDTO.recordContent());
+        record.setRecordTagList(updateRecordTagList);
+
+        return recordRepository.save(record);
     }
 
 

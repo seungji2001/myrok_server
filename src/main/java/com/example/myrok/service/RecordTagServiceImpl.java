@@ -18,14 +18,14 @@ public class RecordTagServiceImpl implements RecordTagService{
     RecordTagRepository recordTagRepository;
 
     @Override
-    public void save(Long projectId, Record record, String tagName)
+    public RecordTag save(Long projectId, Record record, String tagName)
     {
         RecordTag recordTag = RecordTag.builder()
                 .projectId(projectId)
                 .record(record)
                 .tagName(tagName)
                 .build();
-        recordTagRepository.save(recordTag);
+        return recordTagRepository.save(recordTag);
     }
     @Override
     public void delete(Long id){

@@ -3,6 +3,7 @@ package com.example.myrok.controller;
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.RecordDTO;
 import com.example.myrok.dto.RecordResponseDTO;
+import com.example.myrok.dto.RecordUpdateDTO;
 import com.example.myrok.service.RecordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,12 @@ public class RecordController {
     public ResponseEntity<Record> delete(@PathVariable("recordId") Long id){
         recordService.deleteUpdate(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/records/{recordId}")
+    public ResponseEntity<Record> update(@PathVariable("recordId") Long recordId, @RequestBody RecordUpdateDTO recordUpdatedDTO){
+        Record updatedRecord=recordService.update(recordId,recordUpdatedDTO);
+        return new ResponseEntity<>(updatedRecord, HttpStatus.CREATED);
     }
 
 }
