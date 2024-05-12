@@ -11,5 +11,4 @@ public interface RecordService {
 
     void deleteUpdate(Long id);
 
-    List<RecordResponseDTO> getRecords(Long projectId);
 }

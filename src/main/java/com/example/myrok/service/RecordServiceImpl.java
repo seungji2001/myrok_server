@@ -101,19 +101,5 @@ public class RecordServiceImpl implements RecordService{
 
     }
 
-    @Override
-    public List<RecordResponseDTO> getRecords(Long projectId) {
-        List<Record> recordList = recordRepository.findAllByProjectId(projectId);
-        return recordList.stream()
-                .map(record -> {
-                    Member member = memberRepository.findById(record.getRecordWriterId()).orElseThrow(EntityNotFoundException::new);
-                    return RecordResponseDTO.builder()
-                            .recordId(record.getId())
-                            .recordWriterName(member.getName())
-                            .recordDate(String.valueOf(record.getRecordDate()))
-                            .recordName(record.getRecordName())
-                            .build();
-                }).collect(Collectors.toList());
-    }
 
 }

@@ -37,9 +37,4 @@ public class RecordController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/list/{projectId}")
-    public ResponseEntity<List<RecordResponseDTO>> findAll(@PathVariable("projectId") Long projectId){
-        List<RecordResponseDTO> records=recordService.getRecords(projectId);
-        return ResponseEntity.ok(records);
-    }
 }

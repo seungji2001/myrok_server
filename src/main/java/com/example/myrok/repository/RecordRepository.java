@@ -10,6 +10,4 @@ import java.util.List;
 
 @Repository
 public interface RecordRepository extends JpaRepository<Record, Long> {
-    @Query("SELECT r FROM Record r WHERE r.project.id = :projectId")
-    List<Record> findAllByProjectId(@Param("projectId") Long projectId);
 }
