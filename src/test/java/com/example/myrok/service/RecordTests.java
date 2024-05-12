@@ -1,8 +1,6 @@
 package com.example.myrok.service;
 
-import com.example.myrok.domain.Member;
-import com.example.myrok.domain.MemberProject;
-import com.example.myrok.domain.Project;
+import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.RecordDTO;
 import com.example.myrok.exception.CustomException;
@@ -46,12 +44,13 @@ public class RecordTests {
     @MockBean
     private MemberRepository memberRepository;
     @MockBean
-    private TagServiceImpl tagService;
-    @MockBean
     private MemberRecordServiceImpl memberRecordService;
     @MockBean
     private RecordTagServiceImpl recordTagService;
 
+    // 이 테스트 클래스는 RecordService 의 로직만 취급함.
+    // When 에는 RecordService, Then 에는 RecordRepository 가 들어감
+    // 다른 클래스 로직들은 해당 테스트에서 검증할 것이므로 Service 로 사용.
 
     @Transactional(rollbackFor = Exception.class)
     @DisplayName("회의록 저장 검사")
@@ -106,9 +105,8 @@ public class RecordTests {
         assertNotNull(savedRecord);
         verify(projectRepository, times(1)).findById(anyLong());
         verify(recordRepository, times(1)).save(any(Record.class));
-        verify(tagService, times(recordDTO.tagList().size())).save(anyString());
         verify(memberRecordService, times(1)).save(anyList(), eq(savedRecord), anyLong());
-        verify(recordTagService, times(1)).save(anyList(), eq(savedRecord));
+        verify(recordTagService, times(tagList.size())).save(anyLong(),any(Record.class),anyString());
     }
 
 
@@ -121,7 +119,6 @@ public class RecordTests {
         mockRecord.setId(recordId);
 
         when(recordRepository.findById(recordId)).thenReturn(Optional.of(mockRecord));
-        doNothing().when(tagService).delete(anyList());
         doNothing().when(memberRecordService).delete(anyLong());
         doNothing().when(recordTagService).delete(anyLong());
 
@@ -132,7 +129,6 @@ public class RecordTests {
         //times() : 메소드가 호출된 횟수
         verify(recordRepository, times(1)).findById(recordId);
         verify(recordRepository, times(1)).save(mockRecord);
-        verify(tagService, times(1)).delete(mockRecord.getRecordTagList());
         verify(memberRecordService, times(1)).delete(recordId);
         verify(recordTagService, times(1)).delete(recordId);
         assertTrue(mockRecord.getDeleted());
@@ -156,7 +152,6 @@ public class RecordTests {
         // never() : 메소드가 실행되지 않았음을 검증. 삭제된 회의록의 삭제 시도니 관련 객체들도 삭제되면 안됨
         verify(recordRepository, times(1)).findById(recordId);
         verify(recordRepository, never()).save(any(Record.class));
-        verify(tagService, never()).delete(anyList());
         verify(memberRecordService, never()).delete(anyLong());
         verify(recordTagService, never()).delete(anyLong());
     }
