@@ -48,6 +48,19 @@ public class ProjectController {
     }
 
     @Operation(
+            summary = "프로젝트 초대코드를 가져옵니다.",
+            description = "프로젝트 초대코드를 가져옵니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "프로젝트 초대코드를 가져옵니다."
+    )
+    @GetMapping("/{projectId}")
+    public ResponseEntity<String> getInviteCode(@PathVariable Long projectId) {
+        return ResponseEntity.ok().body(projectService.getInviteCode(projectId));
+    }
+
+    @Operation(
             summary = "프로젝트 참가",
             description = "프로젝트에 참가합니다"
     )
