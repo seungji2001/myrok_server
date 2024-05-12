@@ -113,8 +113,17 @@ public class RecordServiceImpl implements RecordService{
         Long recordWriterId = recordUpdateDTO.recordWriterId();
         Record record = recordRepository.findById(recordId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회의록입니다. id: " + recordId));
+        //삭제된 회의록이라면 예외
+        if(record.getDeleted()){
+            throw new CustomException(ErrorCode.DELETED_RECORD_CODE, HttpStatus.BAD_REQUEST);
+        }
+        //회의 참여자가 아니라면 예외
         MemberRecord memberRecord =memberRecordRepository.findByMemberIdAndRecordIdAndDeletedIsFalse(recordWriterId,recordId)
-                .orElseThrow(() -> new CustomException(ErrorCode.WRONG_UPDATE_ACCESS, HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new CustomException(ErrorCode.WRONG_RECORD_ACCESS, HttpStatus.BAD_REQUEST));
+        //작성자 외 수정 시도시 예외
+        if (memberRecord.getRole()!=Role.ADMIN){
+            throw new CustomException(ErrorCode.WRONG_UPDATE_ACCESS, HttpStatus.BAD_REQUEST);
+        }
 
         List<RecordTag> updateRecordTagList = new ArrayList<>();
         for (String tagName : tags) {

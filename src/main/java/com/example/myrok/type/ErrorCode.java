@@ -21,6 +21,7 @@ public enum ErrorCode implements EnumModel{
     // record
     DELETED_RECORD_CODE(40402,"R001","이미 삭제된 회의록입니다."),
     WRONG_UPDATE_ACCESS(40604,"R002","회의록 수정은 작성자만 가능합니다."),
+    WRONG_RECORD_ACCESS(40605,"R003","회의 참여자가 아닙니다."),
     // tag
     DELETED_TAG_CODE(40403,"T001","이미 삭제된 태그입니다."),
     // memberRecord
