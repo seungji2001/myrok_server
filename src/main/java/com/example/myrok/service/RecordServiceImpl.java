@@ -38,8 +38,7 @@ public class RecordServiceImpl implements RecordService{
     private RecordTagService recordTagService;
     @Autowired
     private MemberRecordService memberRecordService;
-    @Autowired
-    private TagService tagService;
+
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -74,12 +73,10 @@ public class RecordServiceImpl implements RecordService{
 
         // Tag 저장
         for (String tagName : tags) {
-            tagService.save(tagName);
+            recordTagService.save(projectId,savedRecord,tagName);
         }
 
         memberRecordService.save(members,savedRecord,recordWriterId);
-        recordTagService.save(tags,savedRecord);
-
 
         return savedRecord;
     }
@@ -95,9 +92,6 @@ public class RecordServiceImpl implements RecordService{
         }
         record.delete();
         recordRepository.save(record);
-
-        //회의록 안의 태그 리스트 삭제
-        tagService.delete(record.getRecordTagList());
 
         //MemberRecord 매핑객체 삭제
         memberRecordService.delete(record.getId());
