@@ -68,6 +68,19 @@ public class RecordController {
         return new ResponseEntity<>(recordService.getRecords(pageRequestDto, projectId), HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "제목 혹은 태그명에 따른 회의록 목록을 페이징 처리하여 가져옵니다.",
+            description = "제목 혹은 태그명에 따른 회의록 목록을 페이징 처리하여 가져옵니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "제목 혹은 태그명에 따른 회의록 목록을 페이징 처리하여 가져옵니다."
+    )
+    @GetMapping("/myrok/{projectId}/list/pagination")
+    public ResponseEntity<PageResponseDto<com.example.myrok.dto.classtype.RecordDTO.RecordListObject>> getRecordsPaginationByProjectNameOrTagName(PageRequestDto pageRequestDto, @PathVariable Long projectId, @RequestParam(value = "projectName", required = false) String projectName, @RequestParam(value = "tagName", required = false) String tagName){
+        return new ResponseEntity<>(recordService.getRecordsBySearch(pageRequestDto, projectName, tagName, projectId), HttpStatus.OK);
+    }
+
     @PatchMapping("/records/{recordId}")
     public ResponseEntity<Long> update( @PathVariable("recordId") Long recordId, @RequestBody @Valid RecordUpdateDTO recordUpdatedDTO){
         Record updatedRecord=recordService.update(recordId,recordUpdatedDTO);

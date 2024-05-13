@@ -11,7 +11,9 @@ import com.example.myrok.repository.*;
 import com.example.myrok.repository.search.RecordSearch;
 import com.example.myrok.type.ErrorCode;
 import com.example.myrok.type.Role;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.Null;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -175,7 +177,6 @@ public class RecordServiceImpl implements RecordService{
         List<RecordDTO.RecordListObject> dtoList = result.getContent().stream().map(arr -> {
             RecordDTO.RecordListObject recordListObject = new RecordDTO.RecordListObject();
 
-            // Correctly cast each element of the array to its expected type
             Record record = (Record) arr;
 
 
@@ -201,9 +202,9 @@ public class RecordServiceImpl implements RecordService{
 
     @Override
     public PageResponseDto<RecordDTO.RecordListObject> getRecordsBySearch(PageRequestDto pageRequestDto, String searchValue, String tagName, Long projectId) {
-        Page<Record> records = recordRepository.search(pageRequestDto, searchValue, tagName, projectId);
-        System.out.println(records);
-        return null;
+        PageResponseDto<RecordDTO.RecordListObject> records = recordRepository.search(pageRequestDto, searchValue, tagName, projectId);
+
+        return records;
     }
 
 }
