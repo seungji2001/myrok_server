@@ -87,11 +87,11 @@ public class ProjectController {
         Long id = projectService.checkProjectDelete(dto.getProjectId());
         return ResponseEntity.ok().body(id);
     }
-    @PreAuthorize("isAuthenticated")
-    @GetMapping("/")
-    public OAuth2User home(@AuthenticationPrincipal OAuth2User user) {
-        return user;
-    }
+//    @PreAuthorize("isAuthenticated")
+//    @GetMapping("/")
+//    public OAuth2User home(@AuthenticationPrincipal OAuth2User user) {
+//        return user;
+//    }
 
     //todo 회의록 Controller에 이동 필요
     @Operation(
