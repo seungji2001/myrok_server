@@ -34,6 +34,8 @@ public class RecordServiceImpl implements RecordService{
     private final ProjectRepository projectRepository;
     @Autowired
     private final MemberProjectRepository memberProjectRepository;
+    @Autowired
+    private final MemberRepository memberRepository;
 
     @Autowired
     private RecordTagService recordTagService;
@@ -41,6 +43,8 @@ public class RecordServiceImpl implements RecordService{
     private MemberRecordService memberRecordService;
     @Autowired
     private MemberRecordRepository memberRecordRepository;
+    @Autowired
+    private RecordTagRepository recordTagRepository;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -133,6 +137,7 @@ public class RecordServiceImpl implements RecordService{
         }
 
         record.setRecordName(recordUpdateDTO.recordName());
+        record.setRecordContent(recordUpdateDTO.recordContent());
         record.setRecordTagList(updateRecordTagList);
 
         return recordRepository.save(record);
