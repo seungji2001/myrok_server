@@ -7,6 +7,7 @@ import com.example.myrok.dto.pagination.PageRequestDto;
 import com.example.myrok.dto.pagination.PageResponseDto;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.*;
+import com.example.myrok.repository.search.RecordSearch;
 import com.example.myrok.type.ErrorCode;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -159,6 +160,13 @@ public class RecordServiceImpl implements RecordService{
                 .total(totalCount)
                 .pageRequestDto(pageRequestDto)
                 .build();
+    }
+
+    @Override
+    public PageResponseDto<RecordDTO.RecordListObject> getRecordsBySearch(PageRequestDto pageRequestDto, String searchValue, String tagName) {
+        Page<Record> records = recordRepository.search(pageRequestDto, searchValue, tagName);
+        System.out.println(records);
+        return null;
     }
 
 }

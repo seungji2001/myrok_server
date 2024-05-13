@@ -53,4 +53,10 @@ public class ProjectTests {
         PageResponseDto<RecordDTO.RecordListObject> listObjects = recordService.getRecords(pageRequestDto, 1L);
         System.out.println(Arrays.asList(listObjects));
     }
+
+    @Test
+    public void findRecordByTagAndValue(){
+        PageRequestDto pageRequestDto = PageRequestDto.builder().build();
+        recordService.getRecordsBySearch(pageRequestDto, "뉴", "제주도");
+    }
 }

@@ -70,8 +70,6 @@ public class ProjectController {
 //    public OAuth2User home(@AuthenticationPrincipal OAuth2User user) {
 //        return user;
 //    }
-
-    //todo 회의록 Controller에 이동 필요
     @Operation(
             summary = "회의록을 요약합니다.",
             description = "회의록을 요약합니다."
