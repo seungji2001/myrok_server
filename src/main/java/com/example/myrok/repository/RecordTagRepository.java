@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface RecordTagRepository extends JpaRepository<RecordTag,Long> {
-    List<RecordTag> findAllByRecordId(Long id);
+    List<RecordTag> findAllByRecordIdAndDeletedIsFalse(Long id);
 }

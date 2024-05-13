@@ -43,6 +43,8 @@ public class RecordServiceImpl implements RecordService{
     private MemberRecordService memberRecordService;
     @Autowired
     private MemberRecordRepository memberRecordRepository;
+    @Autowired
+    private RecordTagRepository recordTagRepository;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -109,7 +111,7 @@ public class RecordServiceImpl implements RecordService{
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Record update(Long recordId, RecordUpdateDTO recordUpdateDTO) {
-        List<String> tags = recordUpdateDTO.tagList();
+        List<String> updatedTags = recordUpdateDTO.tagList();
         Long recordWriterId = recordUpdateDTO.recordWriterId();
         Record record = recordRepository.findById(recordId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회의록입니다. id: " + recordId));
@@ -124,12 +126,16 @@ public class RecordServiceImpl implements RecordService{
         if (memberRecord.getRole()!=Role.ADMIN){
             throw new CustomException(ErrorCode.WRONG_UPDATE_ACCESS, HttpStatus.BAD_REQUEST);
         }
+        //수정 로직
+
+        //이전 태그들 삭제
+        recordTagService.delete(record.getId());
 
         List<RecordTag> updateRecordTagList = new ArrayList<>();
-        for (String tagName : tags) {
+        for (String tagName : updatedTags) {
             updateRecordTagList.add(recordTagService.save(record.getProject().getId(),record,tagName));
         }
-        recordTagService.delete(record.getId());
+
         record.setRecordName(recordUpdateDTO.recordName());
         record.setRecordContent(recordUpdateDTO.recordContent());
         record.setRecordTagList(updateRecordTagList);

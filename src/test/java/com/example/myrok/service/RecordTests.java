@@ -210,6 +210,7 @@ public class RecordTests {
         //When
         Record updatedRecord = recordService.update(recordId,mockRecordUpdateDTO);
         //Then
+        assertNotNull(updatedRecord);
         assertEquals(mockRecordUpdateDTO.recordName(), updatedRecord.getRecordName());
         assertEquals(mockRecordUpdateDTO.recordContent(), updatedRecord.getRecordContent());
         verify(recordRepository, times(1)).findById(recordId);
