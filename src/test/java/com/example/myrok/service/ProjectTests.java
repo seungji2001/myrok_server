@@ -57,6 +57,6 @@ public class ProjectTests {
     @Test
     public void findRecordByTagAndValue(){
         PageRequestDto pageRequestDto = PageRequestDto.builder().build();
-        recordService.getRecordsBySearch(pageRequestDto, "뉴", "제주도");
+        recordService.getRecordsBySearch(pageRequestDto,  "보험","의대증원", 1L);
     }
 }

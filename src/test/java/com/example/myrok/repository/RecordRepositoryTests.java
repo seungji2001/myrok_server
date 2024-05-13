@@ -36,6 +36,6 @@ public class RecordRepositoryTests {
     @Test
     public void findRecordByTagAndValue(){
         PageRequestDto pageRequestDto = PageRequestDto.builder().build();
-        recordRepository.search(pageRequestDto, "뉴", "제주도");
+        recordRepository.search(pageRequestDto, "뉴", "제주도", 1L);
     }
 }

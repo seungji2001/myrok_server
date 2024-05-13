@@ -2,7 +2,6 @@ package com.example.myrok.repository.search;
 
 import com.example.myrok.domain.QRecord;
 import com.example.myrok.domain.QRecordTag;
-import com.example.myrok.domain.QTag;
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.pagination.PageRequestDto;
 import com.querydsl.jpa.JPQLQuery;
@@ -19,12 +18,13 @@ public class RecordSearchImpl extends QuerydslRepositorySupport implements Recor
     }
 
     @Override
-    public Page<Record> search(PageRequestDto pageRequestDto, String searchValue, String tagValue) {
+    public Page<Record> search(PageRequestDto pageRequestDto, String searchValue, String tagValue, Long projectId) {
         QRecord record = QRecord.record;
         QRecordTag recordTag = QRecordTag.recordTag;
-        QTag tag = QTag.tag;
 
         JPQLQuery<Record> query = from(record);
+        query.where(record.project.id.eq(projectId));
+
         if (searchValue!= null &&!searchValue.isEmpty()) {
             query.where(record.recordName.like("%" + searchValue + "%"));
         }
@@ -32,7 +32,7 @@ public class RecordSearchImpl extends QuerydslRepositorySupport implements Recor
             query.select(record)
                     .from(record)
                     .leftJoin(record.recordTagList, recordTag).fetchJoin()
-                    .leftJoin(recordTag.tag, tag).fetchJoin()
+                    .where(recordTag.tagName.eq(tagValue))
                     .fetch();
         }
 
@@ -45,7 +45,9 @@ public class RecordSearchImpl extends QuerydslRepositorySupport implements Recor
 
         long total = query.fetchCount();
 
-        System.out.println(Arrays.toString(list.toArray()));
+        for(Record r :list){
+            System.out.println(r.getRecordName());
+        }
         return new PageImpl<>(list, pageable, total);
     }
 }

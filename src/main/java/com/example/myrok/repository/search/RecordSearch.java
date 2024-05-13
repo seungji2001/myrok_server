@@ -5,5 +5,5 @@ import com.example.myrok.dto.pagination.PageRequestDto;
 import org.springframework.data.domain.Page;
 
 public interface RecordSearch {
-    Page<Record> search(PageRequestDto pageRequestDto, String searchValue, String tagValue);
+    Page<Record> search(PageRequestDto pageRequestDto, String searchValue, String tagValue, Long projectId);
 }

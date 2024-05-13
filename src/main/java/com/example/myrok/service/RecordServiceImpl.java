@@ -200,8 +200,8 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public PageResponseDto<RecordDTO.RecordListObject> getRecordsBySearch(PageRequestDto pageRequestDto, String searchValue, String tagName) {
-        Page<Record> records = recordRepository.search(pageRequestDto, searchValue, tagName);
+    public PageResponseDto<RecordDTO.RecordListObject> getRecordsBySearch(PageRequestDto pageRequestDto, String searchValue, String tagName, Long projectId) {
+        Page<Record> records = recordRepository.search(pageRequestDto, searchValue, tagName, projectId);
         System.out.println(records);
         return null;
     }
