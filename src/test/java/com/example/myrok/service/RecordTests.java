@@ -19,9 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.example.myrok.type.MemberProjectType.PROJECT_MEMBER;
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,6 +59,7 @@ public class RecordTests {
     private Long projectId, memberId1, memberId2, recordWriterId;
     private List<Long> memberList;
     private List<String> tagList;
+    private List<String> updatedTagList;
     private List<RecordTag> mockRecordTagList = new ArrayList<>();
     private Project mockProject;
     private Member mockMember1, mockMember2;
@@ -81,6 +81,7 @@ public class RecordTests {
 
         memberList = List.of(memberId1, memberId2);
         tagList = List.of("tag1", "tag2");
+        updatedTagList = List.of("tag3","tag4","tag5");
         recordWriterId = memberId1;
 
         mockProject = Project.builder()
@@ -105,9 +106,8 @@ public class RecordTests {
                 .build();
         mockRecordUpdateDTO = new RecordUpdateDTO(
                 "Update Record",
-                "This is updated content",
                 recordWriterId,
-                tagList
+                updatedTagList
         );
         mockRecordTagList.add(mockRecordTag1);
         mockRecordTagList.add(mockRecordTag2);
@@ -211,8 +211,7 @@ public class RecordTests {
         Record updatedRecord = recordService.update(recordId,mockRecordUpdateDTO);
         //Then
         assertNotNull(updatedRecord);
-        assertEquals(mockRecordUpdateDTO.recordName(), updatedRecord.getRecordName());
-        assertEquals(mockRecordUpdateDTO.recordContent(), updatedRecord.getRecordContent());
+        assertEquals(mockRecordUpdateDTO.tagList().size(), updatedRecord.getRecordTagList().size());
         verify(recordRepository, times(1)).findById(recordId);
         verify(recordRepository, times(1)).save(any(Record.class));
         verify(recordTagService,times(1)).delete(recordId);
