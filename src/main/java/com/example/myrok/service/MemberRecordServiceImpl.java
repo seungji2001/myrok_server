@@ -3,7 +3,6 @@ package com.example.myrok.service;
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
 import com.example.myrok.exception.CustomException;
-import com.example.myrok.exception.NotFoundException;
 import com.example.myrok.repository.MemberProjectRepository;
 import com.example.myrok.repository.MemberRecordRepository;
 import com.example.myrok.repository.MemberRepository;

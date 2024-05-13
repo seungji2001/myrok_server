@@ -1,6 +1,7 @@
 package com.example.myrok.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,9 +10,7 @@ import java.util.List;
 public record RecordUpdateDTO(
         @NotBlank(message = "제목은 필수 입력 사항입니다.")
         String recordName,
-        @NotBlank(message = "본문은 필수 입력 사항입니다.")
-        String recordContent,
-        @NotBlank
+        @NotNull
         Long recordWriterId,
         List<String> tagList
 ) {
