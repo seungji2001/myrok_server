@@ -27,9 +27,9 @@ public class RecordController {
     public void save(){}
 
     @PostMapping("/records")
-    public ResponseEntity<Record> save( @RequestBody @Valid RecordDTO recordDTO){
+    public ResponseEntity<Long> save( @RequestBody @Valid RecordDTO recordDTO){
         Record savedRecord=recordService.save(recordDTO);
-        return new ResponseEntity<>(savedRecord, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedRecord.getId(), HttpStatus.CREATED);
     }
 
     @PostMapping("/delete/{recordId}")
@@ -39,9 +39,9 @@ public class RecordController {
     }
 
     @PatchMapping("/records/{recordId}")
-    public ResponseEntity<Record> update( @PathVariable("recordId") Long recordId, @RequestBody @Valid RecordUpdateDTO recordUpdatedDTO){
+    public ResponseEntity<Long> update( @PathVariable("recordId") Long recordId, @RequestBody @Valid RecordUpdateDTO recordUpdatedDTO){
         Record updatedRecord=recordService.update(recordId,recordUpdatedDTO);
-        return new ResponseEntity<>(updatedRecord, HttpStatus.CREATED);
+        return new ResponseEntity<>(updatedRecord.getId(), HttpStatus.CREATED);
     }
 
 }
