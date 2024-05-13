@@ -1,7 +1,6 @@
 package com.example.myrok.controller;
 
-import com.example.myrok.domain.Project;
-import com.example.myrok.dto.ProjectDto;
+import com.example.myrok.dto.classtype.ProjectDTO;
 import com.example.myrok.service.MemberService;
 import com.example.myrok.service.ProjectService;
 import lombok.extern.log4j.Log4j2;
@@ -20,7 +19,7 @@ public class ProjectControllerTests {
     @Test
     public void createProject(){
         memberService.checkMemberHaveProject(2L);
-        ProjectDto.RegisterProject registerProject = ProjectDto.RegisterProject.builder()
+        ProjectDTO.RegisterProject registerProject = ProjectDTO.RegisterProject.builder()
                 .projectName("test_member2")
                 .startDate("")
                 .endDate("")

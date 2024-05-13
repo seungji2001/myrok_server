@@ -1,15 +1,10 @@
-package com.example.myrok.dto;
+package com.example.myrok.dto.classtype;
 
-import com.example.myrok.domain.Member;
-import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jdk.jfr.Description;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
-public class ProjectDto {
+public class ProjectDTO {
     @Data
     @NoArgsConstructor
     @Builder
@@ -48,7 +43,7 @@ public class ProjectDto {
     @AllArgsConstructor
     @ToString
     public static class ProjectMembersDto{
-        private List<MemberDto.MemberNameDto> projectMemberNames;
+        private List<MemberDTO.MemberNameDto> projectMemberNames;
     }
 
 }
