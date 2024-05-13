@@ -5,8 +5,6 @@ import com.example.myrok.domain.Record;
 import com.example.myrok.dto.classtype.RecordDTO;
 import com.example.myrok.dto.pagination.PageRequestDto;
 import com.example.myrok.dto.pagination.PageResponseDto;
-import com.example.myrok.dto.RecordDTO;
-import com.example.myrok.dto.RecordResponseDTO;
 import com.example.myrok.dto.RecordUpdateDTO;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.*;

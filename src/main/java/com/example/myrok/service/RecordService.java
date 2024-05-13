@@ -6,8 +6,6 @@ import com.example.myrok.dto.pagination.PageRequestDto;
 import com.example.myrok.dto.pagination.PageResponseDto;
 
 import java.util.List;
-
-import com.example.myrok.dto.RecordDTO;
 import com.example.myrok.dto.RecordResponseDTO;
 import com.example.myrok.dto.RecordUpdateDTO;
 
