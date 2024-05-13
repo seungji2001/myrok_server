@@ -7,6 +7,11 @@ import com.example.myrok.dto.pagination.PageResponseDto;
 
 import java.util.List;
 
+import com.example.myrok.dto.RecordDTO;
+import com.example.myrok.dto.RecordResponseDTO;
+import com.example.myrok.dto.RecordUpdateDTO;
+
+import java.util.List;
 
 public interface RecordService {
     Record save(com.example.myrok.dto.recordtype.RecordDTO recordDTO);
@@ -18,4 +23,7 @@ public interface RecordService {
     PageResponseDto<RecordDTO.RecordListObject> getRecords(PageRequestDto pageRequestDto, Long projectId);
 
     PageResponseDto<RecordDTO.RecordListObject> getRecordsBySearch(PageRequestDto pageRequestDto, String searchValue, String tagName);
+
+    Record update(Long id, RecordUpdateDTO recordDTO);
+
 }

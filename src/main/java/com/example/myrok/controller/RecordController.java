@@ -4,6 +4,8 @@ import com.example.myrok.domain.Record;
 import com.example.myrok.dto.pagination.PageRequestDto;
 import com.example.myrok.dto.pagination.PageResponseDto;
 import com.example.myrok.dto.recordtype.RecordDTO;
+import com.example.myrok.dto.RecordResponseDTO;
+import com.example.myrok.dto.RecordUpdateDTO;
 import com.example.myrok.service.RecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,9 +31,9 @@ public class RecordController {
     public void save(){}
 
     @PostMapping("/records")
-    public ResponseEntity<Record> save( @Valid @RequestBody RecordDTO recordDTO){
+    public ResponseEntity<Long> save( @RequestBody @Valid RecordDTO recordDTO){
         Record savedRecord=recordService.save(recordDTO);
-        return new ResponseEntity<>(savedRecord, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedRecord.getId(), HttpStatus.CREATED);
     }
 
     @PostMapping("/delete/{recordId}")
@@ -64,4 +67,11 @@ public class RecordController {
     public ResponseEntity<PageResponseDto<com.example.myrok.dto.classtype.RecordDTO.RecordListObject>> getRecordsPagination(PageRequestDto pageRequestDto, Long projectId){
         return new ResponseEntity<>(recordService.getRecords(pageRequestDto, projectId), HttpStatus.OK);
     }
+
+    @PatchMapping("/records/{recordId}")
+    public ResponseEntity<Long> update( @PathVariable("recordId") Long recordId, @RequestBody @Valid RecordUpdateDTO recordUpdatedDTO){
+        Record updatedRecord=recordService.update(recordId,recordUpdatedDTO);
+        return new ResponseEntity<>(updatedRecord.getId(), HttpStatus.CREATED);
+    }
+
 }

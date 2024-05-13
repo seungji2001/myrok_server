@@ -2,6 +2,9 @@ package com.example.myrok.dto.recordtype;
 
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -10,17 +13,17 @@ import jakarta.validation.constraints.NotBlank;
 
 @Builder
 public record RecordDTO (
-    @NotBlank(message = "제목은 필수 입력 사항입니다.")
+        @NotBlank(message = "제목은 필수 입력 사항입니다.")
     String recordName,
-    @NotBlank(message = "본문은 필수 입력 사항입니다.")
+        @NotBlank(message = "본문은 필수 입력 사항입니다.")
     String recordContent,
-    LocalDate recordDate,
-    @NotBlank
+        LocalDate recordDate,
+    @NotNull
     Long recordWriterId,
-    @NotBlank
+        @NotEmpty
     List<Long> memberList,
-    List<String> tagList,
-    @NotBlank
+        List<String> tagList,
+        @NotNull
     Long projectId
 ){
 
