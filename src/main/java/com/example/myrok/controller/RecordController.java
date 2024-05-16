@@ -4,7 +4,6 @@ import com.example.myrok.domain.Record;
 import com.example.myrok.dto.pagination.PageRequestDto;
 import com.example.myrok.dto.pagination.PageResponseDto;
 import com.example.myrok.dto.recordtype.RecordDTO;
-import com.example.myrok.dto.RecordResponseDTO;
 import com.example.myrok.dto.RecordUpdateDTO;
 import com.example.myrok.service.RecordService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -77,8 +75,8 @@ public class RecordController {
             description = "제목 혹은 태그명에 따른 회의록 목록을 페이징 처리하여 가져옵니다."
     )
     @GetMapping("/myrok/{projectId}/list/pagination")
-    public ResponseEntity<PageResponseDto<com.example.myrok.dto.classtype.RecordDTO.RecordListObject>> getRecordsPaginationByProjectNameOrTagName(PageRequestDto pageRequestDto, @PathVariable Long projectId, @RequestParam(value = "projectName", required = false) String projectName, @RequestParam(value = "tagName", required = false) String tagName){
-        return new ResponseEntity<>(recordService.getRecordsBySearch(pageRequestDto, projectName, tagName, projectId), HttpStatus.OK);
+    public ResponseEntity<PageResponseDto<com.example.myrok.dto.classtype.RecordDTO.RecordListObject>> getRecordsPaginationByProjectNameOrTagName(PageRequestDto pageRequestDto, @PathVariable Long projectId, @RequestParam(value = "recordName", required = false) String recordName, @RequestParam(value = "tagName", required = false) String tagName){
+        return new ResponseEntity<>(recordService.getRecordsBySearch(pageRequestDto, recordName, tagName, projectId), HttpStatus.OK);
     }
 
     @PatchMapping("/records/{recordId}")
