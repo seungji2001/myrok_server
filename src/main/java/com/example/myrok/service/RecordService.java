@@ -10,8 +10,10 @@ import java.util.List;
 public interface RecordService {
     Record save(RecordDTO recordDTO);
 
-    void deleteUpdate(Long id);
+    void deleteUpdate(Long recordId);
 
     Record update(Long id, RecordUpdateDTO recordDTO);
+
+    Record read(Long id);
 
 }

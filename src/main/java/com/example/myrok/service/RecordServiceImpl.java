@@ -93,6 +93,13 @@ public class RecordServiceImpl implements RecordService{
         if (record.getDeleted()) {
             throw new CustomException(ErrorCode.DELETED_RECORD_CODE, HttpStatus.BAD_REQUEST);
         }
+//        //회의 참여자가 아니라면 예외
+//        MemberRecord memberRecord =memberRecordRepository.findByMemberIdAndRecordIdAndDeletedIsFalse(recordWriterId,recordId)
+//                .orElseThrow(() -> new CustomException(ErrorCode.WRONG_RECORD_ACCESS, HttpStatus.BAD_REQUEST));
+//        //작성자 외 수정 시도시 예외
+//        if (memberRecord.getRole()!=Role.ADMIN){
+//            throw new CustomException(ErrorCode.WRONG_UPDATE_ACCESS, HttpStatus.BAD_REQUEST);
+//        }
         record.delete();
         recordRepository.save(record);
 
@@ -136,6 +143,17 @@ public class RecordServiceImpl implements RecordService{
         record.setRecordTagList(updateRecordTagList);
 
         return recordRepository.save(record);
+    }
+
+    @Override
+    public Record read(Long recordId){
+        Record readRecord = recordRepository.findById(recordId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회의록입니다. id: " + recordId));
+        if (readRecord.getDeleted()) {
+            throw new CustomException(ErrorCode.DELETED_RECORD_CODE, HttpStatus.BAD_REQUEST);
+        }
+        return readRecord;
+
     }
 
 

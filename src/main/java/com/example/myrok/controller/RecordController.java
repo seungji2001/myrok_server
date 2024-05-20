@@ -8,6 +8,7 @@ import com.example.myrok.service.RecordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -22,10 +23,6 @@ public class RecordController {
     @Autowired
     private final RecordService recordService;
 
-    // 회의록 작성 이동
-    @GetMapping("/records")
-    public void save(){}
-
     @PostMapping("/records")
     public ResponseEntity<Long> save( @RequestBody @Valid RecordDTO recordDTO){
         Record savedRecord=recordService.save(recordDTO);
@@ -33,8 +30,8 @@ public class RecordController {
     }
 
     @PostMapping("/delete/{recordId}")
-    public ResponseEntity<Record> delete(@PathVariable("recordId") Long id){
-        recordService.deleteUpdate(id);
+    public ResponseEntity<Record> delete(@PathVariable("recordId") Long recordId){
+        recordService.deleteUpdate(recordId);
         return ResponseEntity.noContent().build();
     }
 
@@ -42,6 +39,12 @@ public class RecordController {
     public ResponseEntity<Long> update( @PathVariable("recordId") Long recordId, @RequestBody @Valid RecordUpdateDTO recordUpdatedDTO){
         Record updatedRecord=recordService.update(recordId,recordUpdatedDTO);
         return new ResponseEntity<>(updatedRecord.getId(), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/records/{recordId}")
+    public ResponseEntity<Record> get(@PathVariable("recordId") Long recordId){
+        Record readRecord = recordService.read(recordId);
+        return new ResponseEntity<>(readRecord, HttpStatus.OK);
     }
 
 }
