@@ -2,6 +2,7 @@ package com.example.myrok.controller;
 
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.RecordDTO;
+import com.example.myrok.dto.RecordDeleteDTO;
 import com.example.myrok.dto.RecordResponseDTO;
 import com.example.myrok.dto.RecordUpdateDTO;
 import com.example.myrok.service.RecordService;
@@ -30,8 +31,9 @@ public class RecordController {
     }
 
     @PostMapping("/delete/{recordId}")
-    public ResponseEntity<Record> delete(@PathVariable("recordId") Long recordId){
-        recordService.deleteUpdate(recordId);
+    public ResponseEntity<Record> delete(@PathVariable("recordId") Long recordId, @RequestBody @Valid RecordDeleteDTO recordDeleteDTO){
+        Long recordWriterId = recordDeleteDTO.recordWriterId();
+        recordService.deleteUpdate(recordId,recordWriterId);
         return ResponseEntity.noContent().build();
     }
 
