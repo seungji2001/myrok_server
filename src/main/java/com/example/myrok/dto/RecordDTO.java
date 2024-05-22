@@ -21,6 +21,7 @@ public record RecordDTO (
     Long recordWriterId,
         @NotEmpty
     List<Long> memberList,
+        @Max(10)
         List<String> tagList,
         @NotNull
     Long projectId

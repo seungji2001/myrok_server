@@ -44,8 +44,8 @@ public class RecordController {
     }
 
     @GetMapping("/records/{recordId}")
-    public ResponseEntity<Record> get(@PathVariable("recordId") Long recordId){
-        Record readRecord = recordService.read(recordId);
+    public ResponseEntity<RecordResponseDTO> get(@PathVariable("recordId") Long recordId){
+        RecordResponseDTO readRecord = recordService.read(recordId);
         return new ResponseEntity<>(readRecord, HttpStatus.OK);
     }
 

@@ -2,6 +2,7 @@ package com.example.myrok.service;
 
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
+import com.example.myrok.dto.MemberDto;
 import com.example.myrok.dto.RecordDTO;
 import com.example.myrok.dto.RecordResponseDTO;
 import com.example.myrok.dto.RecordUpdateDTO;
@@ -41,6 +42,10 @@ public class RecordServiceImpl implements RecordService{
     private MemberRecordService memberRecordService;
     @Autowired
     private MemberRecordRepository memberRecordRepository;
+    @Autowired
+    private RecordTagRepository recordTagRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -147,12 +152,34 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public Record read(Long recordId){
-        Record readRecord = recordRepository.findById(recordId)
+    public RecordResponseDTO read(Long recordId){
+        Record record = recordRepository.findById(recordId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회의록입니다. id: " + recordId));
-        if (readRecord.getDeleted()) {
+        if (record.getDeleted()) {
             throw new CustomException(ErrorCode.DELETED_RECORD_CODE, HttpStatus.BAD_REQUEST);
         }
+        List<String> tagList = recordTagRepository.findTagsByRecordIdAndDeletedIsFalse(recordId);
+        List<MemberDto.MemberNameDto> memberList = new ArrayList<>();
+        List<Long> members = memberRecordRepository.findMemberIdByRecordIdAndDeletedIsFalse(recordId);
+        for (Long memberId : members) {
+            String memberName = memberRepository.findNameById(memberId);
+            MemberDto.MemberNameDto member = MemberDto.MemberNameDto.builder()
+                    .name(memberName)
+                    .memberId(memberId)
+                    .build();
+            memberList.add(member);
+        }
+        RecordResponseDTO readRecord = RecordResponseDTO.builder()
+                .recordId(record.getId())
+                .recordName(record.getRecordName())
+                .recordDate(record.getRecordDate())
+                .recordWriterId(record.getRecordWriterId())
+                .recordContent(record.getRecordContent())
+                .tagList(tagList)
+                .memberList(memberList)
+                .tagList(tagList)
+                .build();
+
         return readRecord;
 
     }

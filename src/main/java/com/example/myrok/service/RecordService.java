@@ -14,6 +14,6 @@ public interface RecordService {
 
     Record update(Long recordId, RecordUpdateDTO recordDTO);
 
-    Record read(Long recordId);
+    RecordResponseDTO read(Long recordId);
 
 }
