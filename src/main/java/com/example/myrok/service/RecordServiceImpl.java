@@ -167,6 +167,21 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
+    public List<RecordDTO.RecordListObject> getRecordsBySearch(String searchValue, String tagName, Long projectId) {
+        List<Record> recordList = recordRepository.findAllBySearch(projectId, searchValue, tagName);
+        return recordList.stream()
+                .map(record -> {
+                    Member member = memberRepository.findById(record.getRecordWriterId()).orElseThrow(NoSuchElementException::new);
+                    return RecordDTO.RecordListObject.builder()
+                            .recordId(record.getId())
+                            .recordWriterName(member.getName())
+                            .recordDate(String.valueOf(record.getRecordDate()))
+                            .recordName(record.getRecordName())
+                            .build();
+                }).collect(Collectors.toList());
+    }
+
+    @Override
     public PageResponseDto<RecordDTO.RecordListObject> getRecords(PageRequestDto pageRequestDto, Long projectId) {
         Pageable pageable = PageRequest.of(pageRequestDto.getPage()-1,
                 pageRequestDto.getSize(),

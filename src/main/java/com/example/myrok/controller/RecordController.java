@@ -52,6 +52,18 @@ public class RecordController {
     public ResponseEntity<List<com.example.myrok.dto.classtype.RecordDTO.RecordListObject>> getRecordList(Long projectId){
         return new ResponseEntity<>(recordService.getRecords(projectId), HttpStatus.OK);
     }
+    @Operation(
+            summary = "제목 혹은 태그명에 따른 회의록 목록을 가져옵니다.",
+            description = "제목 혹은 태그명에 따른 회의록 목록을 가져옵니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "제목 혹은 태그명에 따른 회의록 목록을 가져옵니다."
+    )
+    @GetMapping("/myrok/{projectId}/list")
+    public ResponseEntity<List<com.example.myrok.dto.classtype.RecordDTO.RecordListObject>> getRecordsByProjectNameOrTagName(@PathVariable Long projectId, @RequestParam(value = "recordName", required = false) String recordName, @RequestParam(value = "tagName", required = false) String tagName){
+        return new ResponseEntity<>(recordService.getRecordsBySearch(recordName, tagName, projectId), HttpStatus.OK);
+    }
 
     @Operation(
             summary = "프로젝트 회의록 목록을 페이징 처리하여 가져옵니다",

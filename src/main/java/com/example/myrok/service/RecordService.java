@@ -17,6 +17,7 @@ public interface RecordService {
     void deleteUpdate(Long id);
 
     List<RecordDTO.RecordListObject> getRecords(Long projectId);
+    List<RecordDTO.RecordListObject> getRecordsBySearch(String searchValue, String tagName, Long projectId);
 
     PageResponseDto<RecordDTO.RecordListObject> getRecords(PageRequestDto pageRequestDto, Long projectId);
 
