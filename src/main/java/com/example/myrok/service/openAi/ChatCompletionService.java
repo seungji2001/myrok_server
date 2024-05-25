@@ -19,11 +19,11 @@ public class ChatCompletionService {
     @Value("${open_ai.api.key}")
     private String apiKey;
 
-    public String chatCompletions(final String question) {
+    public String chatCompletions(String question) {
 
         Message message = Message.builder()
                 .role(ROLE_USER)
-                .content(question)
+                .content(question + "해당 내용에 대해 요약해줘.")
                 .build();
 
         ChatRequest chatRequest = ChatRequest.builder()

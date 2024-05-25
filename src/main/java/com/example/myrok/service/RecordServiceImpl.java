@@ -3,6 +3,7 @@ package com.example.myrok.service;
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.classtype.RecordDTO;
+import com.example.myrok.dto.classtype.event.RecordSavedEvent;
 import com.example.myrok.dto.pagination.PageRequestDto;
 import com.example.myrok.dto.pagination.PageResponseDto;
 import com.example.myrok.dto.RecordUpdateDTO;
@@ -14,6 +15,7 @@ import com.example.myrok.type.Role;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.Null;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -52,6 +54,8 @@ public class RecordServiceImpl implements RecordService{
     private MemberRecordService memberRecordService;
     @Autowired
     private MemberRecordRepository memberRecordRepository;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -92,6 +96,7 @@ public class RecordServiceImpl implements RecordService{
 
         memberRecordService.save(members,savedRecord,recordWriterId);
 
+        applicationEventPublisher.publishEvent(new RecordSavedEvent(savedRecord));
         return savedRecord;
     }
 
