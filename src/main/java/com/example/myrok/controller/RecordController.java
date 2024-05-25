@@ -1,16 +1,22 @@
 package com.example.myrok.controller;
 
 import com.example.myrok.domain.Record;
+import com.example.myrok.dto.RecordDeleteDTO;
+import com.example.myrok.dto.RecordResponseDTO;
 import com.example.myrok.dto.pagination.PageRequestDto;
 import com.example.myrok.dto.pagination.PageResponseDto;
 import com.example.myrok.dto.recordtype.RecordDTO;
 import com.example.myrok.dto.RecordUpdateDTO;
 import com.example.myrok.service.RecordService;
+import com.example.myrok.service.openAi.ChatCompletionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 

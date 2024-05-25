@@ -2,7 +2,8 @@ package com.example.myrok.service;
 
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
-import com.example.myrok.dto.MemberDto;
+import com.example.myrok.dto.RecordResponseDTO;
+import com.example.myrok.dto.classtype.MemberDTO;
 import com.example.myrok.dto.classtype.RecordDTO;
 import com.example.myrok.dto.classtype.event.RecordSavedEvent;
 import com.example.myrok.dto.pagination.PageRequestDto;
@@ -57,8 +58,6 @@ public class RecordServiceImpl implements RecordService{
     private MemberRecordRepository memberRecordRepository;
     @Autowired
     private RecordTagRepository recordTagRepository;
-    @Autowired
-    private MemberRepository memberRepository;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -175,11 +174,11 @@ public class RecordServiceImpl implements RecordService{
             throw new CustomException(ErrorCode.DELETED_RECORD_CODE, HttpStatus.BAD_REQUEST);
         }
         List<String> tagList = recordTagRepository.findTagsByRecordIdAndDeletedIsFalse(recordId);
-        List<MemberDto.MemberNameDto> memberList = new ArrayList<>();
+        List<MemberDTO.MemberNameDto> memberList = new ArrayList<>();
         List<Long> members = memberRecordRepository.findMemberIdByRecordIdAndDeletedIsFalse(recordId);
         for (Long memberId : members) {
             String memberName = memberRepository.findNameById(memberId);
-            MemberDto.MemberNameDto member = MemberDto.MemberNameDto.builder()
+            MemberDTO.MemberNameDto member = MemberDTO.MemberNameDto.builder()
                     .name(memberName)
                     .memberId(memberId)
                     .build();
