@@ -56,6 +56,14 @@ public class Record extends BaseTimeEntity {
     @JoinColumn(name = "p_id")
     private Project project;
 
+    @Description("회의록 작성시 recordContent 요약한 내용")
+    @Column(name = "record_content_summary", columnDefinition = "TEXT")
+    private String recordContentSummary;
+
+    public void updateSummary(String recordContentSummary){
+        this.recordContentSummary = recordContentSummary;
+    }
+    
     public void delete(){
         this.deleted=true;
     }

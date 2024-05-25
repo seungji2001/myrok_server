@@ -1,13 +1,12 @@
 package com.example.myrok.service.openAi;
 
-import com.example.myrok.dto.ClovaDto;
+import com.example.myrok.dto.classtype.ClovaDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,7 +23,7 @@ public class ClovaSummary {
     @Value("${naver.clova.api.secret}")
     public String secretKey;
 
-    public ClovaDto.ResponseDto get(ClovaDto.RequestDto requestDto){
+    public ClovaDTO.ResponseDto get(ClovaDTO.RequestDto requestDto){
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -59,7 +58,7 @@ public class ClovaSummary {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonNode = objectMapper.readTree(response.getBody());
-            return ClovaDto.ResponseDto.builder()
+            return ClovaDTO.ResponseDto.builder()
                     .summary(String.valueOf(jsonNode.get("summary")))
                     .build();
         } catch (JsonProcessingException e) {

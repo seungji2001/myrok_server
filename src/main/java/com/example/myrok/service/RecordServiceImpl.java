@@ -2,17 +2,26 @@ package com.example.myrok.service;
 
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
-import com.example.myrok.dto.MemberDto;
-import com.example.myrok.dto.RecordDTO;
 import com.example.myrok.dto.RecordResponseDTO;
+import com.example.myrok.dto.classtype.MemberDTO;
+import com.example.myrok.dto.classtype.RecordDTO;
+import com.example.myrok.dto.classtype.event.RecordSavedEvent;
+import com.example.myrok.dto.pagination.PageRequestDto;
+import com.example.myrok.dto.pagination.PageResponseDto;
 import com.example.myrok.dto.RecordUpdateDTO;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.*;
+import com.example.myrok.repository.search.RecordSearch;
 import com.example.myrok.type.ErrorCode;
 import com.example.myrok.type.Role;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.validation.constraints.Null;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +30,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static com.example.myrok.type.MemberProjectType.PROJECT_MEMBER;
@@ -36,6 +48,8 @@ public class RecordServiceImpl implements RecordService{
     @Autowired
     private final MemberProjectRepository memberProjectRepository;
 
+    private final MemberRepository memberRepository;
+
     @Autowired
     private RecordTagService recordTagService;
     @Autowired
@@ -44,13 +58,13 @@ public class RecordServiceImpl implements RecordService{
     private MemberRecordRepository memberRecordRepository;
     @Autowired
     private RecordTagRepository recordTagRepository;
-    @Autowired
-    private MemberRepository memberRepository;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Record save(RecordDTO recordDTO){
+    public Record save(com.example.myrok.dto.recordtype.RecordDTO recordDTO){
 
         // 멤버 리스트 & 태그 리스트 받아와서 Record 저장
         List<String> tags = recordDTO.tagList();
@@ -86,6 +100,7 @@ public class RecordServiceImpl implements RecordService{
 
         memberRecordService.save(members,savedRecord,recordWriterId);
 
+        applicationEventPublisher.publishEvent(new RecordSavedEvent(savedRecord));
         return savedRecord;
     }
 
@@ -159,11 +174,11 @@ public class RecordServiceImpl implements RecordService{
             throw new CustomException(ErrorCode.DELETED_RECORD_CODE, HttpStatus.BAD_REQUEST);
         }
         List<String> tagList = recordTagRepository.findTagsByRecordIdAndDeletedIsFalse(recordId);
-        List<MemberDto.MemberNameDto> memberList = new ArrayList<>();
+        List<MemberDTO.MemberNameDto> memberList = new ArrayList<>();
         List<Long> members = memberRecordRepository.findMemberIdByRecordIdAndDeletedIsFalse(recordId);
         for (Long memberId : members) {
             String memberName = memberRepository.findNameById(memberId);
-            MemberDto.MemberNameDto member = MemberDto.MemberNameDto.builder()
+            MemberDTO.MemberNameDto member = MemberDTO.MemberNameDto.builder()
                     .name(memberName)
                     .memberId(memberId)
                     .build();
@@ -184,5 +199,77 @@ public class RecordServiceImpl implements RecordService{
 
     }
 
+
+
+    @Override
+    public List<RecordDTO.RecordListObject> getRecords(Long projectId) {
+        List<Record> recordList = recordRepository.findAllByProjectId(projectId);
+        return recordList.stream()
+                .map(record -> {
+                    Member member = memberRepository.findById(record.getRecordWriterId()).orElseThrow(NoSuchElementException::new);
+                    return RecordDTO.RecordListObject.builder()
+                            .recordId(record.getId())
+                            .recordWriterName(member.getName())
+                            .recordDate(String.valueOf(record.getRecordDate()))
+                            .recordName(record.getRecordName())
+                            .build();
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RecordDTO.RecordListObject> getRecordsBySearch(String searchValue, String tagName, Long projectId) {
+        List<Record> recordList = recordRepository.findAllBySearch(projectId, searchValue, tagName);
+        return recordList.stream()
+                .map(record -> {
+                    Member member = memberRepository.findById(record.getRecordWriterId()).orElseThrow(NoSuchElementException::new);
+                    return RecordDTO.RecordListObject.builder()
+                            .recordId(record.getId())
+                            .recordWriterName(member.getName())
+                            .recordDate(String.valueOf(record.getRecordDate()))
+                            .recordName(record.getRecordName())
+                            .build();
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResponseDto<RecordDTO.RecordListObject> getRecords(PageRequestDto pageRequestDto, Long projectId) {
+        Pageable pageable = PageRequest.of(pageRequestDto.getPage()-1,
+                pageRequestDto.getSize(),
+                Sort.by("recordDate").descending());
+
+        Page<Object> result = recordRepository.selectList(pageable, projectId);
+
+        List<RecordDTO.RecordListObject> dtoList = result.getContent().stream().map(arr -> {
+            RecordDTO.RecordListObject recordListObject = new RecordDTO.RecordListObject();
+
+            Record record = (Record) arr;
+
+
+            Member writer = memberRepository.findById(record.getRecordWriterId()).orElseThrow(NoSuchElementException::new);
+            recordListObject = RecordDTO.RecordListObject.builder()
+                    .recordId(record.getId())
+                    .recordDate(String.valueOf(record.getRecordDate()))
+                    .recordName(record.getRecordName())
+                    .recordWriterName(writer.getName())
+                    .build();
+
+            return recordListObject;
+        }).collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+
+        return PageResponseDto.<RecordDTO.RecordListObject>withAll()
+                .dtoList(dtoList)
+                .total(totalCount)
+                .pageRequestDto(pageRequestDto)
+                .build();
+    }
+
+    @Override
+    public PageResponseDto<RecordDTO.RecordListObject> getRecordsBySearch(PageRequestDto pageRequestDto, String searchValue, String tagName, Long projectId) {
+        PageResponseDto<RecordDTO.RecordListObject> records = recordRepository.search(pageRequestDto, searchValue, tagName, projectId);
+
+        return records;
+    }
 
 }

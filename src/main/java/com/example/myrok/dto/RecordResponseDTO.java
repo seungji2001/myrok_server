@@ -2,6 +2,7 @@ package com.example.myrok.dto;
 
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
+import com.example.myrok.dto.classtype.MemberDTO;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ public record RecordResponseDTO (
         String recordContent,
         LocalDate recordDate,
         Long recordWriterId,
-        List<MemberDto.MemberNameDto> memberList,
+        List<MemberDTO.MemberNameDto> memberList,
         List<String> tagList,
         Long projectId
 ){
