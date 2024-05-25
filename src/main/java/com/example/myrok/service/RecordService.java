@@ -14,8 +14,11 @@ import java.util.List;
 public interface RecordService {
     Record save(com.example.myrok.dto.recordtype.RecordDTO recordDTO);
 
-    void deleteUpdate(Long id);
+    void deleteUpdate(Long recordId,Long recordWriterId);
 
+    Record update(Long recordId, RecordUpdateDTO recordDTO);
+
+    RecordResponseDTO read(Long recordId);
     List<RecordDTO.RecordListObject> getRecords(Long projectId);
     List<RecordDTO.RecordListObject> getRecordsBySearch(String searchValue, String tagName, Long projectId);
 
@@ -23,6 +26,5 @@ public interface RecordService {
 
     PageResponseDto<RecordDTO.RecordListObject> getRecordsBySearch(PageRequestDto pageRequestDto, String searchValue, String tagName, Long projectId);
 
-    Record update(Long id, RecordUpdateDTO recordDTO);
 
 }
