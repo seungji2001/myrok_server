@@ -6,6 +6,7 @@ import com.example.myrok.dto.pagination.PageResponseDto;
 import com.example.myrok.dto.recordtype.RecordDTO;
 import com.example.myrok.dto.RecordUpdateDTO;
 import com.example.myrok.service.RecordService;
+import com.example.myrok.service.openAi.ChatCompletionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,9 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/myrok")
 public class RecordController {
-    @Autowired
     private final RecordService recordService;
-
+    private final ChatCompletionService chatCompletionService;
     // 회의록 작성 이동
     @GetMapping("/records")
     public void save(){}
@@ -95,6 +96,14 @@ public class RecordController {
     public ResponseEntity<Long> update( @PathVariable("recordId") Long recordId, @RequestBody @Valid RecordUpdateDTO recordUpdatedDTO){
         Record updatedRecord=recordService.update(recordId,recordUpdatedDTO);
         return new ResponseEntity<>(updatedRecord.getId(), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/chat")
+    public String chat(@RequestParam(value = "q")String question){
+        if(!StringUtils.hasLength(question)){
+            throw new RuntimeException();
+        }
+        return chatCompletionService.chatCompletions(question);
     }
 
 }
