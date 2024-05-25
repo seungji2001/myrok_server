@@ -12,9 +12,9 @@ public record RecordResponseDTO (
         Long recordId,
         String recordName,
         String recordContent,
-        String recordDate,
-        String recordWriterName,
-        List<Long> memberList,
+        LocalDate recordDate,
+        Long recordWriterId,
+        List<MemberDto.MemberNameDto> memberList,
         List<String> tagList,
         Long projectId
 ){
