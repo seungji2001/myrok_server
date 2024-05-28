@@ -18,16 +18,16 @@ public class DashBoardServiceImpl implements DashBoardService{
         List<TagDTO> tags = recordTagRepository.findTagNameAndCountByProjectIdAndDeletedIsFalse(projectId);
         List<TagDTO> topTags = tags.stream()
                 .limit(4)
-                .toList(); // Java 8 호환성을 위해 toList() 대신 collect(Collectors.toList()) 사용
+                .toList();
         // 전체 태그 갯수
         long sum = recordTagRepository.countByProjectIdAndDeletedIsFalse(projectId);
         long tagSum = 0;
         // tag 비율 계산
         for (TagDTO tagDto : topTags) {
-            tagSum += tagDto.getPercentage(); // getPercentage 가 tag 개수임
             tagDto.setPercentage((long)((tagDto.getPercentage() * 100.0) / sum)); // 비율 계산해서 set, double 로 계산한 뒤 long 으로 캐스팅
+            tagSum += tagDto.getPercentage(); // 상위 태그 비율 합산
         }
-        Long etcPercentage = (long)(((sum - tagSum) * 100.0) / sum);
+        Long etcPercentage = 100-tagSum; // 기타 비율
 
         DashBoardDTO.TagResponseDTO tagResponseDTO = DashBoardDTO.TagResponseDTO.builder()
                 .etcPercentage(etcPercentage)
