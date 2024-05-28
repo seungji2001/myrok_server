@@ -33,7 +33,7 @@ public class ErrorControllerAdvice {
     }
 
     @ExceptionHandler({HttpClientErrorException.class, HttpMessageNotReadableException.class, NullPointerException.class, DateTimeParseException.class})
-    protected ResponseEntity<ErrorResponse> httpClientErrorException(HttpClientErrorException e) {
+    protected ResponseEntity<ErrorResponse> httpClientErrorException(Exception e) {
         ErrorResponse response = ErrorResponse.of(ErrorCode.INSUFFICIENT_VALID);
         response.setDetail(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
