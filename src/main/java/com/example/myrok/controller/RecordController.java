@@ -117,4 +117,17 @@ public class RecordController {
         return chatCompletionService.chatCompletions(question);
     }
 
+    @Operation(
+            summary = "요약된 회의록을 가져옵니다.",
+            description = "요약된 회의록을 가져옵니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "요약된 회의록을 가져왔습니다."
+    )
+    @GetMapping("/record/summary")
+    public ResponseEntity<com.example.myrok.dto.classtype.RecordDTO.ResponseDTO> getSummary(Long recordId) {
+        return new ResponseEntity<>(recordService.getRecordSummary(recordId), HttpStatus.CREATED);
+    }
+
 }
