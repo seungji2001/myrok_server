@@ -272,4 +272,14 @@ public class RecordServiceImpl implements RecordService{
         return records;
     }
 
+    @Override
+    public RecordDTO.ResponseDTO getRecordSummary(Long recordId) {
+        Record record = recordRepository.findById(recordId).orElseThrow(NoSuchElementException::new);
+        RecordDTO.ResponseDTO responseDTO = RecordDTO.ResponseDTO.builder()
+                .id(recordId)
+                .summary(record.getRecordContentSummary())
+                .build();
+        return responseDTO;
+    }
+
 }

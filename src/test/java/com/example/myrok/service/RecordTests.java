@@ -171,7 +171,7 @@ public class RecordTests {
         // Given
         when(recordRepository.findById(recordId)).thenReturn(Optional.of(mockRecord));
         // When
-        recordService.deleteUpdate(recordId);
+        recordService.deleteUpdate(recordId, 2L);
         // Then
         //times() : 메소드가 호출된 횟수
         verify(recordRepository, times(1)).findById(recordId);
@@ -189,7 +189,7 @@ public class RecordTests {
         mockRecord.delete(); // 이미 삭제된 상태로 설정
         // When
         // CustomException 이 던져지는지 assert
-        CustomException customException = assertThrows(CustomException.class, () -> recordService.deleteUpdate(recordId));
+        CustomException customException = assertThrows(CustomException.class, () -> recordService.deleteUpdate(recordId, 2L));
         //Then
         // never() : 메소드가 실행되지 않았음을 검증. 삭제된 회의록의 삭제 시도니 관련 객체들도 삭제되면 안됨
         assertEquals(ErrorCode.DELETED_RECORD_CODE, customException.getErrorCode()); // 에러 코드 검증
