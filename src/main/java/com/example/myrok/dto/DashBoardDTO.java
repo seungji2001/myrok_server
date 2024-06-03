@@ -14,4 +14,13 @@ public class DashBoardDTO {
         private List<TagDTO> tags;
         private Long etcPercentage;
     }
+    @Data
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    @ToString
+    public static class TagListDTO{
+        private List<TagDTO> tags;
+        private Long totalCount;
+    }
 }

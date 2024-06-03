@@ -1,6 +1,7 @@
 package com.example.myrok.controller;
 
 import com.example.myrok.domain.Record;
+import com.example.myrok.dto.DashBoardDTO;
 import com.example.myrok.dto.RecordDeleteDTO;
 import com.example.myrok.dto.RecordResponseDTO;
 import com.example.myrok.dto.pagination.PageRequestDto;
@@ -104,7 +105,7 @@ public class RecordController {
     }
 
     @GetMapping("/records/{recordId}")
-    public ResponseEntity<RecordResponseDTO> get(@PathVariable("recordId") Long recordId){
+    public ResponseEntity<RecordResponseDTO> getRecord(@PathVariable("recordId") Long recordId){
         RecordResponseDTO readRecord = recordService.read(recordId);
         return new ResponseEntity<>(readRecord, HttpStatus.OK);
     }
@@ -115,6 +116,12 @@ public class RecordController {
             throw new RuntimeException();
         }
         return chatCompletionService.chatCompletions(question);
+    }
+
+    @GetMapping("{projectId}/tagList")
+    public ResponseEntity<DashBoardDTO.TagListDTO> getTagList(@PathVariable("projectId") Long projectId){
+        DashBoardDTO.TagListDTO tagListDTO= recordService.getTagList(projectId);
+        return new ResponseEntity<>(tagListDTO, HttpStatus.OK);
     }
 
 }

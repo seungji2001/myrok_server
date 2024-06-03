@@ -1,6 +1,7 @@
 package com.example.myrok.service;
 
 import com.example.myrok.domain.Record;
+import com.example.myrok.dto.DashBoardDTO;
 import com.example.myrok.dto.classtype.RecordDTO;
 import com.example.myrok.dto.pagination.PageRequestDto;
 import com.example.myrok.dto.pagination.PageResponseDto;
@@ -25,6 +26,8 @@ public interface RecordService {
     PageResponseDto<RecordDTO.RecordListObject> getRecords(PageRequestDto pageRequestDto, Long projectId);
 
     PageResponseDto<RecordDTO.RecordListObject> getRecordsBySearch(PageRequestDto pageRequestDto, String searchValue, String tagName, Long projectId);
+
+    DashBoardDTO.TagListDTO getTagList(Long projectId);
 
 
 }
