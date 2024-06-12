@@ -1,6 +1,7 @@
 package com.example.myrok.config;
 
 import com.example.myrok.security.filter.JWTCheckFilter;
+import com.example.myrok.security.filter.TokenRefreshFilter;
 import com.example.myrok.security.handler.APILoginFailureHandler;
 import com.example.myrok.security.handler.APILoginSuccessHandler;
 import com.example.myrok.security.handler.CustomAccessDeniedHandler;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -47,17 +49,14 @@ public class CustomSecurityConfig {
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 
         // 폼 로그인을 활성화하고, 로그인 페이지를 /api/member/login으로 설정합니다. 이 설정은 사용자가 로그인할 때 사용할 페이지를 지정합니다.
-//        http.formLogin(config -> {
-//            //로그인 페이지
-//            config.loginPage("/api/member/login");
-//            //로그인 성공시 핸들러 사용 -> 성공시 핸들러 사용
-//            config.successHandler(new APILoginSuccessHandler());
-//        });
+        http.formLogin(config -> {
+            //로그인 페이지
+            config.loginPage("/api/member/login");
+            //로그인 성공시 핸들러 사용 -> 성공시 핸들러 사용
+            config.successHandler(new APILoginSuccessHandler());
+        });
 
         http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        //return http.build();: 구성된 HttpSecurity 설정을 바탕으로 SecurityFilterChain 객체를 빌드하고 반환합니다.
-        // 이 객체는 Spring Security 필터 체인을 구성하고, 요청을 처리하는 데 사용됩니다.
 
         http.exceptionHandling(config ->{
             config.accessDeniedHandler(new CustomAccessDeniedHandler());

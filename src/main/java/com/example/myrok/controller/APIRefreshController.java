@@ -15,27 +15,24 @@ import java.util.Map;
 @Log4j2
 public class APIRefreshController {
 
-    @RequestMapping("/api/member/refresh")
+    @RequestMapping("/myrok/reissue/google")
     public Map<String, Object> refresh(
-            @RequestHeader("Authorization") String authHeader,
             String refreshToken
     ){
-        if(refreshToken == null){
-            throw new CustomJWTException("NULL_REFRESH");
-        }
-
-        if(authHeader == null || authHeader.length() < 7){
-            throw new CustomJWTException("INVALID STRING");
-        }
-
-        //Bearer //7
-        String accessToken = authHeader.substring(7);
+//        if(refreshToken == null){
+//            throw new CustomJWTException("NULL_REFRESH");
+//        }
+//
+//        if(authHeader == null || authHeader.length() < 7){
+//            throw new CustomJWTException("INVALID STRING");
+//        }
+//
+//        //Bearer //7
+//        String accessToken = authHeader.substring(7);
 
         //accessToken의 만료 여부 확인
         //만료가 되지 않은 경우 괜춘
-        if(checkExpiredToken(accessToken) == false){
-            return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
-        }
+//        if(checkExpiredToken(acc
 
         //Refresh토큰 검증
         Map<String, Object> claims = JWTUtil.validateToken(refreshToken);

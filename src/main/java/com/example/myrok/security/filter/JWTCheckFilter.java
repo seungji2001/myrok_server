@@ -4,6 +4,7 @@ package com.example.myrok.security.filter;
 import com.example.myrok.dto.MemberSecurityDTO;
 import com.example.myrok.dto.classtype.MemberDTO;
 import com.example.myrok.type.MemberRole;
+import com.example.myrok.util.CustomJWTException;
 import com.example.myrok.util.JWTUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.FilterChain;
@@ -34,28 +35,23 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         //true == not checking
         String path = request.getRequestURI();
-        log.info("check uri -------" + path);
+        if (path.startsWith("/myrok/auth/google") ||
+                path.startsWith("/myrok/reissue/google") ||
+                path.startsWith("/myrok/auth/callback")) {
+            return true;
+        }
 
-        if(path.startsWith("/api/member/login")){
+        // Swagger UI와 관련된 요청도 필터링하지 않음
+        if (path.startsWith("/swagger-ui.html") ||
+                path.startsWith("/swagger-ui/") ||
+                path.startsWith("/v3/api-docs")) {
             return true;
         }
-        if(path.startsWith("/myrok/auth/google")){
-            return true;
-        }
-        if(path.startsWith("/myrok/auth/callback")){
-            return true;
-        }
-        //false == check //
         return false;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-
-        log.info("=============================");
-        log.info("=============================");
-        log.info("=============================");
 
         String authHeaderStr = request.getHeader("Authorization");
 
