@@ -1,5 +1,7 @@
 package com.example.myrok.config;
 
+import com.example.myrok.security.handler.APILoginFailureHandler;
+import com.example.myrok.security.handler.APILoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -36,10 +38,6 @@ public class CustomSecurityConfig {
             httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.NEVER);
         });
 
-
-
-
-
         //csrf설정 -> request 위조 방지
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 
@@ -48,7 +46,8 @@ public class CustomSecurityConfig {
             //로그인 페이지
             config.loginPage("/api/member/login");
             //로그인 성공시 핸들러 사용 -> 성공시 핸들러 사용
-
+            config.successHandler(new APILoginSuccessHandler());
+            config.failureHandler(new APILoginFailureHandler());
         });
 
         //return http.build();: 구성된 HttpSecurity 설정을 바탕으로 SecurityFilterChain 객체를 빌드하고 반환합니다.
