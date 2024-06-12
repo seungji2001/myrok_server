@@ -1,5 +1,6 @@
 package com.example.myrok.config;
 
+import com.example.myrok.security.filter.JWTCheckFilter;
 import com.example.myrok.security.handler.APILoginFailureHandler;
 import com.example.myrok.security.handler.APILoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -49,6 +51,8 @@ public class CustomSecurityConfig {
             config.successHandler(new APILoginSuccessHandler());
             config.failureHandler(new APILoginFailureHandler());
         });
+
+        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 
         //return http.build();: 구성된 HttpSecurity 설정을 바탕으로 SecurityFilterChain 객체를 빌드하고 반환합니다.
         // 이 객체는 Spring Security 필터 체인을 구성하고, 요청을 처리하는 데 사용됩니다.
