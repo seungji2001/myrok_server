@@ -61,7 +61,7 @@ public class OAuth2Service{
 
         Member member = memberRepository.findBySocialIdAndLoginProvider(memberInformation.getSocialId(), provider)
                 .orElseGet(() ->
-                        Member.builder()
+                        memberRepository.save(Member.builder()
                                 .socialId(memberInformation.getSocialId())
                                 .loginProvider(provider)
                                 .name(memberInformation.getName())
@@ -70,31 +70,29 @@ public class OAuth2Service{
                                 .imgUrl(memberInformation.getPostUrl())
                                 .memberRoleList(Arrays.asList(MemberRole.USER))
                                 .memberRoleList(Arrays.asList(MemberRole.USER))
-                                .build()
+                                .build())
                 );
 
         MemberSecurityDTO memberSecurityDTO =
                 new MemberSecurityDTO(member.getSocialId(), member.getPassword(), member.getMemberRoleList().stream().map(Enum::toString).collect(Collectors.toList()), member.getName());
+
+        Map<String, Object> claims = memberSecurityDTO.getClaims();
+
         String jwtToken = JWTUtil.generateToken(memberSecurityDTO.getClaims(), 10); //지금 당장 사용할 수 있는 권리
         String jwtRefreshToken = JWTUtil.generateToken(memberSecurityDTO.getClaims(), 60 * 24); //교환권
 
-//        member.updateTokens(jwtRefreshToken);
-        memberRepository.save(member);
+        claims.put("accessToken", jwtToken);
+        claims.put("refreshToken", jwtRefreshToken);
 
         sendAccessTokenAndRefreshToken(member, response, jwtToken, jwtRefreshToken);
     }
 
     public void sendAccessTokenAndRefreshToken(Member member, HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
-        Map<String, String> tokens = new HashMap<>();
-        tokens.put("accessToken", accessToken);
-        tokens.put("refreshToken", refreshToken);
-
-        Gson gson = new Gson();
-        String jsonStr = gson.toJson(tokens);
+        String str = "http://localhost:3000/login?accessToken=" + accessToken + "&refreshToken=" + refreshToken;
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printWriter = response.getWriter();
-        printWriter.println(jsonStr);
+        printWriter.println(str);
         printWriter.close();
     }
 }
