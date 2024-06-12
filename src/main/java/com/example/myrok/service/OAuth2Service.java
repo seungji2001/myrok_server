@@ -47,7 +47,7 @@ public class OAuth2Service{
         return accessToken;
     }
 
-    public void login(HttpServletResponse response, String accessToken, LoginProvider provider) throws IOException {
+    public String login(HttpServletResponse response, String accessToken, LoginProvider provider) throws IOException {
         MemberDTO.MemberInformation memberInformation;
         if (provider == LoginProvider.GOOGLE) {
             memberInformation = oAuth2Util.getGoogleUserInfo(accessToken);
@@ -84,15 +84,7 @@ public class OAuth2Service{
         claims.put("accessToken", jwtToken);
         claims.put("refreshToken", jwtRefreshToken);
 
-        sendAccessTokenAndRefreshToken(member, response, jwtToken, jwtRefreshToken);
+        return "http://localhost:3000/login?accessToken=" + jwtToken + "&refreshToken=" + jwtRefreshToken;
     }
 
-    public void sendAccessTokenAndRefreshToken(Member member, HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
-        String str = "http://localhost:3000/login?accessToken=" + accessToken + "&refreshToken=" + refreshToken;
-
-        response.setContentType("application/json; charset=UTF-8");
-        PrintWriter printWriter = response.getWriter();
-        printWriter.println(str);
-        printWriter.close();
-    }
 }

@@ -4,6 +4,8 @@ import com.example.myrok.service.OAuth2Service;
 import com.example.myrok.type.LoginProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,9 +32,9 @@ public class AuthController {
     }
 
     @GetMapping("/callback")
-    public void getGoogleAccessToken(String code, String scope, HttpServletResponse response) throws IOException {
+    public ResponseEntity<String> getGoogleAccessToken(String code, String scope, HttpServletResponse response) throws IOException {
         String accessToken = oAuth2Service.getAccessToken(code, LoginProvider.GOOGLE);
-        oAuth2Service.login(response, accessToken, LoginProvider.GOOGLE);
+        return ResponseEntity.ok().body(oAuth2Service.login(response, accessToken, LoginProvider.GOOGLE));
     }
 
 }
