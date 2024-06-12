@@ -1,6 +1,7 @@
 package com.example.myrok.domain;
 
 import com.example.myrok.type.MemberProjectType;
+import com.example.myrok.type.MemberRole;
 import com.example.myrok.type.Role;
 import jakarta.persistence.*;
 import jdk.jfr.Description;
@@ -39,8 +40,16 @@ public class Member {
     @Description("이미지 url")
     private String imgUrl;
 
+    @Column(nullable = false)
+    private String email;
+
     @OneToMany(mappedBy = "member")
     private List<MemberProject> memberProjects;
 
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
 
+    public void addRole(MemberRole memberRole){
+        this.memberRole = memberRole;
+    }
 }
