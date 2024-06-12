@@ -29,10 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         log.info("---------------------loadUserByUserName--------------------" + socialId);
 
-        Member member = memberRepository.findBySocialId(socialId);
-        if(member == null){
-            throw new UsernameNotFoundException("Not found");
-        }
+        Member member = memberRepository.findBySocialId(socialId).orElseThrow();
 
         //시큐리티 처리
         //인증처리 됨
@@ -42,10 +39,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 member.getMemberRoleList().stream()
                         .map(memberRole -> memberRole.name())
                         .collect(Collectors.toList()),
-                member.getName()
+                member.getName(),
+                member.getLoginProvider()
         );
-
-        log.info(memberDTO);
 
         return memberDTO;
     }

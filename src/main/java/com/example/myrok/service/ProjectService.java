@@ -8,9 +8,8 @@ import java.time.LocalDate;
 
 @Transactional
 public interface ProjectService {
-    //프로젝트 등록
-    Long register(ProjectDTO.RegisterProject requestDto, Long memberId);
-
+    Long createProject(ProjectDTO.RegisterProject requestDto , String socialId);
+    Long register(ProjectDTO.RegisterProject requestDto, String socialId);
     Long checkProjectDelete(Long projectId);
 
     ProjectDTO.ProjectMembersDto getProjectMembers(Long projectId);

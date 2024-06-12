@@ -1,5 +1,6 @@
 package com.example.myrok.dto;
 
+import com.example.myrok.type.LoginProvider;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -10,10 +11,11 @@ import java.util.stream.Collectors;
 public class MemberSecurityDTO extends User {
 
     private String socialId, name, password;
+    private LoginProvider loginProvider;
     private List<String> memberRoles = new ArrayList<>();
 
 
-    public MemberSecurityDTO(String socialId, String password, List<String> memberRoles, String name) {
+    public MemberSecurityDTO(String socialId, String password, List<String> memberRoles, String name, LoginProvider loginProvider) {
         super(socialId, password,  memberRoles.stream().map(str ->
                         //spring security가 사용하는 권한으로 사용해야한다
                         //권한을 만들어주는 type이 있다
@@ -24,6 +26,7 @@ public class MemberSecurityDTO extends User {
         this.password = password;
         this.name = name;
         this.memberRoles = memberRoles;
+        this.loginProvider = loginProvider;
     }
 
     //jwt문자열을 만들어서 주고 받는다
@@ -34,6 +37,7 @@ public class MemberSecurityDTO extends User {
         dataMap.put("password",password);
         dataMap.put("socialId", socialId);
         dataMap.put("memberRole", memberRoles);
+        dataMap.put("loginProvider", loginProvider);
         return dataMap;
     }
 }

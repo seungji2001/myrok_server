@@ -2,18 +2,24 @@ package com.example.myrok.controller;
 
 import com.example.myrok.dto.classtype.ClovaDTO;
 import com.example.myrok.dto.classtype.ProjectDTO;
+import com.example.myrok.security.CustomUserDetailsService;
 import com.example.myrok.service.MemberService;
 import com.example.myrok.service.ProjectService;
 import com.example.myrok.service.openAi.ClovaSummary;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasAnyAuthority;
 
@@ -36,10 +42,12 @@ public class ProjectController {
             description = "프로젝트 생성을 완료하였습니다."
     )
     @PostMapping("/")
-    public ResponseEntity<Long> createProject(@RequestBody ProjectDTO.RegisterProject projectDto, Long memberId){
-        memberService.checkMemberHaveProject(memberId);
-        return ResponseEntity.ok().body(projectService.register(projectDto , memberId));
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    public ResponseEntity<Long> createProject(@RequestBody ProjectDTO.RegisterProject projectDto, Principal principal){
+        return ResponseEntity.ok().body(projectService.createProject(projectDto , principal.getName()));
     }
+
 
     @Operation(
             summary = "프로젝트 초대코드를 가져옵니다.",
@@ -64,9 +72,10 @@ public class ProjectController {
             description = "프로젝트 참가를 완료하였습니다."
     )
     @PostMapping("/participate")
-    public ResponseEntity<Long> participateProject(Long memberId, @RequestBody ProjectDTO.ParticipateProject projectDto){
-        memberService.checkMemberHaveProject(memberId);
-        return ResponseEntity.ok().body(memberService.participateProject(memberId, projectDto.getInviteCode()));
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    public ResponseEntity<Long> participateProject(@RequestBody ProjectDTO.ParticipateProject projectDto, Principal principal){
+        memberService.checkMemberHaveProject(principal.getName());
+        return ResponseEntity.ok().body(memberService.participateProject(principal.getName(), projectDto.getInviteCode()));
     }
     @Operation(
             summary = "프로젝트 나가기",

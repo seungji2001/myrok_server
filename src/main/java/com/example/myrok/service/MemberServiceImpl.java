@@ -27,25 +27,29 @@ public class MemberServiceImpl implements MemberService {
     private final MemberProjectRepository memberProjectRepository;
 
     @Override
-    public void checkMemberHaveProject(Long memberId){
-        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
+    public void checkMemberHaveProject(String socialId) {
+        Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchElementException::new);
         Optional<MemberProject> memberProject = memberProjectRepository.findByMemberAndMemberProjectType(member, MemberProjectType.PROJECT_MEMBER);
         if(memberProject.isPresent())
             throw new CustomException(ErrorCode.MEMBER_IN_PROJECT, HttpStatus.NOT_ACCEPTABLE);
     }
 
-
     @Override
-    public Long participateProject(Long memberId, String inviteCode) {
+    public Long participateProject(String socialId, String inviteCode) {
+
         Optional<Project> project = projectRepository.findByInviteCode(inviteCode);
         if(project.isEmpty()){
             throw new CustomException(ErrorCode.WRONG_INVITE_CODE, HttpStatus.BAD_REQUEST);
         }
+
+        checkMemberHaveProject(socialId);
+
         MemberProject memberProject = MemberProject.builder()
-                .member(memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new))
+                .member(memberRepository.findBySocialId(socialId).orElseThrow(NoSuchElementException::new))
                 .project(project.get())
                 .memberProjectType(MemberProjectType.PROJECT_MEMBER)
                 .build();
+
         return memberProjectRepository.save(memberProject).getId();
     }
 

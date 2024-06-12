@@ -74,7 +74,7 @@ public class OAuth2Service{
                 );
 
         MemberSecurityDTO memberSecurityDTO =
-                new MemberSecurityDTO(member.getSocialId(), member.getPassword(), member.getMemberRoleList().stream().map(Enum::toString).collect(Collectors.toList()), member.getName());
+                new MemberSecurityDTO(member.getSocialId(), member.getPassword(), member.getMemberRoleList().stream().map(Enum::toString).collect(Collectors.toList()), member.getName(), member.getLoginProvider());
 
         Map<String, Object> claims = memberSecurityDTO.getClaims();
 

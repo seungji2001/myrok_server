@@ -3,6 +3,7 @@ package com.example.myrok.security.filter;
 
 import com.example.myrok.dto.MemberSecurityDTO;
 import com.example.myrok.dto.classtype.MemberDTO;
+import com.example.myrok.type.LoginProvider;
 import com.example.myrok.type.MemberRole;
 import com.example.myrok.util.CustomJWTException;
 import com.example.myrok.util.JWTUtil;
@@ -67,9 +68,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String password = (String) claims.get("password");
             String socialId = (String) claims.get("socialId");
             List<String> memberRole = (List<String>) claims.get("memberRole");
+            LoginProvider loginProvider = (LoginProvider) claims.get("loginProvider");
 
-
-            MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO( socialId, password, memberRole, name);
+            MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO( socialId, password, memberRole, name, loginProvider);
             log.info("-----------------------------------");
             log.info(memberSecurityDTO);
             log.info(memberSecurityDTO.getAuthorities());

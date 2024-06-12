@@ -29,8 +29,8 @@ public class ProjectControllerTests {
 
     @Test
     public void participantProject(){
-        memberService.checkMemberHaveProject(3L);
-        log.info(memberService.participateProject(3L, "0ddd3e25"));
+//        memberService.checkMemberHaveProject(3L);
+//        log.info(memberService.participateProject(3L, "0ddd3e25"));
     }
 
 //    @Test

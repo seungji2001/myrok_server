@@ -24,16 +24,23 @@ public class ProjectServiceImpl implements ProjectService{
     private final ProjectRepository projectRepository;
     private final MemberProjectRepository memberProjectRepository;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     @Override
-    public Long register(ProjectDTO.RegisterProject projectDto, Long memberId) {
+    public Long createProject(ProjectDTO.RegisterProject requestDto, String socialId) {
+        memberService.checkMemberHaveProject(socialId);
+        return register(requestDto, socialId);
+    }
+
+    @Override
+    public Long register(ProjectDTO.RegisterProject projectDto, String socialId) {
         if(Objects.equals(projectDto.getStartDate(), "") && Objects.equals(projectDto.getEndDate(), "")){
             projectDto.setStartDate("1000-01-01");
             projectDto.setEndDate("3000-01-01");
         }
         Project project = projectRepository.save(dtoToEntity(projectDto));
 
-        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
+        Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchElementException::new);
         MemberProject memberProject = MemberProject.builder()
                 .memberProjectType(MemberProjectType.PROJECT_MEMBER)
                 .member(member)
@@ -41,7 +48,6 @@ public class ProjectServiceImpl implements ProjectService{
                 .build();
 
         return memberProjectRepository.save(memberProject).getId();
-
     }
 
     @Override
