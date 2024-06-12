@@ -23,7 +23,7 @@ public class MemberRepositoryTests {
             Member member = Member.builder()
                     .socialId("user" + i + "@aaa.com")
                     .password(passwordEncoder.encode("111"))
-                    .email("user" + i + "@aaa.com")
+                    .name("user" + i)
                     .build();
             if(i>5){
                 member.addRole(MemberRole.ADMIN);

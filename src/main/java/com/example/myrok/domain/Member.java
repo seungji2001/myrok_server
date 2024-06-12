@@ -40,9 +40,6 @@ public class Member {
     @Description("이미지 url")
     private String imgUrl;
 
-    @Column(nullable = false)
-    private String email;
-
     @OneToMany(mappedBy = "member")
     private List<MemberProject> memberProjects;
 
