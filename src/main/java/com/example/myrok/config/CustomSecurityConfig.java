@@ -3,6 +3,7 @@ package com.example.myrok.config;
 import com.example.myrok.security.filter.JWTCheckFilter;
 import com.example.myrok.security.handler.APILoginFailureHandler;
 import com.example.myrok.security.handler.APILoginSuccessHandler;
+import com.example.myrok.security.handler.CustomAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -58,6 +59,11 @@ public class CustomSecurityConfig {
 
         //return http.build();: 구성된 HttpSecurity 설정을 바탕으로 SecurityFilterChain 객체를 빌드하고 반환합니다.
         // 이 객체는 Spring Security 필터 체인을 구성하고, 요청을 처리하는 데 사용됩니다.
+
+        http.exceptionHandling(config ->{
+            config.accessDeniedHandler(new CustomAccessDeniedHandler());
+        });
+
         return http.build();
     }
 
