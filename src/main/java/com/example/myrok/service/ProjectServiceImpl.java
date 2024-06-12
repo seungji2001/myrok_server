@@ -5,12 +5,16 @@ import com.example.myrok.domain.MemberProject;
 import com.example.myrok.domain.Project;
 import com.example.myrok.dto.classtype.MemberDTO;
 import com.example.myrok.dto.classtype.ProjectDTO;
+import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.MemberProjectRepository;
 import com.example.myrok.repository.MemberRepository;
 import com.example.myrok.repository.ProjectRepository;
+import com.example.myrok.type.ErrorCode;
 import com.example.myrok.type.MemberProjectType;
+import com.example.myrok.type.MemberRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -41,6 +45,8 @@ public class ProjectServiceImpl implements ProjectService{
         Project project = projectRepository.save(dtoToEntity(projectDto));
 
         Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchElementException::new);
+        member.addRole(MemberRole.CREATOR);
+
         MemberProject memberProject = MemberProject.builder()
                 .memberProjectType(MemberProjectType.PROJECT_MEMBER)
                 .member(member)
@@ -65,7 +71,13 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public ProjectDTO.ProjectMembersDto getProjectMembers(Long projectId) {
+    public ProjectDTO.ProjectMembersDto getProjectMembers(Long projectId, String socialId) {
+
+        Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchFieldError::new);
+        if(!memberProjectRepository.existsMemberProjectByMemberIdAndProjectId(member.getId(), projectId)){
+            throw new CustomException(ErrorCode.MEMBER_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE);
+        }
+
         //해당 프로젝트 소속 인원의 정보 들고오기
         List<MemberDTO.MemberNameDto> memberNameDtos= memberProjectRepository.findAllByProjectIdAndMemberProjectType(projectId, MemberProjectType.PROJECT_MEMBER)
                 .stream()
@@ -75,6 +87,7 @@ public class ProjectServiceImpl implements ProjectService{
                             .name(memberProject.getMember().getName())
                             .build();
                 }).collect(Collectors.toList());
+
         return ProjectDTO.ProjectMembersDto.builder()
                 .projectMemberNames(memberNameDtos)
                 .build();

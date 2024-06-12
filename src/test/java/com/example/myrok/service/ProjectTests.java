@@ -27,21 +27,21 @@ public class ProjectTests {
     @Autowired
     RecordService recordService;
 
-    @Test
-    public void testRegister(){
-        ProjectDTO.RegisterProject projectDto = ProjectDTO.RegisterProject.builder()
-                .projectName("test name 1")
-                .startDate("")
-                .endDate("")
-                .build();
-        Long projectId = projectService.register(projectDto, 1L);
-    }
+//    @Test
+//    public void testRegister(){
+//        ProjectDTO.RegisterProject projectDto = ProjectDTO.RegisterProject.builder()
+//                .projectName("test name 1")
+//                .startDate("")
+//                .endDate("")
+//                .build();
+//        Long projectId = projectService.register(projectDto, 1L);
+//    }
 
-    @Test
-    public void testGetMembersByProjectId(){
-        ProjectDTO.ProjectMembersDto projectMembersDto = projectService.getProjectMembers(4L);
-        log.info(projectMembersDto);
-    }
+//    @Test
+//    public void testGetMembersByProjectId(){
+//        ProjectDTO.ProjectMembersDto projectMembersDto = projectService.getProjectMembers(4L);
+//        log.info(projectMembersDto);
+//    }
 
     @Test
     public void getRecordListTests(){

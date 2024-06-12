@@ -12,7 +12,7 @@ public interface ProjectService {
     Long register(ProjectDTO.RegisterProject requestDto, String socialId);
     Long checkProjectDelete(Long projectId);
 
-    ProjectDTO.ProjectMembersDto getProjectMembers(Long projectId);
+    ProjectDTO.ProjectMembersDto getProjectMembers(Long projectId, String socialId);
     ProjectDTO.ParticipateProject getInviteCode(Long projectId);
 
     default Project dtoToEntity(ProjectDTO.RegisterProject projectDto){
