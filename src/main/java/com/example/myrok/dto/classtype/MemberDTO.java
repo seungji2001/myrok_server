@@ -12,4 +12,16 @@ public class MemberDTO {
         private Long memberId;
         private String name;
     }
+
+    @Data
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    @ToString
+    public static class MemberInformation{
+        private String socialId;
+        private String email;
+        private String name;
+        private String postUrl;
+    }
 }

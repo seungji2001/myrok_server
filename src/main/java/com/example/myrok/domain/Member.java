@@ -1,5 +1,6 @@
 package com.example.myrok.domain;
 
+import com.example.myrok.type.LoginProvider;
 import com.example.myrok.type.MemberProjectType;
 import com.example.myrok.type.MemberRole;
 import com.example.myrok.type.Role;
@@ -7,6 +8,7 @@ import jakarta.persistence.*;
 import jdk.jfr.Description;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,13 +42,23 @@ public class Member {
     @Description("이미지 url")
     private String imgUrl;
 
+    private String email;
+
     @OneToMany(mappedBy = "member")
     private List<MemberProject> memberProjects;
 
-    @Enumerated(EnumType.STRING)
-    private MemberRole memberRole;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<MemberRole> memberRoleList = new ArrayList<>();
 
-    public void addRole(MemberRole memberRole){
-        this.memberRole = memberRole;
+    @Enumerated(EnumType.STRING)
+    private LoginProvider loginProvider;
+
+    @Column(columnDefinition = "TEXT")
+    private String refreshToken;
+
+    public void updateTokens(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
+    public void addRole(MemberRole memberRole){ memberRoleList.add(memberRole); }
 }

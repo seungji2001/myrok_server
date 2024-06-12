@@ -39,8 +39,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         MemberSecurityDTO memberDTO = new MemberSecurityDTO(
                 member.getSocialId(),
                 member.getPassword(),
-                member.getMemberRole().toString(),
-                member.getName());
+                member.getMemberRoleList().stream()
+                        .map(memberRole -> memberRole.name())
+                        .collect(Collectors.toList()),
+                member.getName()
+        );
 
         log.info(memberDTO);
 

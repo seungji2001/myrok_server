@@ -47,13 +47,12 @@ public class CustomSecurityConfig {
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 
         // 폼 로그인을 활성화하고, 로그인 페이지를 /api/member/login으로 설정합니다. 이 설정은 사용자가 로그인할 때 사용할 페이지를 지정합니다.
-        http.formLogin(config -> {
-            //로그인 페이지
-            config.loginPage("/api/member/login");
-            //로그인 성공시 핸들러 사용 -> 성공시 핸들러 사용
-            config.successHandler(new APILoginSuccessHandler());
-            config.failureHandler(new APILoginFailureHandler());
-        });
+//        http.formLogin(config -> {
+//            //로그인 페이지
+//            config.loginPage("/api/member/login");
+//            //로그인 성공시 핸들러 사용 -> 성공시 핸들러 사용
+//            config.successHandler(new APILoginSuccessHandler());
+//        });
 
         http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 

@@ -3,6 +3,7 @@ package com.example.myrok.security.filter;
 
 import com.example.myrok.dto.MemberSecurityDTO;
 import com.example.myrok.dto.classtype.MemberDTO;
+import com.example.myrok.type.MemberRole;
 import com.example.myrok.util.JWTUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.FilterChain;
@@ -38,6 +39,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/api/member/login")){
             return true;
         }
+        if(path.startsWith("/myrok/auth/google")){
+            return true;
+        }
+        if(path.startsWith("/myrok/auth/callback")){
+            return true;
+        }
         //false == check //
         return false;
     }
@@ -63,7 +70,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String name = (String) claims.get("name");
             String password = (String) claims.get("password");
             String socialId = (String) claims.get("socialId");
-            String memberRole = (String) claims.get("memberRole");
+            List<String> memberRole = (List<String>) claims.get("memberRole");
 
 
             MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO( socialId, password, memberRole, name);
