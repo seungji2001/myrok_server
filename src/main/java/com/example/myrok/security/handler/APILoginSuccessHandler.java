@@ -1,6 +1,7 @@
 package com.example.myrok.security.handler;
 
 import com.example.myrok.dto.MemberSecurityDTO;
+import com.example.myrok.util.JWTUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,8 +28,11 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
         MemberSecurityDTO memberDTO = (MemberSecurityDTO) authentication.getPrincipal();
         // 여기에 Access랑 refresh token을 넣는다
         Map<String, Object> claims = memberDTO.getClaims();
-        claims.put("accessToken", "");
-        claims.put("refreshToken", "");
+        String accessToken = JWTUtil.generateToken(claims, 10); //지금 당장 사용할 수 있는 권리
+        String refreshToken = JWTUtil.generateToken(claims, 60 * 24); //교환권
+        //유효시간을 줘 탈취를 어렵게 한다
+        claims.put("accessToken", accessToken);
+        claims.put("refreshToken", refreshToken);
 
         Gson gson = new Gson();
 
