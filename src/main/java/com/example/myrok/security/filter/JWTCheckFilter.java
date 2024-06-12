@@ -1,6 +1,8 @@
 package com.example.myrok.security.filter;
 
 
+import com.example.myrok.dto.MemberSecurityDTO;
+import com.example.myrok.dto.classtype.MemberDTO;
 import com.example.myrok.util.JWTUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.FilterChain;
@@ -8,10 +10,16 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //모든 리케스트에 대해 동작한다
@@ -27,6 +35,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         log.info("check uri -------" + path);
 
+        if(path.startsWith("/api/member/login")){
+            return true;
+        }
         //false == check //
         return false;
     }
@@ -43,10 +54,28 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         //Bearer //7 JWT 문자열
         try {
-//Bearer accestoken...
+            //Bearer accestoken...
             String accessToken = authHeaderStr.substring(7);
             Map<String, Object> claims = JWTUtil.validateToken(accessToken);
             log.info("JWT claims: " + claims);
+
+            //사용자의 정보를 꺼낼 수 있으며 DTO구성이 가능하다
+            String name = (String) claims.get("name");
+            String password = (String) claims.get("password");
+            String socialId = (String) claims.get("socialId");
+            String memberRole = (String) claims.get("memberRole");
+
+
+            MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO( socialId, password, memberRole, name);
+            log.info("-----------------------------------");
+            log.info(memberSecurityDTO);
+            log.info(memberSecurityDTO.getAuthorities());
+            UsernamePasswordAuthenticationToken authenticationToken
+                    = new UsernamePasswordAuthenticationToken(memberSecurityDTO,password,memberSecurityDTO.getAuthorities());
+            //무상태이다
+            //매번 토큰이 호출 될때마다 springsecurity에 넣어준 다음 preAuthorize되어야한다 단점 있음
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
             //dest
             //성공하면 다음 목적지로 보낸다
             filterChain.doFilter(request, response);

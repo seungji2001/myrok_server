@@ -18,7 +18,7 @@ public class ProjectControllerTests {
 
     @Test
     public void createProject(){
-        memberService.checkMemberHaveProject(2L);
+        memberService.checkMemberHaveProject(7L);
         ProjectDTO.RegisterProject registerProject = ProjectDTO.RegisterProject.builder()
                 .projectName("test_member2")
                 .startDate("")

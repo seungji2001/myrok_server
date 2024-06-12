@@ -11,8 +11,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
+
+import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasAnyAuthority;
 
 @RestController
 @Tag(name = "Project", description = "Project 관련 API 입니다.")
@@ -47,6 +50,7 @@ public class ProjectController {
             description = "프로젝트 초대코드를 가져옵니다."
     )
     @GetMapping("/{projectId}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<ProjectDTO.ParticipateProject> getInviteCode(@PathVariable Long projectId) {
         return ResponseEntity.ok().body(projectService.getInviteCode(projectId));
     }

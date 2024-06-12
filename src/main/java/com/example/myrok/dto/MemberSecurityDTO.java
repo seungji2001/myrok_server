@@ -26,7 +26,7 @@ public class MemberSecurityDTO extends User {
         dataMap.put("name", name);
         dataMap.put("password",password);
         dataMap.put("socialId", socialId);
-        dataMap.put("roleNames", memberRole);
+        dataMap.put("memberRole", memberRole);
         return dataMap;
     }
 }
