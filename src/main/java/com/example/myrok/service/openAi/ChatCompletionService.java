@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Service
@@ -14,6 +15,7 @@ public class ChatCompletionService {
 
     private final ChatCompletionClient chatCompletionClient;
     private final static String ROLE_USER = "user";
+    private final static String ROLE_SYSTEM = "system";
     private final static String MODEL = "gpt-3.5-turbo";
 
     @Value("${open_ai.api.key}")
@@ -23,12 +25,18 @@ public class ChatCompletionService {
 
         Message message = Message.builder()
                 .role(ROLE_USER)
-                .content(question + "해당 내용에 대해 요약해줘.")
+                .content(question)
+                .build();
+
+        String systemContent = "위 내용을 요약해줘";
+        Message systemMessage = Message.builder()
+                .role(ROLE_SYSTEM)
+                .content(systemContent)
                 .build();
 
         ChatRequest chatRequest = ChatRequest.builder()
                 .model(MODEL)
-                .messages(Collections.singletonList(message))
+                .messages(Arrays.asList(message, systemMessage))
                 .build();
 
         return chatCompletionClient

@@ -68,7 +68,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String password = (String) claims.get("password");
             String socialId = (String) claims.get("socialId");
             List<String> memberRole = (List<String>) claims.get("memberRole");
-            LoginProvider loginProvider = (LoginProvider) claims.get("loginProvider");
 
             MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO( socialId, password, memberRole, name);
             log.info("-----------------------------------");

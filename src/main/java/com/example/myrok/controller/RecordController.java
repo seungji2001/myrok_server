@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +29,16 @@ import java.util.List;
 public class RecordController {
     private final RecordService recordService;
     private final ChatCompletionService chatCompletionService;
-    // 회의록 작성 이동
-    @GetMapping("/records")
-    public void save(){}
 
-
+    @Operation(
+            summary = "회의록 저장하기",
+            description = "회의록을 저장하기"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "회의록을 저장하였습니다"
+    )
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'TEAMMEMBER')")
     @PostMapping("/records")
     public ResponseEntity<Long> save( @RequestBody @Valid RecordDTO recordDTO){
         Record savedRecord=recordService.save(recordDTO);
