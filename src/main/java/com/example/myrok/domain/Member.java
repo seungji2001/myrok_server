@@ -51,7 +51,6 @@ public class Member {
     @Builder.Default
     private List<MemberRole> memberRoleList = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
     private LoginProvider loginProvider;
 
     @Column(columnDefinition = "TEXT")
