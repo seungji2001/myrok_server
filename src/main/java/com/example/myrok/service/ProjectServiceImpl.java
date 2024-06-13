@@ -46,6 +46,7 @@ public class ProjectServiceImpl implements ProjectService{
 
         Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchElementException::new);
         member.addRole(MemberRole.CREATOR);
+        member.addRole(MemberRole.TEAMMEMBER);
 
         MemberProject memberProject = MemberProject.builder()
                 .memberProjectType(MemberProjectType.PROJECT_MEMBER)
@@ -60,7 +61,6 @@ public class ProjectServiceImpl implements ProjectService{
     //멤버가 프로젝트 나가기를 할 때마다, 해당 프로젝트 내 소속된 인원이 없는지 확인 필요
     //소속된 멤버의 상태가 모두 NON_PROJECT_MEMBER일 경우
     public Long checkProjectDelete(Long projectId) {
-        boolean canDelete = true;
         Project project = projectRepository.findById(projectId).orElseThrow(NoSuchElementException::new);
         int count = (int) memberProjectRepository.findAllByProjectIdAndMemberProjectType(projectId, MemberProjectType.PROJECT_MEMBER).stream().count();
         //한명이라도 소속 멤버인 경우 delete하지 않는다

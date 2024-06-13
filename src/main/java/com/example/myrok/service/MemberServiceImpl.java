@@ -9,6 +9,7 @@ import com.example.myrok.repository.MemberRepository;
 import com.example.myrok.repository.ProjectRepository;
 import com.example.myrok.type.ErrorCode;
 import com.example.myrok.type.MemberProjectType;
+import com.example.myrok.type.MemberRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -47,8 +48,11 @@ public class MemberServiceImpl implements MemberService {
 
         checkMemberHaveProject(socialId);
 
+        Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchElementException::new);
+        member.addRole(MemberRole.TEAMMEMBER);
+
         MemberProject memberProject = MemberProject.builder()
-                .member(memberRepository.findBySocialId(socialId).orElseThrow(NoSuchElementException::new))
+                .member(member)
                 .project(project.get())
                 .memberProjectType(MemberProjectType.PROJECT_MEMBER)
                 .build();
@@ -57,8 +61,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Long getOutFromProject(Long memberId, Long projectId) {
+    public Long getOutFromProject(Long memberId, Long projectId, String socialId) {
         MemberProject memberProject = memberProjectRepository.findByMemberIdAndProjectIdAndMemberProjectType(memberId, projectId, MemberProjectType.PROJECT_MEMBER).orElseThrow(new CustomException(ErrorCode.MEMBER_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE));
+
+        Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchElementException::new);
+        member.deleteRole(MemberRole.TEAMMEMBER);
+        if(member.getMemberRoleList().contains(MemberRole.CREATOR)){
+            member.deleteRole(MemberRole.CREATOR);
+        }
+
         memberProject.changeMemberProjectType(MemberProjectType.NON_PROJECT_MEMBER);
         return memberProjectRepository.save(memberProject).getId();
     }

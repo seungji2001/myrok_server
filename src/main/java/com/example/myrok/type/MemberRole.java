@@ -1,5 +1,5 @@
 package com.example.myrok.type;
 
 public enum MemberRole {
-    USER,CREATOR
+    USER,CREATOR,TEAMMEMBER
 }

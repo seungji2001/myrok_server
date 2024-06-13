@@ -61,5 +61,9 @@ public class Member {
         this.refreshToken = refreshToken;
     }
     public void addRole(MemberRole memberRole){
-        memberRoleList.add(memberRole); }
+        memberRoleList.add(memberRole);
+    }
+    public void deleteRole(MemberRole memberRole){
+        memberRoleList.remove(memberRole);
+    }
 }
