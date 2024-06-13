@@ -60,5 +60,6 @@ public class Member {
     public void updateTokens(String refreshToken) {
         this.refreshToken = refreshToken;
     }
-    public void addRole(MemberRole memberRole){ memberRoleList.add(memberRole); }
+    public void addRole(MemberRole memberRole){
+        memberRoleList.add(memberRole); }
 }

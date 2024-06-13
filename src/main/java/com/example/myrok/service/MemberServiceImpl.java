@@ -41,6 +41,9 @@ public class MemberServiceImpl implements MemberService {
         if(project.isEmpty()){
             throw new CustomException(ErrorCode.WRONG_INVITE_CODE, HttpStatus.BAD_REQUEST);
         }
+        if(project.get().getDeleted()){
+            throw new CustomException(ErrorCode.DELETED_PROJECT, HttpStatus.BAD_GATEWAY);
+        }
 
         checkMemberHaveProject(socialId);
 
