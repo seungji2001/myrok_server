@@ -31,7 +31,6 @@ public class ProjectController {
 
     private final ProjectService projectService;
     private final MemberService memberService;
-    private final ClovaSummary clovaSummary;
 
     @Operation(
             summary = "프로젝트 생성",
