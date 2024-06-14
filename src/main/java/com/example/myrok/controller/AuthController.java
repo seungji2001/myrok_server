@@ -31,9 +31,9 @@ public class AuthController {
     }
 
     @GetMapping("/callback")
-    public ResponseEntity<String> getGoogleAccessToken(String code, String scope, HttpServletResponse response) throws IOException {
+    public ResponseEntity<String> getGoogleAccessToken(String code, String scope, HttpServletResponse response, String authuser, String prompt) throws IOException {
         String accessToken = oAuth2Service.getAccessToken(code, LoginProvider.GOOGLE);
-        return ResponseEntity.ok().body(oAuth2Service.login(response, accessToken, LoginProvider.GOOGLE));
+        return ResponseEntity.ok().body(oAuth2Service.login(accessToken, LoginProvider.GOOGLE));
     }
 
 }
