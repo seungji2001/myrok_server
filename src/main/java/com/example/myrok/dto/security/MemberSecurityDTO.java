@@ -1,4 +1,4 @@
-package com.example.myrok.dto;
+package com.example.myrok.dto.security;
 
 import com.example.myrok.type.LoginProvider;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

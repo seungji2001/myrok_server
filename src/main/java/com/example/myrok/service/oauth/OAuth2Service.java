@@ -1,15 +1,14 @@
-package com.example.myrok.service;
+package com.example.myrok.service.oauth;
 
 
 import com.example.myrok.domain.Member;
-import com.example.myrok.dto.MemberSecurityDTO;
-import com.example.myrok.dto.classtype.MemberDTO;
+import com.example.myrok.dto.security.MemberSecurityDTO;
+import com.example.myrok.dto.member.MemberDTO;
 import com.example.myrok.repository.MemberRepository;
 import com.example.myrok.type.LoginProvider;
 import com.example.myrok.type.MemberRole;
 import com.example.myrok.util.JWTUtil;
 import com.example.myrok.util.OAuth2Util;
-import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,7 +64,6 @@ public class OAuth2Service{
                                 .email(memberInformation.getEmail())
                                 .password(passwordEncoder.encode(memberInformation.getSocialId()))
                                 .imgUrl(memberInformation.getPostUrl())
-                                .memberRoleList(Arrays.asList(MemberRole.USER))
                                 .memberRoleList(Arrays.asList(MemberRole.USER))
                                 .build())
                 );

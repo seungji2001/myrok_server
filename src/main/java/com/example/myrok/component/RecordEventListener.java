@@ -2,10 +2,9 @@ package com.example.myrok.component;
 
 
 import com.example.myrok.domain.Record;
-import com.example.myrok.dto.classtype.event.RecordSavedEvent;
+import com.example.myrok.component.event.RecordSavedEvent;
 import com.example.myrok.repository.RecordRepository;
-import com.example.myrok.service.openAi.ChatCompletionService;
-import com.zaxxer.hikari.util.IsolationLevel;
+import com.example.myrok.service.openapi.ChatCompletionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;

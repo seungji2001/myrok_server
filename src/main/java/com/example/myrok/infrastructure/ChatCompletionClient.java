@@ -1,7 +1,7 @@
 package com.example.myrok.infrastructure;
 
-import com.example.myrok.dto.classtype.chat.ChatRequest;
-import com.example.myrok.dto.classtype.chat.ChatResponse;
+import com.example.myrok.dto.chat.ChatRequest;
+import com.example.myrok.dto.chat.ChatResponse;
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;

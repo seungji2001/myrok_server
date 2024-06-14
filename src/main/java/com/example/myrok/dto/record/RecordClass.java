@@ -1,8 +1,8 @@
-package com.example.myrok.dto.classtype;
+package com.example.myrok.dto.record;
 
 import lombok.*;
 
-public class RecordDTO {
+public class RecordClass {
 
     @Data
     @NoArgsConstructor

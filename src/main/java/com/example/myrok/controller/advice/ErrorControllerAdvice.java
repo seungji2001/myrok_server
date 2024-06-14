@@ -3,14 +3,12 @@ package com.example.myrok.controller.advice;
 import com.example.myrok.dto.error.ErrorResponse;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.type.ErrorCode;
-import com.example.myrok.util.CustomJWTException;
-import jakarta.servlet.http.HttpServletRequest;
+import com.example.myrok.exception.CustomJWTException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 

@@ -1,13 +1,11 @@
-package com.example.myrok.dto;
+package com.example.myrok.dto.record;
 
-import com.example.myrok.domain.*;
-import com.example.myrok.domain.Record;
-import com.example.myrok.dto.classtype.MemberDTO;
+import com.example.myrok.dto.member.MemberDTO;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import jakarta.validation.constraints.NotBlank;
+
 @Builder
 public record RecordResponseDTO (
         Long recordId,

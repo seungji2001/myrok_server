@@ -2,21 +2,19 @@ package com.example.myrok.service;
 
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
-import com.example.myrok.dto.RecordResponseDTO;
-import com.example.myrok.dto.classtype.MemberDTO;
-import com.example.myrok.dto.classtype.RecordDTO;
-import com.example.myrok.dto.classtype.event.RecordSavedEvent;
+import com.example.myrok.dto.record.RecordDTO;
+import com.example.myrok.dto.record.RecordResponseDTO;
+import com.example.myrok.dto.member.MemberDTO;
+import com.example.myrok.dto.record.RecordClass;
+import com.example.myrok.component.event.RecordSavedEvent;
 import com.example.myrok.dto.pagination.PageRequestDto;
 import com.example.myrok.dto.pagination.PageResponseDto;
-import com.example.myrok.dto.RecordUpdateDTO;
+import com.example.myrok.dto.record.RecordUpdateDTO;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.*;
-import com.example.myrok.repository.search.RecordSearch;
 import com.example.myrok.type.ErrorCode;
 import com.example.myrok.type.Role;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.constraints.Null;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +31,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import static com.example.myrok.type.MemberProjectType.PROJECT_MEMBER;
 
@@ -64,7 +61,7 @@ public class RecordServiceImpl implements RecordService{
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Record save(com.example.myrok.dto.recordtype.RecordDTO recordDTO){
+    public Record save(RecordDTO recordDTO){
 
         // 멤버 리스트 & 태그 리스트 받아와서 Record 저장
         List<String> tags = recordDTO.tagList();
@@ -202,12 +199,12 @@ public class RecordServiceImpl implements RecordService{
 
 
     @Override
-    public List<RecordDTO.RecordListObject> getRecords(Long projectId) {
+    public List<RecordClass.RecordListObject> getRecords(Long projectId) {
         List<Record> recordList = recordRepository.findAllByProjectIdAndDeletedIsFalse(projectId);
         return recordList.stream()
                 .map(record -> {
                     Member member = memberRepository.findById(record.getRecordWriterId()).orElseThrow(NoSuchElementException::new);
-                    return RecordDTO.RecordListObject.builder()
+                    return RecordClass.RecordListObject.builder()
                             .recordId(record.getId())
                             .recordWriterName(member.getName())
                             .recordDate(String.valueOf(record.getRecordDate()))
@@ -217,12 +214,12 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public List<RecordDTO.RecordListObject> getRecordsBySearch(String searchValue, String tagName, Long projectId) {
+    public List<RecordClass.RecordListObject> getRecordsBySearch(String searchValue, String tagName, Long projectId) {
         List<Record> recordList = recordRepository.findAllBySearch(projectId, searchValue, tagName);
         return recordList.stream()
                 .map(record -> {
                     Member member = memberRepository.findById(record.getRecordWriterId()).orElseThrow(NoSuchElementException::new);
-                    return RecordDTO.RecordListObject.builder()
+                    return RecordClass.RecordListObject.builder()
                             .recordId(record.getId())
                             .recordWriterName(member.getName())
                             .recordDate(String.valueOf(record.getRecordDate()))
@@ -232,21 +229,21 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public PageResponseDto<RecordDTO.RecordListObject> getRecords(PageRequestDto pageRequestDto, Long projectId) {
+    public PageResponseDto<RecordClass.RecordListObject> getRecords(PageRequestDto pageRequestDto, Long projectId) {
         Pageable pageable = PageRequest.of(pageRequestDto.getPage()-1,
                 pageRequestDto.getSize(),
                 Sort.by("recordDate").descending());
 
         Page<Object> result = recordRepository.selectList(pageable, projectId);
 
-        List<RecordDTO.RecordListObject> dtoList = result.getContent().stream().map(arr -> {
-            RecordDTO.RecordListObject recordListObject = new RecordDTO.RecordListObject();
+        List<RecordClass.RecordListObject> dtoList = result.getContent().stream().map(arr -> {
+            RecordClass.RecordListObject recordListObject = new RecordClass.RecordListObject();
 
             Record record = (Record) arr;
 
 
             Member writer = memberRepository.findById(record.getRecordWriterId()).orElseThrow(NoSuchElementException::new);
-            recordListObject = RecordDTO.RecordListObject.builder()
+            recordListObject = RecordClass.RecordListObject.builder()
                     .recordId(record.getId())
                     .recordDate(String.valueOf(record.getRecordDate()))
                     .recordName(record.getRecordName())
@@ -258,7 +255,7 @@ public class RecordServiceImpl implements RecordService{
 
         long totalCount = result.getTotalElements();
 
-        return PageResponseDto.<RecordDTO.RecordListObject>withAll()
+        return PageResponseDto.<RecordClass.RecordListObject>withAll()
                 .dtoList(dtoList)
                 .total(totalCount)
                 .pageRequestDto(pageRequestDto)
@@ -266,16 +263,16 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public PageResponseDto<RecordDTO.RecordListObject> getRecordsBySearch(PageRequestDto pageRequestDto, String searchValue, String tagName, Long projectId) {
-        PageResponseDto<RecordDTO.RecordListObject> records = recordRepository.search(pageRequestDto, searchValue, tagName, projectId);
+    public PageResponseDto<RecordClass.RecordListObject> getRecordsBySearch(PageRequestDto pageRequestDto, String searchValue, String tagName, Long projectId) {
+        PageResponseDto<RecordClass.RecordListObject> records = recordRepository.search(pageRequestDto, searchValue, tagName, projectId);
 
         return records;
     }
 
     @Override
-    public RecordDTO.ResponseDTO getRecordSummary(Long recordId) {
+    public RecordClass.ResponseDTO getRecordSummary(Long recordId) {
         Record record = recordRepository.findById(recordId).orElseThrow(NoSuchElementException::new);
-        RecordDTO.ResponseDTO responseDTO = RecordDTO.ResponseDTO.builder()
+        RecordClass.ResponseDTO responseDTO = RecordClass.ResponseDTO.builder()
                 .id(recordId)
                 .summary(record.getRecordContentSummary())
                 .build();

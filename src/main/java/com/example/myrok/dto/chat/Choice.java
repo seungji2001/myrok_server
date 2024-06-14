@@ -1,4 +1,4 @@
-package com.example.myrok.dto.classtype.chat;
+package com.example.myrok.dto.chat;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

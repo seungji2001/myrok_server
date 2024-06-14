@@ -1,6 +1,6 @@
 package com.example.myrok.security.handler;
 
-import com.example.myrok.dto.MemberSecurityDTO;
+import com.example.myrok.dto.security.MemberSecurityDTO;
 import com.example.myrok.util.JWTUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;

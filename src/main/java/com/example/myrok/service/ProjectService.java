@@ -1,7 +1,7 @@
 package com.example.myrok.service;
 
 import com.example.myrok.domain.Project;
-import com.example.myrok.dto.classtype.ProjectDTO;
+import com.example.myrok.dto.project.ProjectDTO;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;

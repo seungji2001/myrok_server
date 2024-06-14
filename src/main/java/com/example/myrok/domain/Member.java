@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class Member extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,13 +52,6 @@ public class Member {
     private List<MemberRole> memberRoleList = new ArrayList<>();
 
     private LoginProvider loginProvider;
-
-    @Column(columnDefinition = "TEXT")
-    private String refreshToken;
-
-    public void updateTokens(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
     public void addRole(MemberRole memberRole){
         memberRoleList.add(memberRole);
     }

@@ -1,10 +1,9 @@
-package com.example.myrok.dto.classtype;
+package com.example.myrok.dto.member;
 
 import lombok.*;
 
 public class MemberDTO {
-    @Data
-    @NoArgsConstructor
+    @Getter
     @Builder
     @AllArgsConstructor
     @ToString
@@ -13,8 +12,7 @@ public class MemberDTO {
         private String name;
     }
 
-    @Data
-    @NoArgsConstructor
+    @Getter
     @Builder
     @AllArgsConstructor
     @ToString

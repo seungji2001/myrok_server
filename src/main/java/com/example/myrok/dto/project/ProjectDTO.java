@@ -1,5 +1,6 @@
-package com.example.myrok.dto.classtype;
+package com.example.myrok.dto.project;
 
+import com.example.myrok.dto.member.MemberDTO;
 import lombok.*;
 
 import java.util.List;

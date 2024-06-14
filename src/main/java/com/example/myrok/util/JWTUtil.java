@@ -1,11 +1,10 @@
 package com.example.myrok.util;
 
+import com.example.myrok.exception.CustomJWTException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.time.ZonedDateTime;

@@ -1,10 +1,6 @@
 package com.example.myrok.controller;
 
-import com.example.myrok.domain.Record;
-import com.example.myrok.dto.classtype.ProjectDTO;
-import com.example.myrok.dto.recordtype.RecordDTO;
-import com.example.myrok.service.MemberService;
-import com.example.myrok.service.ProjectService;
+import com.example.myrok.dto.record.RecordDTO;
 import com.example.myrok.service.RecordService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;

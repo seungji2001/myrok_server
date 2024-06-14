@@ -1,4 +1,4 @@
-package com.example.myrok.dto;
+package com.example.myrok.dto.record;
 
 import jakarta.validation.constraints.NotNull;
 

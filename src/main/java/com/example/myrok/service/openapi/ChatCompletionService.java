@@ -1,13 +1,12 @@
-package com.example.myrok.service.openAi;
-import com.example.myrok.dto.classtype.chat.ChatRequest;
-import com.example.myrok.dto.classtype.chat.Message;
+package com.example.myrok.service.openapi;
+import com.example.myrok.dto.chat.ChatRequest;
+import com.example.myrok.dto.chat.Message;
 import com.example.myrok.infrastructure.ChatCompletionClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor

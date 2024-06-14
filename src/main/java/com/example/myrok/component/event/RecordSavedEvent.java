@@ -1,4 +1,4 @@
-package com.example.myrok.dto.classtype.event;
+package com.example.myrok.component.event;
 
 import com.example.myrok.domain.Record;
 

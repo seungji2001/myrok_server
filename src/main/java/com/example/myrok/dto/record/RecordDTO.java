@@ -1,4 +1,4 @@
-package com.example.myrok.dto.recordtype;
+package com.example.myrok.dto.record;
 
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
