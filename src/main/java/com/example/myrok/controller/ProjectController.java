@@ -33,7 +33,7 @@ public class ProjectController {
             responseCode = "200",
             description = "프로젝트 생성을 완료하였습니다."
     )
-    @PostMapping("/")
+    @PostMapping("")
     @Transactional
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<Long> createProject(@RequestBody ProjectDTO.RegisterProject projectDto, Principal principal){
