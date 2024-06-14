@@ -26,7 +26,7 @@ public class AuthController {
     @GetMapping("/google")
     public Map<String, String> getGoogleRedirectUrl(){
         Map<String, String> map = new HashMap<>();
-        map.put("url", oAuth2Service.getRedirectUrl(LoginProvider.GOOGLE));
+        map.put("loginUrl", oAuth2Service.getRedirectUrl(LoginProvider.GOOGLE));
         return map;
     }
 
