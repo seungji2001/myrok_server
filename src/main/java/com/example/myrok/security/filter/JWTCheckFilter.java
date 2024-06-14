@@ -1,11 +1,7 @@
 package com.example.myrok.security.filter;
 
 
-import com.example.myrok.dto.MemberSecurityDTO;
-import com.example.myrok.dto.classtype.MemberDTO;
-import com.example.myrok.type.LoginProvider;
-import com.example.myrok.type.MemberRole;
-import com.example.myrok.util.CustomJWTException;
+import com.example.myrok.dto.security.MemberSecurityDTO;
 import com.example.myrok.util.JWTUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.FilterChain;
@@ -14,14 +10,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

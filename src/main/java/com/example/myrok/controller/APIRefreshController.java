@@ -1,6 +1,6 @@
 package com.example.myrok.controller;
 
-import com.example.myrok.util.CustomJWTException;
+import com.example.myrok.exception.CustomJWTException;
 import com.example.myrok.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

@@ -1,7 +1,7 @@
 package com.example.myrok.security.filter;
 
 
-import com.example.myrok.util.CustomJWTException;
+import com.example.myrok.exception.CustomJWTException;
 import com.example.myrok.util.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

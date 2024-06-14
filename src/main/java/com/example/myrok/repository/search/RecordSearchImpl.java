@@ -4,7 +4,7 @@ import com.example.myrok.domain.Member;
 import com.example.myrok.domain.QRecord;
 import com.example.myrok.domain.QRecordTag;
 import com.example.myrok.domain.Record;
-import com.example.myrok.dto.classtype.RecordDTO;
+import com.example.myrok.dto.record.RecordClass;
 import com.example.myrok.dto.pagination.PageRequestDto;
 import com.example.myrok.dto.pagination.PageResponseDto;
 import com.example.myrok.repository.MemberRepository;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -28,7 +27,7 @@ public class RecordSearchImpl extends QuerydslRepositorySupport implements Recor
     }
 
     @Override
-    public PageResponseDto<RecordDTO.RecordListObject> search(PageRequestDto pageRequestDto, String searchValue, String tagValue, Long projectId) {
+    public PageResponseDto<RecordClass.RecordListObject> search(PageRequestDto pageRequestDto, String searchValue, String tagValue, Long projectId) {
         QRecord record = QRecord.record;
         QRecordTag recordTag = QRecordTag.recordTag;
 
@@ -55,9 +54,9 @@ public class RecordSearchImpl extends QuerydslRepositorySupport implements Recor
 
         long total = query.fetchCount();
 
-        List<RecordDTO.RecordListObject> recordListObjects = list.stream().map(record1 -> {
+        List<RecordClass.RecordListObject> recordListObjects = list.stream().map(record1 -> {
             Member member = memberRepository.findById(record1.getRecordWriterId()).orElseThrow(NoSuchElementException::new);
-           return RecordDTO.RecordListObject.builder()
+           return RecordClass.RecordListObject.builder()
                     .recordId(record1.getId())
                     .recordDate(String.valueOf(record1.getRecordDate()))
                     .recordName(record1.getRecordName())
@@ -65,7 +64,7 @@ public class RecordSearchImpl extends QuerydslRepositorySupport implements Recor
                     .build();
         }).collect(Collectors.toList());
 
-        PageResponseDto<RecordDTO.RecordListObject> responseDto = PageResponseDto.<RecordDTO.RecordListObject>withAll()
+        PageResponseDto<RecordClass.RecordListObject> responseDto = PageResponseDto.<RecordClass.RecordListObject>withAll()
                 .dtoList(recordListObjects)
                 .total(total)
                 .pageRequestDto(pageRequestDto)

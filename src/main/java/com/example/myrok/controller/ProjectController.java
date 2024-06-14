@@ -1,18 +1,13 @@
 package com.example.myrok.controller;
 
-import com.example.myrok.dto.classtype.ClovaDTO;
-import com.example.myrok.dto.classtype.ProjectDTO;
-import com.example.myrok.security.CustomUserDetailsService;
+import com.example.myrok.dto.project.ProjectDTO;
 import com.example.myrok.service.MemberService;
 import com.example.myrok.service.ProjectService;
-import com.example.myrok.service.openAi.ClovaSummary;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-
-import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasAnyAuthority;
 
 @RestController
 @Tag(name = "Project", description = "Project 관련 API 입니다.")

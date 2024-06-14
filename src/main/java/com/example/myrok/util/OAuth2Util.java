@@ -1,6 +1,6 @@
 package com.example.myrok.util;
 
-import com.example.myrok.dto.classtype.MemberDTO;
+import com.example.myrok.dto.member.MemberDTO;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

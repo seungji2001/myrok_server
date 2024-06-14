@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberProject {
+public class MemberProject extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mp_id")
@@ -28,9 +28,6 @@ public class MemberProject {
     @Column(name = "member_project_type")
     @Enumerated(EnumType.STRING)
     private MemberProjectType memberProjectType;
-    public void changeProject(Project project){
-        this.project = project;
-    }
     public void changeMemberProjectType(MemberProjectType memberProjectType){
         this.memberProjectType = memberProjectType;
     }

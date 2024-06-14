@@ -2,8 +2,7 @@ package com.example.myrok.security;
 
 
 import com.example.myrok.domain.Member;
-import com.example.myrok.dto.MemberSecurityDTO;
-import com.example.myrok.dto.classtype.MemberDTO;
+import com.example.myrok.dto.security.MemberSecurityDTO;
 import com.example.myrok.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
