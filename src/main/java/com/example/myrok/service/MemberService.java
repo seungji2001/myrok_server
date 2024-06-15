@@ -12,5 +12,5 @@ public interface MemberService {
     Long participateProject(String socialId, String inviteCode);
     Long getOutFromProject(Long memberId, Long projectId, String socialId);
     public MemberInfoResponse getMemberInformation(String socialId);
-    public MemberProjectsResponse getMyProject(String email);
+    public MemberProjectsResponse getMyProject(String socialId);
 }

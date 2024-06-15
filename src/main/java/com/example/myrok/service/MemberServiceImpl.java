@@ -84,10 +84,10 @@ public class MemberServiceImpl implements MemberService {
         return MemberInfoResponse.of(member);
     }
 
-    public MemberProjectsResponse getMyProject(String email) {
-        final Long id = memberRepository.findIdByEmail(email);
+    public MemberProjectsResponse getMyProject(String socialId) {
+        Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchFieldError::new);
 
-        final List<MemberProject> allByMemberId = memberProjectRepository.findAllByMemberId(id);
+        final Optional<MemberProject> allByMemberId = memberProjectRepository.findByMember(member);
 
         return MemberProjectsResponse.of(allByMemberId);
     }

@@ -28,8 +28,8 @@ public class MemberController {
     }
 
     @GetMapping("/project")
-    public ResponseEntity<MemberProjectsResponse> getMyProject(@PathVariable String email) {
-        final MemberProjectsResponse myProject = memberService.getMyProject(email);
+    public ResponseEntity<MemberProjectsResponse> getMyProject(Principal principal) {
+        final MemberProjectsResponse myProject = memberService.getMyProject(principal.getName());
 
         return ResponseEntity.ok(myProject);
     }
