@@ -1,8 +1,8 @@
 package com.example.myrok.service;
 
 import com.example.myrok.dto.classtype.ClovaDTO;
-import com.example.myrok.service.openAi.ClovaSummary;
-import com.example.myrok.service.openAi.OpenAi;
+import com.example.myrok.service.openapi.ClovaSummary;
+import com.example.myrok.service.openapi.OpenAi;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;

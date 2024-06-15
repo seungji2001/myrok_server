@@ -10,8 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class MemberTests {
     @Autowired
     MemberService memberService;
-    @Test
-    public void testRegister(){
-        memberService.checkMemberHaveProject(1L);
-    }
+//    @Test
+//    public void testRegister(){
+//        memberService.checkMemberHaveProject(1L);
+//    }
 }

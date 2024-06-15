@@ -1,7 +1,6 @@
 package com.example.myrok.controller;
 
-import com.example.myrok.dto.DashBoardDTO;
-import com.example.myrok.dto.RecordResponseDTO;
+import com.example.myrok.dto.project.DashBoardDTO;
 import com.example.myrok.service.DashBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

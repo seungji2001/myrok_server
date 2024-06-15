@@ -1,7 +1,7 @@
 package com.example.myrok.service;
 
-import com.example.myrok.dto.DashBoardDTO;
-import com.example.myrok.dto.TagDTO;
+import com.example.myrok.dto.project.DashBoardDTO;
+import com.example.myrok.dto.project.TagDTO;
 import com.example.myrok.repository.RecordTagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

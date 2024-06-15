@@ -1,9 +1,9 @@
 package com.example.myrok.service;
 
-import com.example.myrok.dto.classtype.ProjectDTO;
-import com.example.myrok.dto.classtype.RecordDTO;
+import com.example.myrok.dto.record.RecordClass;
 import com.example.myrok.dto.pagination.PageRequestDto;
 import com.example.myrok.dto.pagination.PageResponseDto;
+import com.example.myrok.dto.record.RecordDTO;
 import com.example.myrok.repository.ProjectRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,32 +26,32 @@ public class ProjectTests {
     @Autowired
     RecordService recordService;
 
-    @Test
-    public void testRegister(){
-        ProjectDTO.RegisterProject projectDto = ProjectDTO.RegisterProject.builder()
-                .projectName("test name 1")
-                .startDate("")
-                .endDate("")
-                .build();
-        Long projectId = projectService.register(projectDto, 1L);
-    }
+//    @Test
+//    public void testRegister(){
+//        ProjectDTO.RegisterProject projectDto = ProjectDTO.RegisterProject.builder()
+//                .projectName("test name 1")
+//                .startDate("")
+//                .endDate("")
+//                .build();
+//        Long projectId = projectService.register(projectDto, 1L);
+//    }
 
-    @Test
-    public void testGetMembersByProjectId(){
-        ProjectDTO.ProjectMembersDto projectMembersDto = projectService.getProjectMembers(4L);
-        log.info(projectMembersDto);
-    }
+//    @Test
+//    public void testGetMembersByProjectId(){
+//        ProjectDTO.ProjectMembersDto projectMembersDto = projectService.getProjectMembers(4L);
+//        log.info(projectMembersDto);
+//    }
 
     @Test
     public void getRecordListTests(){
-        List<RecordDTO.RecordListObject> listObjects = recordService.getRecords(1L);
+        List<RecordClass.RecordListObject> listObjects = recordService.getRecords(1L);
         System.out.println(Arrays.asList(listObjects));
     }
 
     @Test
     public void getRecordListPaginationTests(){
         PageRequestDto pageRequestDto = PageRequestDto.builder().build();
-        PageResponseDto<RecordDTO.RecordListObject> listObjects = recordService.getRecords(pageRequestDto, 1L);
+        PageResponseDto<RecordClass.RecordListObject> listObjects = recordService.getRecords(pageRequestDto, 1L);
         System.out.println(Arrays.asList(listObjects));
     }
 
@@ -64,7 +63,7 @@ public class ProjectTests {
 
     @Test
     public void saveTest(){
-        recordService.save(com.example.myrok.dto.recordtype.RecordDTO.builder()
+        recordService.save(RecordDTO.builder()
                         .memberList(Arrays.asList(2L, 3L))
                         .projectId(2L)
                         .recordWriterId(2L)

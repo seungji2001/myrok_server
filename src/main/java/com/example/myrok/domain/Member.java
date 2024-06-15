@@ -1,11 +1,14 @@
 package com.example.myrok.domain;
 
+import com.example.myrok.type.LoginProvider;
 import com.example.myrok.type.MemberProjectType;
+import com.example.myrok.type.MemberRole;
 import com.example.myrok.type.Role;
 import jakarta.persistence.*;
 import jdk.jfr.Description;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,7 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class Member extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +42,20 @@ public class Member {
     @Description("이미지 url")
     private String imgUrl;
 
+    private String email;
+
     @OneToMany(mappedBy = "member")
     private List<MemberProject> memberProjects;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<MemberRole> memberRoleList = new ArrayList<>();
 
+    private LoginProvider loginProvider;
+    public void addRole(MemberRole memberRole){
+        memberRoleList.add(memberRole);
+    }
+    public void deleteRole(MemberRole memberRole){
+        memberRoleList.remove(memberRole);
+    }
 }
