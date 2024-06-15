@@ -3,7 +3,6 @@ package com.example.myrok.repository;
 import com.example.myrok.domain.Member;
 import com.example.myrok.domain.MemberProject;
 import com.example.myrok.type.MemberProjectType;
-import jakarta.annotation.Nullable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
