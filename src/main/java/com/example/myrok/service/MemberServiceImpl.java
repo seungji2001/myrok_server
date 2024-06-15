@@ -3,7 +3,9 @@ package com.example.myrok.service;
 import com.example.myrok.domain.Member;
 import com.example.myrok.domain.MemberProject;
 import com.example.myrok.domain.Project;
+import com.example.myrok.dto.member.MemberInfoResponse;
 import com.example.myrok.dto.member.MemberProjectResponse;
+import com.example.myrok.dto.member.MemberProjectsResponse;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.repository.MemberProjectRepository;
 import com.example.myrok.repository.MemberRepository;
@@ -76,16 +78,26 @@ public class MemberServiceImpl implements MemberService {
         return memberProjectRepository.save(memberProject).getId();
     }
 
-    public Member getMemberInformation(String email) {
-        return memberRepository.findUserByEmail(email);
+    public MemberInfoResponse getMemberInformation(String email) {
+        final Member member = memberRepository.findByEmail(email);
+
+        return MemberInfoResponse.of(member);
     }
 
     public MemberProjectResponse getParticipatedMemberProject(String email) {
-        final Member member = memberRepository.findUserByEmail(email);
+        final Member member = memberRepository.findByEmail(email);
 
         final List<MemberProject> allByMemberId = memberProjectRepository.findAllByMember(member);
 
         return MemberProjectResponse.of((MemberProject) allByMemberId);
+    }
+
+    public MemberProjectsResponse getMyProject(String email) {
+        final Member member = memberRepository.findByEmail(email);
+
+        final List<MemberProject> allByMemberId = memberProjectRepository.findAllByMember(member);
+
+        return MemberProjectsResponse.of(allByMemberId);
     }
 
 }
