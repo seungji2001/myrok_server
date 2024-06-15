@@ -47,7 +47,7 @@ public class ProjectController {
             description = "프로젝트 초대코드를 가져옵니다."
     )
     @GetMapping("/{projectId}")
-    public ResponseEntity<String> getInviteCode(@PathVariable Long projectId) {
+    public ResponseEntity<ProjectDTO.ParticipateProject> getInviteCode(@PathVariable Long projectId) {
         return ResponseEntity.ok().body(projectService.getInviteCode(projectId));
     }
 
@@ -83,18 +83,6 @@ public class ProjectController {
 //    public OAuth2User home(@AuthenticationPrincipal OAuth2User user) {
 //        return user;
 //    }
-    @Operation(
-            summary = "회의록을 요약합니다.",
-            description = "회의록을 요약합니다."
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "회의록이 요약 되었습니다."
-    )
-    @PostMapping("/summary")
-    public ResponseEntity<ClovaDTO.ResponseDto> getOutProject(@RequestBody ClovaDTO.RequestDto requestDto) {
-        return ResponseEntity.ok().body(clovaSummary.get(requestDto));
-    }
 
     @Operation(
             summary = "프로젝트 멤버를 가져옵니다",

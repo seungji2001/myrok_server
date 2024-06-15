@@ -205,7 +205,7 @@ public class RecordServiceImpl implements RecordService{
 
     @Override
     public List<RecordDTO.RecordListObject> getRecords(Long projectId) {
-        List<Record> recordList = recordRepository.findAllByProjectId(projectId);
+        List<Record> recordList = recordRepository.findAllByProjectIdAndDeletedIsFalse(projectId);
         return recordList.stream()
                 .map(record -> {
                     Member member = memberRepository.findById(record.getRecordWriterId()).orElseThrow(NoSuchElementException::new);
@@ -288,5 +288,14 @@ public class RecordServiceImpl implements RecordService{
         return tagListDTO;
     }
 
+
+    public RecordDTO.ResponseDTO getRecordSummary(Long recordId) {
+        Record record = recordRepository.findById(recordId).orElseThrow(NoSuchElementException::new);
+        RecordDTO.ResponseDTO responseDTO = RecordDTO.ResponseDTO.builder()
+                .id(recordId)
+                .summary(record.getRecordContentSummary())
+                .build();
+        return responseDTO;
+    }
 
 }

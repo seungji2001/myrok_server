@@ -29,5 +29,6 @@ public interface RecordService {
 
     DashBoardDTO.TagListDTO getTagList(Long projectId);
 
+    RecordDTO.ResponseDTO getRecordSummary(Long recordId);
 
 }

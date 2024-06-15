@@ -67,7 +67,7 @@ public class RecordController {
             responseCode = "200",
             description = "제목 혹은 태그명에 따른 회의록 목록을 가져옵니다."
     )
-    @GetMapping("/myrok/{projectId}/list")
+    @GetMapping("/{projectId}/list")
     public ResponseEntity<List<com.example.myrok.dto.classtype.RecordDTO.RecordListObject>> getRecordsByProjectNameOrTagName(@PathVariable Long projectId, @RequestParam(value = "recordName", required = false) String recordName, @RequestParam(value = "tagName", required = false) String tagName){
         return new ResponseEntity<>(recordService.getRecordsBySearch(recordName, tagName, projectId), HttpStatus.OK);
     }
@@ -93,7 +93,7 @@ public class RecordController {
             responseCode = "200",
             description = "제목 혹은 태그명에 따른 회의록 목록을 페이징 처리하여 가져옵니다."
     )
-    @GetMapping("/myrok/{projectId}/list/pagination")
+    @GetMapping("/{projectId}/list/pagination")
     public ResponseEntity<PageResponseDto<com.example.myrok.dto.classtype.RecordDTO.RecordListObject>> getRecordsPaginationByProjectNameOrTagName(PageRequestDto pageRequestDto, @PathVariable Long projectId, @RequestParam(value = "recordName", required = false) String recordName, @RequestParam(value = "tagName", required = false) String tagName){
         return new ResponseEntity<>(recordService.getRecordsBySearch(pageRequestDto, recordName, tagName, projectId), HttpStatus.OK);
     }
@@ -122,6 +122,18 @@ public class RecordController {
     public ResponseEntity<DashBoardDTO.TagListDTO> getTagList(@PathVariable("projectId") Long projectId){
         DashBoardDTO.TagListDTO tagListDTO= recordService.getTagList(projectId);
         return new ResponseEntity<>(tagListDTO, HttpStatus.OK);
+    }
+    @Operation(
+            summary = "요약된 회의록을 가져옵니다.",
+            description = "요약된 회의록을 가져옵니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "요약된 회의록을 가져왔습니다."
+    )
+    @GetMapping("/record/summary")
+    public ResponseEntity<com.example.myrok.dto.classtype.RecordDTO.ResponseDTO> getSummary(Long recordId) {
+        return new ResponseEntity<>(recordService.getRecordSummary(recordId), HttpStatus.CREATED);
     }
 
 }

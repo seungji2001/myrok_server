@@ -14,4 +14,13 @@ public class RecordDTO {
         String recordDate;
         String recordWriterName;
     }
+
+    @Data
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class ResponseDTO {
+       Long id;
+       String summary;
+    }
 }
