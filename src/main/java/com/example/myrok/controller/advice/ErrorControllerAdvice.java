@@ -3,17 +3,17 @@ package com.example.myrok.controller.advice;
 import com.example.myrok.dto.error.ErrorResponse;
 import com.example.myrok.exception.CustomException;
 import com.example.myrok.type.ErrorCode;
-import jakarta.servlet.http.HttpServletRequest;
+import com.example.myrok.exception.CustomJWTException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.format.DateTimeParseException;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @RestControllerAdvice //컨트롤러에서 발생하는 예외처리를 해당 클래스안에서 해
@@ -44,5 +44,11 @@ public class ErrorControllerAdvice {
         ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_REQUEST_FORMAT);
         response.setDetail(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomJWTException.class)
+    protected ResponseEntity<?> handleJWTException(CustomJWTException e) {
+        String msg = e.getMessage();
+        return ResponseEntity.ok().body(Map.of("error", msg));
     }
 }

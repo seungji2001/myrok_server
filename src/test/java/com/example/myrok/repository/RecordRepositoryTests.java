@@ -22,11 +22,11 @@ public class RecordRepositoryTests {
 
     @Autowired
     ProjectRepository projectRepository;
-    @Test
-    public void findRecordByProjectId(){
-        List<Record> recordList = recordRepository.findAllByProjectId(1L);
-        System.out.println(Arrays.asList(recordList.toString()));
-    }
+//    @Test
+//    public void findRecordByProjectId(){
+//        List<Record> recordList = recordRepository.findAllByProjectId(1L);
+//        System.out.println(Arrays.asList(recordList.toString()));
+//    }
     @Test
     public void findProject(){
         Project project = projectRepository.findById(4L).orElseThrow();

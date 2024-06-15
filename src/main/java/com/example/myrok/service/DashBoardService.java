@@ -1,9 +1,7 @@
 package com.example.myrok.service;
 
 
-import com.example.myrok.dto.DashBoardDTO;
-
-import java.util.List;
+import com.example.myrok.dto.project.DashBoardDTO;
 
 public interface DashBoardService {
 
