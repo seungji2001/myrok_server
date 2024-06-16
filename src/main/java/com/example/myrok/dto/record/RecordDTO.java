@@ -11,24 +11,27 @@ import java.time.LocalDate;
 import java.util.List;
 import jakarta.validation.constraints.NotBlank;
 
+@Data
 @Builder
-public record RecordDTO (
-        @NotBlank(message = "제목은 필수 입력 사항입니다.")
-    String recordName,
-        @NotBlank(message = "본문은 필수 입력 사항입니다.")
-    String recordContent,
-        LocalDate recordDate,
+@AllArgsConstructor
+public class RecordDTO {
+    @NotBlank(message = "제목은 필수 입력 사항입니다.")
+    private String recordName;
+    @NotBlank(message = "본문은 필수 입력 사항입니다.")
+    private String recordContent;
+    private LocalDate recordDate;
     @NotNull
-    Long recordWriterId,
-        @NotEmpty
-    List<Long> memberList,
-        @Max(10)
-        List<String> tagList,
-        @NotNull
-    Long projectId
-){
+    private Long recordWriterId;
+    @NotEmpty
+    private List<Long> memberList;
+    @Max(10)
+    private List<String> tagList;
+    @NotNull
+    private Long projectId;
 
-    public Record toEntity(Project project){
+
+
+    public Record toEntity(Project project) {
         return Record.builder()
                 .recordName(recordName)
                 .recordContent(recordContent)
@@ -37,5 +40,5 @@ public record RecordDTO (
                 .project(project)
                 .build();
     }
-
 }
+
