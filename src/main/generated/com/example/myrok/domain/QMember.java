@@ -20,13 +20,27 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
+    public final QBaseTimeEntity _super = new QBaseTimeEntity(this);
+
+    //inherited
+    public final DatePath<java.time.LocalDate> createdDate = _super.createdDate;
+
     public final BooleanPath deleted = createBoolean("deleted");
+
+    public final StringPath email = createString("email");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath imgUrl = createString("imgUrl");
 
+    //inherited
+    public final DatePath<java.time.LocalDate> lastModifiedDate = _super.lastModifiedDate;
+
+    public final EnumPath<com.example.myrok.type.LoginProvider> loginProvider = createEnum("loginProvider", com.example.myrok.type.LoginProvider.class);
+
     public final ListPath<MemberProject, QMemberProject> memberProjects = this.<MemberProject, QMemberProject>createList("memberProjects", MemberProject.class, QMemberProject.class, PathInits.DIRECT2);
+
+    public final ListPath<com.example.myrok.type.MemberRole, EnumPath<com.example.myrok.type.MemberRole>> memberRoleList = this.<com.example.myrok.type.MemberRole, EnumPath<com.example.myrok.type.MemberRole>>createList("memberRoleList", com.example.myrok.type.MemberRole.class, EnumPath.class, PathInits.DIRECT2);
 
     public final StringPath name = createString("name");
 
