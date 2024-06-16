@@ -2,9 +2,9 @@ package com.example.myrok.dto.member;
 
 import com.example.myrok.domain.Member;
 public record MemberInfoResponse(
-        Long id,
+        Long memberId,
         String name,
-        String ImgUrl,
+        String picture,
         String email
 ) {
     public static MemberInfoResponse of(final Member member) {

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public record MemberProjectResponse(
-        Long Id,
+        Long projectId,
         String projectName,
         LocalDate startDate,
         LocalDate endDate

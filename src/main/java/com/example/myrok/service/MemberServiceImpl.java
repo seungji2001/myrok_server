@@ -78,24 +78,16 @@ public class MemberServiceImpl implements MemberService {
         return memberProjectRepository.save(memberProject).getId();
     }
 
-    public MemberInfoResponse getMemberInformation(String email) {
-        final Member member = memberRepository.findByEmail(email);
+    public MemberInfoResponse getMemberInformation(String socialId) {
+        Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchFieldError::new);
 
         return MemberInfoResponse.of(member);
     }
 
-    public MemberProjectResponse getParticipatedMemberProject(String email) {
-        final Member member = memberRepository.findByEmail(email);
+    public MemberProjectsResponse getMyProject(String socialId) {
+        Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchFieldError::new);
 
-        final List<MemberProject> allByMemberId = memberProjectRepository.findAllByMember(member);
-
-        return MemberProjectResponse.of((MemberProject) allByMemberId);
-    }
-
-    public MemberProjectsResponse getMyProject(String email) {
-        final Member member = memberRepository.findByEmail(email);
-
-        final List<MemberProject> allByMemberId = memberProjectRepository.findAllByMember(member);
+        final Optional<MemberProject> allByMemberId = memberProjectRepository.findByMember(member);
 
         return MemberProjectsResponse.of(allByMemberId);
     }
