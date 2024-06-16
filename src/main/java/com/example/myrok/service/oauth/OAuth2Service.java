@@ -43,7 +43,7 @@ public class OAuth2Service{
         return accessToken;
     }
 
-    public String login(HttpServletResponse response, String accessToken, LoginProvider provider) throws IOException {
+    public String login(String accessToken, LoginProvider provider) throws IOException {
         MemberDTO.MemberInformation memberInformation;
         if (provider == LoginProvider.GOOGLE) {
             memberInformation = oAuth2Util.getGoogleUserInfo(accessToken);
