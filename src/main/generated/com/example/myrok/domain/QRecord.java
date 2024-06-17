@@ -40,6 +40,8 @@ public class QRecord extends EntityPathBase<Record> {
 
     public final StringPath recordContent = createString("recordContent");
 
+    public final StringPath recordContentSummary = createString("recordContentSummary");
+
     public final DatePath<java.time.LocalDate> recordDate = createDate("recordDate", java.time.LocalDate.class);
 
     public final StringPath recordName = createString("recordName");

@@ -31,6 +31,7 @@ public class MemberController {
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<MemberProjectResponse> getMyProject(Principal principal) {
         MemberProjectResponse myProject = memberService.getMyProject(principal.getName());
+
         return ResponseEntity.ok(myProject);
     }
 }

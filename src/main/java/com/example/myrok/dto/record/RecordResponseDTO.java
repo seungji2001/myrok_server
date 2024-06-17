@@ -6,16 +6,15 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@Data
 @Builder
-public record RecordResponseDTO (
-        Long recordId,
-        String recordName,
-        String recordContent,
-        LocalDate recordDate,
-        Long recordWriterId,
-        List<MemberDTO.MemberNameDto> memberList,
-        List<String> tagList,
-        Long projectId
-){
-
+public class RecordResponseDTO {
+    private Long recordId;
+    private String recordName;
+    private String recordContent;
+    private LocalDate recordDate;
+    private Long recordWriterId;
+    private List<MemberDTO.MemberNameDto> memberList;
+    private List<String> tagList;
+    private Long projectId;
 }

@@ -2,9 +2,11 @@ package com.example.myrok.service;
 
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
-import com.example.myrok.dto.record.RecordDTO;
+import com.example.myrok.dto.project.DashBoardDTO;
 import com.example.myrok.dto.record.RecordResponseDTO;
+import com.example.myrok.dto.project.TagDTO;
 import com.example.myrok.dto.member.MemberDTO;
+import com.example.myrok.dto.record.RecordDTO;
 import com.example.myrok.dto.record.RecordClass;
 import com.example.myrok.component.event.RecordSavedEvent;
 import com.example.myrok.dto.pagination.PageRequestDto;
@@ -64,10 +66,10 @@ public class RecordServiceImpl implements RecordService{
     public Record save(RecordDTO recordDTO){
 
         // 멤버 리스트 & 태그 리스트 받아와서 Record 저장
-        List<String> tags = recordDTO.tagList();
-        List<Long> members = recordDTO.memberList();
-        Long projectId = recordDTO.projectId();
-        Long recordWriterId=recordDTO.recordWriterId();
+        List<String> tags = recordDTO.getTagList();
+        List<Long> members = recordDTO.getMemberList();
+        Long projectId = recordDTO.getProjectId();
+        Long recordWriterId=recordDTO.getRecordWriterId();
 
         // 작성자 아이디가 멤버 리스트에 없다면 예외
         if (!members.contains(recordWriterId)){
@@ -270,6 +272,20 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
+    public DashBoardDTO.TagListDTO getTagList(Long projectId){
+        List<TagDTO> tags = recordTagRepository.findTagNameAndCountByProjectIdAndDeletedIsFalse(projectId);
+        long totalCount = 0;
+        for(TagDTO tag : tags){
+            totalCount+=tag.getPercentage();
+        }
+        DashBoardDTO.TagListDTO tagListDTO = DashBoardDTO.TagListDTO.builder()
+                .totalCount(totalCount)
+                .tags(tags)
+                .build();
+        return tagListDTO;
+    }
+
+
     public RecordClass.ResponseDTO getRecordSummary(Long recordId) {
         Record record = recordRepository.findById(recordId).orElseThrow(NoSuchElementException::new);
         RecordClass.ResponseDTO responseDTO = RecordClass.ResponseDTO.builder()

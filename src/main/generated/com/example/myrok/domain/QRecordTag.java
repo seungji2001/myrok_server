@@ -22,9 +22,17 @@ public class QRecordTag extends EntityPathBase<RecordTag> {
 
     public static final QRecordTag recordTag = new QRecordTag("recordTag");
 
+    public final QBaseTimeEntity _super = new QBaseTimeEntity(this);
+
+    //inherited
+    public final DatePath<java.time.LocalDate> createdDate = _super.createdDate;
+
     public final BooleanPath deleted = createBoolean("deleted");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    //inherited
+    public final DatePath<java.time.LocalDate> lastModifiedDate = _super.lastModifiedDate;
 
     public final NumberPath<Long> projectId = createNumber("projectId", Long.class);
 

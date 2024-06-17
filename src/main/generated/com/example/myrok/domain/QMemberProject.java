@@ -22,7 +22,15 @@ public class QMemberProject extends EntityPathBase<MemberProject> {
 
     public static final QMemberProject memberProject = new QMemberProject("memberProject");
 
+    public final QBaseTimeEntity _super = new QBaseTimeEntity(this);
+
+    //inherited
+    public final DatePath<java.time.LocalDate> createdDate = _super.createdDate;
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    //inherited
+    public final DatePath<java.time.LocalDate> lastModifiedDate = _super.lastModifiedDate;
 
     public final QMember member;
 
