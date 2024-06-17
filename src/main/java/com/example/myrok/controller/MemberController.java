@@ -32,6 +32,11 @@ public class MemberController {
     public ResponseEntity<MemberProjectResponse> getMyProject(Principal principal) {
         MemberProjectResponse myProject = memberService.getMyProject(principal.getName());
 
+        if (myProject == null) {
+            // 프로젝트 정보가 없을 경우 빈 객체 반환
+            return ResponseEntity.ok(new MemberProjectResponse());
+        }
+
         return ResponseEntity.ok(myProject);
     }
 }
