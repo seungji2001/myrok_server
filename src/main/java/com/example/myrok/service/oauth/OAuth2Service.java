@@ -73,7 +73,7 @@ public class OAuth2Service{
 
         Map<String, Object> claims = memberSecurityDTO.getClaims();
 
-        String jwtToken = JWTUtil.generateToken(memberSecurityDTO.getClaims(), 10); //지금 당장 사용할 수 있는 권리
+        String jwtToken = JWTUtil.generateToken(memberSecurityDTO.getClaims(), 1); //지금 당장 사용할 수 있는 권리
         String jwtRefreshToken = JWTUtil.generateToken(memberSecurityDTO.getClaims(), 60 * 24); //교환권
 
         claims.put("accessToken", jwtToken);
