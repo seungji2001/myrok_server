@@ -1,9 +1,11 @@
 package com.example.myrok.controller;
 
 import com.example.myrok.exception.CustomJWTException;
+import com.example.myrok.type.ErrorCode;
 import com.example.myrok.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +23,11 @@ public class APIRefreshController {
             String refreshToken
     ){
         if(refreshToken == null){
-            throw new CustomJWTException("NULL_REFRESH");
+            throw new CustomJWTException(ErrorCode.NULL_REFRESH);
         }
 
         if(authHeader == null || authHeader.length() < 7){
-            throw new CustomJWTException("INVALID STRING");
+            throw new CustomJWTException(ErrorCode.MALFORMED);
         }
 
         //Bearer //7

@@ -2,6 +2,7 @@ package com.example.myrok.security.filter;
 
 
 import com.example.myrok.exception.CustomJWTException;
+import com.example.myrok.type.ErrorCode;
 import com.example.myrok.util.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,11 +23,11 @@ public class TokenRefreshFilter extends OncePerRequestFilter {
             String refreshToken = request.getParameter("refreshToken");
 
             if (refreshToken == null) {
-                throw new CustomJWTException("NULL_REFRESH");
+                throw new CustomJWTException(ErrorCode.NULL_REFRESH);
             }
 
             if (authHeader == null || authHeader.length() < 7) {
-                throw new CustomJWTException("INVALID STRING");
+                throw new CustomJWTException(ErrorCode.MALFORMED);
             }
 
             String accessToken = authHeader.substring(7);
