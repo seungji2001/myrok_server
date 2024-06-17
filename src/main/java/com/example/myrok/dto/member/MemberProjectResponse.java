@@ -1,29 +1,19 @@
 package com.example.myrok.dto.member;
 
-import com.example.myrok.domain.MemberProject;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record MemberProjectResponse(
-        Long projectId,
-        String projectName,
-        LocalDate startDate,
-        LocalDate endDate
-) {
-    public static MemberProjectResponse of(MemberProject memberProject) {
-        return new MemberProjectResponse(
-                memberProject.getProject().getId(),
-                memberProject.getProject().getProjectName(),
-                memberProject.getProject().getStartDate(),
-                memberProject.getProject().getEndDate()
-        );
-    }
-
-
-    public List<MemberProjectResponse> memberProject() {
-        return memberProject();
-    }
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class MemberProjectResponse{
+    private Long projectId;
+    private String projectName;
+    private String startDate;
+    private String endDate;
 
 }

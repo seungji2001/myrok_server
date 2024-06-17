@@ -1,13 +1,13 @@
 package com.example.myrok.controller;
 
+import com.example.myrok.domain.MemberProject;
 import com.example.myrok.dto.member.MemberInfoResponse;
-import com.example.myrok.dto.member.MemberProjectsResponse;
+import com.example.myrok.dto.member.MemberProjectResponse;
 import com.example.myrok.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,8 +28,9 @@ public class MemberController {
     }
 
     @GetMapping("/project")
-    public ResponseEntity<MemberProjectsResponse> getMyProject(Principal principal) {
-        final MemberProjectsResponse myProject = memberService.getMyProject(principal.getName());
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    public ResponseEntity<MemberProjectResponse> getMyProject(Principal principal) {
+        MemberProjectResponse myProject = memberService.getMyProject(principal.getName());
 
         return ResponseEntity.ok(myProject);
     }
