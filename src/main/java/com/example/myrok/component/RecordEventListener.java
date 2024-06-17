@@ -29,7 +29,7 @@ public class RecordEventListener {
 
     @Async
     @EventListener
-    @Transactional(propagation = Propagation.REQUIRES_NEW, timeout = 1600)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleRecordSavedEvent(RecordSavedEvent event) {
         Record record = event.getRecord();
         String recordContent = record.getRecordContent();
@@ -38,5 +38,6 @@ public class RecordEventListener {
             throw new RuntimeException();
         }
         record.updateSummary(summary);
+        recordRepository.save(record);
     }
 }
