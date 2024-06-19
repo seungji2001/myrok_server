@@ -43,10 +43,10 @@ public class RecordController {
     )
     @PreAuthorize("hasAnyAuthority('ROLE_USER', 'TEAMMEMBER')")
     @PostMapping("/records")
-    public ResponseEntity<Long> save( @RequestBody @Valid RecordDTO recordDTO){
+    public ResponseEntity<Record> save( @RequestBody @Valid RecordDTO recordDTO){
         recordDTO.setRecordContent(StringEscapeUtils.escapeJson(recordDTO.getRecordContent()));
         Record savedRecord=recordService.save(recordDTO);
-        return new ResponseEntity<>(savedRecord.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(savedRecord, HttpStatus.CREATED);
     }
 
     @PostMapping("/delete/{recordId}")
@@ -129,8 +129,8 @@ public class RecordController {
     }
 
     @GetMapping("{projectId}/tagList")
-    public ResponseEntity<DashBoardDTO.TagListDTO> getTagList(@PathVariable("projectId") Long projectId){
-        DashBoardDTO.TagListDTO tagListDTO= recordService.getTagList(projectId);
+    public ResponseEntity<DashBoardDTO.RTagListDTO> getTagList(@PathVariable("projectId") Long projectId){
+        DashBoardDTO.RTagListDTO tagListDTO= recordService.getTagList(projectId);
         return new ResponseEntity<>(tagListDTO, HttpStatus.OK);
     }
     @Operation(
