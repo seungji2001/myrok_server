@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RecordTagRepository extends JpaRepository<RecordTag,Long> {
@@ -22,5 +23,5 @@ public interface RecordTagRepository extends JpaRepository<RecordTag,Long> {
             "WHERE rt.projectId = :projectId AND rt.deleted = false " +
             "GROUP BY rt.tagName " +
             "ORDER BY COUNT(rt) DESC")
-    List<TagDTO> findTagNameAndCountByProjectIdAndDeletedIsFalse(@Param("projectId") Long projectId);
+    Optional<List<TagDTO>> findTagNameAndCountByProjectIdAndDeletedIsFalse(@Param("projectId") Long projectId);
 }
