@@ -5,6 +5,8 @@ import com.example.myrok.dto.project.TagDTO;
 import com.example.myrok.repository.RecordTagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -15,7 +17,8 @@ public class DashBoardServiceImpl implements DashBoardService{
 
     @Override
     public DashBoardDTO.TagResponseDTO getTagInfo(Long projectId){
-        List<TagDTO> tags = recordTagRepository.findTagNameAndCountByProjectIdAndDeletedIsFalse(projectId);
+        List<TagDTO> tags = recordTagRepository.findTagNameAndCountByProjectIdAndDeletedIsFalse(projectId)
+                .orElse(Collections.emptyList());
         List<TagDTO> topTags = tags.stream()
                 .limit(4)
                 .toList();

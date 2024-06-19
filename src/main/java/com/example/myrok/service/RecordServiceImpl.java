@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -273,7 +274,9 @@ public class RecordServiceImpl implements RecordService{
 
     @Override
     public DashBoardDTO.TagListDTO getTagList(Long projectId){
-        List<TagDTO> tags = recordTagRepository.findTagNameAndCountByProjectIdAndDeletedIsFalse(projectId);
+        List<TagDTO> tags = recordTagRepository.findTagNameAndCountByProjectIdAndDeletedIsFalse(projectId)
+                .orElse(Collections.emptyList());
+
         long totalCount = 0;
         for(TagDTO tag : tags){
             totalCount+=tag.getPercentage();
