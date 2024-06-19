@@ -22,9 +22,17 @@ public class QMemberRecord extends EntityPathBase<MemberRecord> {
 
     public static final QMemberRecord memberRecord = new QMemberRecord("memberRecord");
 
+    public final QBaseTimeEntity _super = new QBaseTimeEntity(this);
+
+    //inherited
+    public final DatePath<java.time.LocalDate> createdDate = _super.createdDate;
+
     public final BooleanPath deleted = createBoolean("deleted");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    //inherited
+    public final DatePath<java.time.LocalDate> lastModifiedDate = _super.lastModifiedDate;
 
     public final QMember member;
 

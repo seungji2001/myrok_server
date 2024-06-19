@@ -1,6 +1,9 @@
 package com.example.myrok.controller;
 
 import com.example.myrok.domain.Record;
+import com.example.myrok.dto.project.DashBoardDTO;
+import com.example.myrok.dto.record.RecordDeleteDTO;
+import com.example.myrok.dto.record.RecordResponseDTO;
 import com.example.myrok.dto.record.RecordClass;
 import com.example.myrok.dto.record.RecordDeleteDTO;
 import com.example.myrok.dto.record.RecordResponseDTO;
@@ -14,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +44,7 @@ public class RecordController {
     @PreAuthorize("hasAnyAuthority('ROLE_USER', 'TEAMMEMBER')")
     @PostMapping("/records")
     public ResponseEntity<Long> save( @RequestBody @Valid RecordDTO recordDTO){
+        recordDTO.setRecordContent(StringEscapeUtils.escapeJson(recordDTO.getRecordContent()));
         Record savedRecord=recordService.save(recordDTO);
         return new ResponseEntity<>(savedRecord.getId(), HttpStatus.CREATED);
     }
@@ -109,8 +114,9 @@ public class RecordController {
     }
 
     @GetMapping("/records/{recordId}")
-    public ResponseEntity<RecordResponseDTO> get(@PathVariable("recordId") Long recordId){
+    public ResponseEntity<RecordResponseDTO> getRecord(@PathVariable("recordId") Long recordId){
         RecordResponseDTO readRecord = recordService.read(recordId);
+        readRecord.setRecordContent(StringEscapeUtils.unescapeJson(readRecord.getRecordContent()));
         return new ResponseEntity<>(readRecord, HttpStatus.OK);
     }
 
@@ -122,6 +128,11 @@ public class RecordController {
         return chatCompletionService.chatCompletions(question);
     }
 
+    @GetMapping("{projectId}/tagList")
+    public ResponseEntity<DashBoardDTO.TagListDTO> getTagList(@PathVariable("projectId") Long projectId){
+        DashBoardDTO.TagListDTO tagListDTO= recordService.getTagList(projectId);
+        return new ResponseEntity<>(tagListDTO, HttpStatus.OK);
+    }
     @Operation(
             summary = "요약된 회의록을 가져옵니다.",
             description = "요약된 회의록을 가져옵니다."

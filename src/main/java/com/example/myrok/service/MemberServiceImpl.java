@@ -17,6 +17,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -83,10 +84,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public MemberProjectResponse getMyProject(String socialId) {
-        Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchFieldError::new);
+        Member member = memberRepository.findBySocialId(socialId).orElse(null);
 
-        MemberProject memberProject = memberProjectRepository.findByMemberAndMemberProjectType(member, MemberProjectType.PROJECT_MEMBER).orElseThrow(NoSuchElementException::new);
+        if (member == null) {
+            // Member가 없을 경우 빈 객체 반환
+            return MemberProjectResponse.builder().build();
+        }
 
+        MemberProject memberProject = memberProjectRepository.findByMemberAndMemberProjectType(member, MemberProjectType.PROJECT_MEMBER).orElse(null);
+
+        if (memberProject == null) {
+            // MemberProject가 없을 경우 빈 객체 반환
+            return MemberProjectResponse.builder().build();
+        }
+
+        // MemberProject가 있을 경우 해당 데이터로 응답 객체 생성
         return MemberProjectResponse.builder()
                 .projectId(memberProject.getId())
                 .projectName(memberProject.getProjectName())
@@ -94,5 +106,4 @@ public class MemberServiceImpl implements MemberService {
                 .endDate(String.valueOf(memberProject.getProject().getEndDate()))
                 .build();
     }
-
 }
