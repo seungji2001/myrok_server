@@ -77,10 +77,10 @@ public class ProjectController {
             responseCode = "200",
             description = "프로젝트에서 나갔습니다."
     )
-    @DeleteMapping("/")
+    @DeleteMapping("")
     @PreAuthorize("hasAnyAuthority('ROLE_USER', 'TEAMMEMBER')")
     public ResponseEntity<Long> getOutProject(@RequestBody ProjectDTO.ProjectMemberDto dto, Principal principal) {
-        memberService.getOutFromProject(dto.getMemberId(), dto.getProjectId(), principal.getName());
+        memberService.getOutFromProject(dto.getProjectId(), principal.getName());
         Long id = projectService.checkProjectDelete(dto.getProjectId());
         return ResponseEntity.ok().body(id);
     }

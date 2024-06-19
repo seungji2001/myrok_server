@@ -64,15 +64,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Long getOutFromProject(Long memberId, Long projectId, String socialId) {
-        MemberProject memberProject = memberProjectRepository.findByMemberIdAndProjectIdAndMemberProjectType(memberId, projectId, MemberProjectType.PROJECT_MEMBER).orElseThrow(new CustomException(ErrorCode.MEMBER_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE));
-
+    public Long getOutFromProject(Long projectId, String socialId) {
         Member member = memberRepository.findBySocialId(socialId).orElseThrow(NoSuchElementException::new);
         member.deleteRole(MemberRole.TEAMMEMBER);
         if(member.getMemberRoleList().contains(MemberRole.CREATOR)){
             member.deleteRole(MemberRole.CREATOR);
         }
 
+        MemberProject memberProject = memberProjectRepository.findByMemberAndProjectIdAndMemberProjectType(member, projectId, MemberProjectType.PROJECT_MEMBER).orElseThrow(new CustomException(ErrorCode.MEMBER_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE));
         memberProject.changeMemberProjectType(MemberProjectType.NON_PROJECT_MEMBER);
         return memberProjectRepository.save(memberProject).getId();
     }
