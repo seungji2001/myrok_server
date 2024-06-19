@@ -34,8 +34,6 @@ public class ProjectDTO {
     public static class ProjectMemberDto{
         @NonNull
         private Long projectId;
-        @NonNull
-        private Long memberId;
     }
 
     @Data

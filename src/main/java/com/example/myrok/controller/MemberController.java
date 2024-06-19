@@ -21,6 +21,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<MemberInfoResponse> getMyInformation(Principal principal) {
         final MemberInfoResponse myInformation = memberService.getMemberInformation(principal.getName());
 
