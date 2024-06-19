@@ -93,7 +93,7 @@ public class ProjectController {
             responseCode = "200",
             description = "프로젝트 멤버를 가져왔습니다."
     )
-    @PostMapping("/{projectId}/members")
+    @GetMapping("/{projectId}/members")
     @PreAuthorize("hasAnyAuthority('ROLE_USER', 'TEAMMEMBER')")
     public ResponseEntity<ProjectDTO.ProjectMembersDto> getProjectMembers(@PathVariable Long projectId, Principal principal) {
         return ResponseEntity.ok().body(projectService.getProjectMembers(projectId, principal.getName()));
