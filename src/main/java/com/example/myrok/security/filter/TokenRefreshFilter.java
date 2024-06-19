@@ -38,7 +38,7 @@ public class TokenRefreshFilter extends OncePerRequestFilter {
             }
 
             Map<String, Object> claims = JWTUtil.validateToken(refreshToken);
-            String newAccessToken = JWTUtil.generateToken(claims, 10);
+            String newAccessToken = JWTUtil.generateToken(claims, 24 * 60 * 36);
             String newRefreshToken = checkTime((Integer) claims.get("exp")) ? JWTUtil.generateToken(claims, 60 * 24) : refreshToken;
 
             // 새로 발급된 토큰을 헤더에 설정
