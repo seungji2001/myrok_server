@@ -25,6 +25,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,10 +44,11 @@ public class RecordController {
     )
     @PreAuthorize("hasAnyAuthority('ROLE_USER', 'TEAMMEMBER')")
     @PostMapping("/records")
-    public ResponseEntity<Long> save( @RequestBody @Valid RecordDTO recordDTO){
+    public ResponseEntity<Map<String, Long>> save(@RequestBody @Valid RecordDTO recordDTO){
         recordDTO.setRecordContent(StringEscapeUtils.escapeJson(recordDTO.getRecordContent()));
         Record savedRecord=recordService.save(recordDTO);
-        return new ResponseEntity<>(savedRecord.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(Map.of("recordId", savedRecord.getId()
+        ), HttpStatus.CREATED);
     }
 
     @PostMapping("/records/delete/{recordId}")
