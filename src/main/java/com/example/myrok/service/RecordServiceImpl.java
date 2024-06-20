@@ -194,6 +194,7 @@ public class RecordServiceImpl implements RecordService{
                 .tagList(tagList)
                 .memberList(memberList)
                 .tagList(tagList)
+                .projectId(record.getProject().getId())
                 .build();
 
         return readRecord;
