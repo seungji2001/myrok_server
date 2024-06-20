@@ -55,7 +55,6 @@ public class CustomSecurityConfig {
             //로그인 성공시 핸들러 사용 -> 성공시 핸들러 사용
             config.successHandler(new APILoginSuccessHandler());
         });
-
         http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.exceptionHandling(config ->{
