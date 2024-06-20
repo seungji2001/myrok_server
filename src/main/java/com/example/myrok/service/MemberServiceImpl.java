@@ -60,7 +60,8 @@ public class MemberServiceImpl implements MemberService {
                 .memberProjectType(MemberProjectType.PROJECT_MEMBER)
                 .build();
 
-        return memberProjectRepository.save(memberProject).getId();
+        memberProjectRepository.save(memberProject);
+        return project.get().getId();
     }
 
     @Override
@@ -99,7 +100,7 @@ public class MemberServiceImpl implements MemberService {
 
         // MemberProject가 있을 경우 해당 데이터로 응답 객체 생성
         return MemberProjectResponse.builder()
-                .projectId(memberProject.getId())
+                .projectId(memberProject.getProject().getId())
                 .projectName(memberProject.getProjectName())
                 .startDate(String.valueOf(memberProject.getProject().getStartDate()))
                 .endDate(String.valueOf(memberProject.getProject().getEndDate()))
