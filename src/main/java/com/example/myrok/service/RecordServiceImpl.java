@@ -3,6 +3,7 @@ package com.example.myrok.service;
 import com.example.myrok.domain.*;
 import com.example.myrok.domain.Record;
 import com.example.myrok.dto.project.DashBoardDTO;
+import com.example.myrok.dto.project.TagCountDTO;
 import com.example.myrok.dto.record.RecordResponseDTO;
 import com.example.myrok.dto.project.TagDTO;
 import com.example.myrok.dto.member.MemberDTO;
@@ -274,17 +275,17 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public DashBoardDTO.TagListDTO getTagList(Long projectId){
-        List<TagDTO> tags = recordTagRepository.findTagNameAndCountByProjectIdAndDeletedIsFalse(projectId)
+    public DashBoardDTO.TagCountListDTO getTagList(Long projectId){
+        List<TagCountDTO> tags = recordTagRepository.findTagNameAndCountByProjectIdAndDeletedIsFalseForRecord(projectId)
                 .orElse(Collections.emptyList());
 
         long totalCount = 0;
-        for(TagDTO tag : tags){
-            totalCount+=tag.getPercentage();
+        for(TagCountDTO tag : tags){
+            totalCount+=tag.getCount();
         }
-        DashBoardDTO.TagListDTO tagListDTO = DashBoardDTO.TagListDTO.builder()
+        DashBoardDTO.TagCountListDTO tagListDTO = DashBoardDTO.TagCountListDTO.builder()
                 .totalCount(totalCount)
-                .tags(tags)
+                .tagList(tags)
                 .build();
         return tagListDTO;
     }
