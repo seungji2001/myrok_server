@@ -49,7 +49,7 @@ public class RecordController {
         return new ResponseEntity<>(savedRecord, HttpStatus.CREATED);
     }
 
-    @PostMapping("/delete/{recordId}")
+    @PostMapping("/records/delete/{recordId}")
     public ResponseEntity<Record> delete(@PathVariable("recordId") Long recordId, @RequestBody @Valid RecordDeleteDTO recordDeleteDTO){
         Long recordWriterId = recordDeleteDTO.recordWriterId();
         recordService.deleteUpdate(recordId,recordWriterId);
