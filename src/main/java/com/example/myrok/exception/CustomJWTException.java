@@ -7,14 +7,20 @@ import org.springframework.http.HttpStatus;
 
 import java.util.function.Supplier;
 
-@AllArgsConstructor
 @Getter
 public class CustomJWTException extends RuntimeException implements Supplier<CustomException> {
     private ErrorCode errorCode;
     private HttpStatus httpStatus;
 
-    public CustomJWTException(ErrorCode errorCode){
+    public CustomJWTException(ErrorCode errorCode) {
         super(errorCode.getMessage());
+        this.errorCode = errorCode;
+    }
+
+    public CustomJWTException(ErrorCode errorCode, HttpStatus httpStatus) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+        this.httpStatus = httpStatus;
     }
 
     @Override
