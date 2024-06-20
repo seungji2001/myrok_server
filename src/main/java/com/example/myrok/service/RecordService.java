@@ -28,7 +28,7 @@ public interface RecordService {
 
     PageResponseDto<RecordClass.RecordListObject> getRecordsBySearch(PageRequestDto pageRequestDto, String searchValue, String tagName, Long projectId);
 
-    DashBoardDTO.RTagListDTO getTagList(Long projectId);
+    DashBoardDTO.TagListDTO getTagList(Long projectId);
 
     RecordClass.ResponseDTO getRecordSummary(Long recordId);
 
