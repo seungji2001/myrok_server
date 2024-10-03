@@ -97,5 +97,16 @@ MyRok은 대학생들을 위한 올인원 프로젝트 협업 툴입니다. 디�
 - 이가연 (백엔드): 회의록 CRUD, 대시보드 태그 관리
 - 김도연 (백엔드): 프로젝트 정보 조회, 사용자 정보 조회
 
+## 시연 영상
+https://github.com/user-attachments/assets/2388db4c-86c1-4cb2-9ad6-e63f26b79453
+
+## 화면
+<img width="300" alt="Screenshot 2024-10-03 at 7 51 40 PM" src="https://github.com/user-attachments/assets/21f50090-ed1a-41d7-ae30-756e922fc78e">
+<img width="300" alt="Screenshot 2024-10-03 at 7 51 48 PM" src="https://github.com/user-attachments/assets/2257db91-36da-4e28-8c0d-eed0d94d7331">
+<img width="300" alt="Screenshot 2024-10-03 at 7 51 13 PM" src="https://github.com/user-attachments/assets/fc67fe15-60de-452e-a925-c42444372151">
+<img width="300" alt="Screenshot 2024-10-03 at 7 51 54 PM" src="https://github.com/user-attachments/assets/136b6691-7025-48f5-ac37-ecf644f4efb7">
+<img width="300" height="194" alt="Screenshot 2024-10-03 at 7 51 05 PM" src="https://github.com/user-attachments/assets/f57e7259-890b-40dd-a3d0-687376f88a65">
+<img width="300" height="194" alt="Screenshot 2024-10-03 at 7 50 54 PM" src="https://github.com/user-attachments/assets/d496b48e-3bd3-4732-9f42-2354b305ea47">
+
 # 프레젠테이션
 [Myrok 최종 보고서](https://www.canva.com/design/DAGIA7CocuI/GUk_3Ln5KS9DwJsb_ISQjw/edit?utm_content=DAGIA7CocuI&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
