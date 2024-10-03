@@ -96,3 +96,6 @@ MyRok은 대학생들을 위한 올인원 프로젝트 협업 툴입니다. 디�
 - 송지은 (프론트엔드): UI 설계 및 구현, 프론트엔드 전체 기능 구현
 - 이가연 (백엔드): 회의록 CRUD, 대시보드 태그 관리
 - 김도연 (백엔드): 프로젝트 정보 조회, 사용자 정보 조회
+
+# 프레젠테이션
+[Myrok 최종 보고서](https://www.canva.com/design/DAGIA7CocuI/GUk_3Ln5KS9DwJsb_ISQjw/edit?utm_content=DAGIA7CocuI&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
