@@ -98,7 +98,8 @@ MyRok은 대학생들을 위한 올인원 프로젝트 협업 툴입니다. 디�
 - 김도연 (백엔드): 프로젝트 정보 조회, 사용자 정보 조회
 
 ## 시연 영상
-https://github.com/user-attachments/assets/2388db4c-86c1-4cb2-9ad6-e63f26b79453
+
+https://github.com/user-attachments/assets/f4cce507-01f2-4a9d-bf6f-f9d92669dd06
 
 ## 화면
 <img width="300" alt="Screenshot 2024-10-03 at 7 51 40 PM" src="https://github.com/user-attachments/assets/21f50090-ed1a-41d7-ae30-756e922fc78e">
