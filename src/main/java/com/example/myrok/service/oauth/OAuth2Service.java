@@ -79,7 +79,7 @@ public class OAuth2Service{
         claims.put("accessToken", jwtToken);
         claims.put("refreshToken", jwtRefreshToken);
 
-        return "https://myrokkk.github.io/login?accessToken=" + jwtToken + "&refreshToken=" + jwtRefreshToken;
+        return "https://myrokkk.github.io/myrok_client/login?accessToken=" + jwtToken + "&refreshToken=" + jwtRefreshToken;
     }
 
 }
